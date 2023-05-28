@@ -13,7 +13,8 @@ from .archive import create_idm
 from .geometry_utils import get_floor_boundary, get_ceiling_boundary
 
 
-def opening_to_idm(opening: Aperture):
+def opening_to_idm(opening: Aperture) -> str:
+    """Translate a HBJSON aperture to an IDM Window."""
     # name = opening.display_name
     name = opening.identifier
 
@@ -51,6 +52,7 @@ def opening_to_idm(opening: Aperture):
 
 
 def face_to_idm(face: Face, origin: Point3D, index: int):
+    """Translate a HBJSON face to an IDM ENCLOSING-ELEMENT."""
     _face_mapper = {
         'RoofCeiling': 'CEILING',
         'Floor': 'FLOOR',
@@ -81,6 +83,7 @@ def face_to_idm(face: Face, origin: Point3D, index: int):
 
 
 def ceilings_to_idm(faces: List[Face], origin: Point3D):
+    """Translate a collection of ceilings face to an IDM ENCLOSING-ELEMENT."""
     index = -1000
 
     if len(faces) == 1:
@@ -128,6 +131,7 @@ def ceilings_to_idm(faces: List[Face], origin: Point3D):
 
 
 def room_to_idm(room: Room):
+    """Translate a Honeybee Room to an IDM Zone."""
     # find floor boundary and llc for origin
     vertices = get_floor_boundary(room)
     origin = vertices[0]
@@ -185,7 +189,7 @@ def room_to_idm(room: Room):
 
 
 def section_to_idm(rooms: List[Room], name: str):
-    """A idm section based on the rooms bounding box."""
+    """Create an IDM building section for a group of rooms."""
     sections = []
     geometry = [room.geometry for room in rooms]
     min_pt, max_pt = bounding_box(geometry)
@@ -268,6 +272,7 @@ def section_to_idm(rooms: List[Room], name: str):
 
 
 def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None):
+    """Translate a Honeybee model to an IDM file."""
     model.convert_to_units(units='Meters')
     __here__ = pathlib.Path(__file__).parent
     templates_folder = __here__.joinpath('templates')

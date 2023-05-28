@@ -1,5 +1,5 @@
 from ladybug_geometry.geometry3d import Point3D, Face3D
-from ladybug_geometry.geometry2d import Polygon2D, Point2D, LineSegment2D
+from ladybug_geometry.geometry2d import Polygon2D, Point2D
 from honeybee.facetype import Floor, Wall
 from honeybee.room import Room
 
