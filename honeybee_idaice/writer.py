@@ -219,8 +219,8 @@ def room_to_idm(room: Room):
         face_idm = face_to_idm(wall, origin=origin, index=index)
         room_idm.append(face_idm)
 
-    for floor in floors:
-        face_idm = face_to_idm(floor, origin=origin, index=-2000)
+    for count, floor in enumerate(floors):
+        face_idm = face_to_idm(floor, origin=origin, index=-(2000 + count))
         room_idm.append(face_idm)
 
     ceiling_idm = ceilings_to_idm(ceilings, origin=origin)
