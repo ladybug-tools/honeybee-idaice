@@ -18,6 +18,7 @@ setuptools.setup(
     url="https://github.com/ladybug-tools/honeybee-idaice",
     packages=setuptools.find_packages(exclude=["tests*"]),
     install_requires=requirements,
+    include_package_data=True,
     entry_points={
         "console_scripts": ["honeybee-idaice = honeybee_idaice.cli:ida"]
     },
