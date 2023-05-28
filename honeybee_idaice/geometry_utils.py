@@ -36,12 +36,13 @@ def get_floor_boundary(room: Room):
 
     # insert missing points for the wall starting points
     wall_st_pts = [
-        face.geometry.lower_left_corner for face in room.faces
+        face.geometry.lower_left_corner
+        for face in room.faces
         if isinstance(face.type, Wall)
     ]
+
     vertices = boundary.vertices
     wall_st_pts_2d = [Point2D(v[0], v[1]) for v in wall_st_pts]
-
     polygon_update = []
     for pt in wall_st_pts_2d:
         # check if pt is already included
@@ -72,8 +73,8 @@ def get_floor_boundary(room: Room):
     geometry = geometry.flip()
 
     vertices = geometry.lower_left_counter_clockwise_vertices
-
-    return vertices
+    pole = geometry.pole_of_inaccessibility(0.01)
+    return vertices, pole
 
 
 def get_ceiling_boundary(ceilings):
