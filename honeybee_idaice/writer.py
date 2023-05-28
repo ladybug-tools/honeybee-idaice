@@ -140,13 +140,7 @@ def room_to_idm(room: Room):
     vertices_idm = ' '.join(
         f'({v.x - origin.x} {v.y - origin.y})' for v in vertices
     )
-    geometry = '((AGGREGATE :N GEOMETRY :X NIL)\n' \
-        f' (:PAR :N ORIGIN :V #({origin.x} {origin.y}))\n' \
-        f' (:PAR :N NCORN :V {count})\n' \
-        f' (:PAR :N CORNERS :DIM ({count} 2) :V #2A({vertices_idm}))\n' \
-        f' (:PAR :N FLOOR_HEIGHT_FROM_GROUND :V {elevation}))'
 
-    room_idm = [geometry]
     walls = []
     floors = []
     ceilings = []
@@ -161,6 +155,28 @@ def room_to_idm(room: Room):
         else:
             # air boundary
             print(f'Face from type {type_} is not currently supported.')
+
+    protected = False
+    for w in walls:
+        if abs(w.altitude) <= 0.1:
+            # non-vertical wall
+            protected = True
+            break
+    if protected:
+        geometry = '((AGGREGATE :N GEOMETRY :X NIL)\n' \
+            ' (:PAR :N PROTECTED_SHAPE :V :TRUE)\n' \
+            f' (:PAR :N ORIGIN :V #({origin.x} {origin.y}))\n' \
+            f' (:PAR :N NCORN :V {count})\n' \
+            f' (:PAR :N CORNERS :DIM ({count} 2) :V #2A({vertices_idm}))\n' \
+            f' (:PAR :N FLOOR_HEIGHT_FROM_GROUND :V {elevation}))'
+    else:
+        geometry = '((AGGREGATE :N GEOMETRY :X NIL)\n' \
+            f' (:PAR :N ORIGIN :V #({origin.x} {origin.y}))\n' \
+            f' (:PAR :N NCORN :V {count})\n' \
+            f' (:PAR :N CORNERS :DIM ({count} 2) :V #2A({vertices_idm}))\n' \
+            f' (:PAR :N FLOOR_HEIGHT_FROM_GROUND :V {elevation}))'
+
+    room_idm = [geometry]
 
     # write faces
     used_index = []
