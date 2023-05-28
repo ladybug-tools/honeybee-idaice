@@ -132,9 +132,34 @@ def ceilings_to_idm(faces: List[Face], origin: Point3D):
 
 def room_to_idm(room: Room):
     """Translate a Honeybee Room to an IDM Zone."""
+    room_idm = []
+
     # find floor boundary and llc for origin
-    vertices = get_floor_boundary(room)
+    vertices, pole = get_floor_boundary(room)
     origin = vertices[0]
+
+    # relative coordinates of the pole
+    rp = pole - origin
+    # arbitrary x and y size for lighting fixtures
+    lighting_x = 0.5
+    lighting_y = 0.5
+    min_x = rp.x - lighting_x
+    min_y = rp.y - lighting_y
+    # set the location of light and occupant
+    light_occ = '((LIGHT :N "Light" :T LIGHT)\n' \
+        f' (:PAR :N X :V {min_x})\n' \
+        f' (:PAR :N Y :V {min_y})\n' \
+        f' (:PAR :N DX :V {lighting_x})\n' \
+        f' (:PAR :N DY :V {lighting_y})\n' \
+        ' (:PAR :N RATED_INPUT :V 50.0)\n' \
+        ' (:RES :N SCHEDULE_0-1 :V ALWAYS_ON))\n' \
+        '((OCCUPANT :N "Occupant" :T OCCUPANT)\n' \
+        ' (:PAR :N NUMBER_OF :V 1)\n' \
+        ' (:RES :N SCHEDULE_0-1 :V ALWAYS_ON)\n' \
+        f' (:PAR :N POSITION :V #({rp.x} {rp.y} {0.6})))'
+
+    room_idm.append(light_occ)
+
     count = len(vertices)
     elevation = origin.z
     vertices_idm = ' '.join(
@@ -176,7 +201,7 @@ def room_to_idm(room: Room):
             f' (:PAR :N CORNERS :DIM ({count} 2) :V #2A({vertices_idm}))\n' \
             f' (:PAR :N FLOOR_HEIGHT_FROM_GROUND :V {elevation}))'
 
-    room_idm = [geometry]
+    room_idm.append(geometry)
 
     # write faces
     used_index = []
