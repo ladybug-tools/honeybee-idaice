@@ -330,7 +330,10 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None):
             footer = f'\n;[end of {bldg_name}\\{room_name}.idm]\n'
             rm.write(footer)
 
-    create_idm(model_folder, base_folder.joinpath(f'{bldg_name}.idm'))
+    idm_file = base_folder.joinpath(f'{bldg_name}.idm')
+    create_idm(model_folder, idm_file)
 
     # clean up the folder - leave it for now for debugging purposes
     # shutil.rmtree(model_folder)
+
+    return idm_file

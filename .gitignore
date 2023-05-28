@@ -1,4 +1,4 @@
-assets/
+sample_models/
 *.pyc
 test.py
 *.gh
@@ -16,4 +16,4 @@ dist
 venv
 /.cache
 /.vscode
-
+/tests/assets/temp/
