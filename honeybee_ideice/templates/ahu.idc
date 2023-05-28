@@ -60,5 +60,4 @@ Los parámetros adicionales pueden ser establecidos abriendo los componentes de 
 (EQUATION-FRAME :AT ((632 260)) :R (24 24) :ICON "lib:CEFAN.ids" :SLOT ("sf") :NAME "sf" :DATA :EO :HELP-STRING (:DICT (ICE AHU SF))) 
 (EQUATION-FRAME :AT ((218 313)) :R (24 24) :ICON "lib:CEFAN.ids" :SYMMETRY (180.0) :SLOT ("rf") :NAME "rf" :DATA :EO :HELP-STRING (:DICT (ICE AHU RF))) 
 (FRAME-BOX :VALUE (:DICT (GENERAL RESULTS)) :AT ((404 384) (687 456)) :STYLE SECTION :LINE-COLOR #S(RGB RED 33 GREEN 33 BLUE 192)) 
-(LIST-FIELD :AT ((408 392) (678 448)) :SLOT (:RESULTS) :TEXT-COLOR #S(RGB RED 0 GREEN 0 BLUE 0)) 
-;[end of template_building\ahu.idc]
+(LIST-FIELD :AT ((408 392) (678 448)) :SLOT (:RESULTS) :TEXT-COLOR #S(RGB RED 0 GREEN 0 BLUE 0))
