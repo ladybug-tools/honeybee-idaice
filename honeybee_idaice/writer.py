@@ -9,8 +9,8 @@ from honeybee.facetype import RoofCeiling, Wall, Floor
 from ladybug_geometry.geometry3d import Point3D, Vector3D, Plane, Face3D
 from ladybug_geometry.bounding import bounding_box
 
-from archive import create_idm
-from geometry_utils import get_floor_boundary, get_ceiling_boundary
+from .archive import create_idm
+from .geometry_utils import get_floor_boundary, get_ceiling_boundary
 
 
 def opening_to_idm(opening: Aperture):
@@ -159,15 +159,21 @@ def room_to_idm(room: Room):
             print(f'Face from type {type_} is not currently supported.')
 
     # write faces
+    used_index = []
+    last_index = len(walls) + 1
     for wall in walls:
-        # TODO: improve indexing - we should find all the vertices from the walls and
-        # then project them on the boundary of the room to make sure they match
         llc = wall.geometry.lower_left_corner
-
         sorted_vertices = sorted(vertices, key=lambda x: x.distance_to_point(llc))
         index = vertices.index(sorted_vertices[0]) + 1
+        if index in used_index:
+            # this is a vertical segment of a wall with the same starting point.
+            # use a new index and hope it doesn't have an aperture
+            index = last_index
+            last_index += 1
+        used_index.append(index)
         face_idm = face_to_idm(wall, origin=origin, index=index)
         room_idm.append(face_idm)
+
     for floor in floors:
         face_idm = face_to_idm(floor, origin=origin, index=-2000)
         room_idm.append(face_idm)
@@ -321,18 +327,5 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None):
 
     create_idm(model_folder, base_folder.joinpath(f'{bldg_name}.idm'))
 
-    # clean up the folder
+    # clean up the folder - leave it for now for debugging purposes
     # shutil.rmtree(model_folder)
-
-
-if __name__ == '__main__':
-    fp = r'C:\Users\Mostapha\Documents\ladybug-tools\honeybee-idaice\assets\template_building\sample_room.hbjson'
-    fp = r"C:\Users\Mostapha\Documents\ladybug-tools\honeybee-idaice\assets\template_building\template_building_two_apt.hbjson"
-    out_folder = r'C:\Users\Mostapha\Documents\ladybug-tools\honeybee-idaice\tests\assets'
-    fp = r"C:\ladybug\aperture_test.hbjson"
-    # fp = r'C:\ladybug\aperture_slope.hbjson'
-    # fp = r"C:\Users\Mostapha\Downloads\revit_sample_model_renamed.hbjson"
-    fp = r"C:\ladybug\multi_floor.hbjson"
-
-    model = Model.from_hbjson(fp)
-    model_to_idm(model=model, out_folder=out_folder)
