@@ -148,6 +148,35 @@ def ceilings_to_idm(faces: List[Face], origin: Point3D):
     return '\n'.join(ceiling_idm) + ')'
 
 
+def deconstruct_room(room: Room):
+    """Deconstruct a room into walls, ceilings and floors."""
+    walls = []
+    floors = []
+    ceilings = []
+    for face in room.faces:
+        type_ = face.type
+        if isinstance(type_, Wall):
+            walls.append(face)
+        elif isinstance(type_, RoofCeiling):
+            ceilings.append(face)
+        elif isinstance(type_, Floor):
+            floors.append(face)
+        else:
+            # air boundary
+            print(f'Face from type {type_} is not currently supported.')
+
+    # if the geometry is not extrude then it should be modeled as protected
+    for w in walls:
+        if abs(w.altitude) > 5:
+            # non-vertical wall
+            return walls, ceilings, floors, True
+    for c in ceilings:
+        if abs(90 - c.altitude) > 5:
+            return walls, ceilings, floors, True
+
+    return walls, ceilings, floors, False
+
+
 def room_to_idm(room: Room):
     """Translate a Honeybee Room to an IDM Zone."""
     room_idm = []
@@ -184,27 +213,8 @@ def room_to_idm(room: Room):
         f'({v.x - origin.x} {v.y - origin.y})' for v in vertices
     )
 
-    walls = []
-    floors = []
-    ceilings = []
-    for face in room.faces:
-        type_ = face.type
-        if isinstance(type_, Wall):
-            walls.append(face)
-        elif isinstance(type_, RoofCeiling):
-            ceilings.append(face)
-        elif isinstance(type_, Floor):
-            floors.append(face)
-        else:
-            # air boundary
-            print(f'Face from type {type_} is not currently supported.')
+    walls, ceilings, floors, protected = deconstruct_room(room)
 
-    protected = False
-    for w in walls:
-        if abs(w.altitude) > 5:
-            # non-vertical wall
-            protected = True
-            break
     if protected:
         geometry = '((AGGREGATE :N GEOMETRY :X NIL)\n' \
             ' (:PAR :N PROTECTED_SHAPE :V :TRUE)\n' \
