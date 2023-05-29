@@ -200,7 +200,7 @@ def room_to_idm(room: Room):
 
     protected = False
     for w in walls:
-        if abs(w.altitude) <= 0.1:
+        if abs(w.altitude) > 5:
             # non-vertical wall
             protected = True
             break
