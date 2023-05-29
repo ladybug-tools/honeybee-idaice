@@ -160,8 +160,8 @@ def room_to_idm(room: Room):
     # arbitrary x and y size for lighting fixtures
     lighting_x = 0.5
     lighting_y = 0.5
-    min_x = rp.x - lighting_x
-    min_y = rp.y - lighting_y
+    min_x = rp.x - lighting_x / 2
+    min_y = rp.y - lighting_y / 2
     # set the location of light and occupant
     light_occ = '((LIGHT :N "Light" :T LIGHT)\n' \
         f' (:PAR :N X :V {min_x})\n' \
