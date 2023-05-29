@@ -2,7 +2,7 @@
 
 A honeybee extension to convert HBJSON files to [IDA ICE](https://www.equa.se/en/ida-ice) `idm` files.
 
-![image](https://github.com/ladybug-tools/honeybee-idaice/assets/2915573/1ea06398-0d00-43ef-a350-1c3cbeacf9a9)
+![image](https://github.com/ladybug-tools/honeybee-idaice/assets/2915573/12840ca3-a94f-4c68-9251-e8eb393bc048)
 
 Two comments on how the model should be prepared.
 
