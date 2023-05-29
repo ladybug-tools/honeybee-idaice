@@ -2,9 +2,9 @@
 import pathlib
 import shutil
 import math
-from typing import List
+from typing import List, Union
 
-from honeybee.model import Model, Room, Face, Aperture
+from honeybee.model import Model, Room, Face, Aperture, Door
 from honeybee.facetype import RoofCeiling, Wall, Floor
 from ladybug_geometry.geometry3d import Point3D, Vector3D, Plane, Face3D
 from ladybug_geometry.bounding import bounding_box
@@ -13,7 +13,7 @@ from .archive import create_idm
 from .geometry_utils import get_floor_boundary, get_ceiling_boundary
 
 
-def opening_to_idm(opening: Aperture) -> str:
+def opening_to_idm(opening: Union[Aperture, Door], is_aperture=True) -> str:
     """Translate a HBJSON aperture to an IDM Window."""
     # name = opening.display_name
     name = opening.identifier
@@ -42,11 +42,19 @@ def opening_to_idm(opening: Aperture) -> str:
     height = max_2d.y - min_2d.y
     width = max_2d.x - min_2d.x
 
-    opening_idm = f'\n ((CE-WINDOW :N "{name}" :T WINDOW)\n' \
-        f'  (:PAR :N X :V {min_2d.x})\n' \
-        f'  (:PAR :N Y :V {min_2d.y})\n' \
-        f'  (:PAR :N DX :V {width})\n' \
-        f'  (:PAR :N DY :V {height}))'
+    if is_aperture:
+        opening_idm = f'\n ((CE-WINDOW :N "{name}" :T WINDOW)\n' \
+            f'  (:PAR :N X :V {min_2d.x})\n' \
+            f'  (:PAR :N Y :V {min_2d.y})\n' \
+            f'  (:PAR :N DX :V {width})\n' \
+            f'  (:PAR :N DY :V {height}))'
+    else:
+        opening_idm = f'\n ((OPENING :N "{name}" :T OPENING)\n' \
+            f'  (:PAR :N X :V {min_2d.x})\n' \
+            f'  (:PAR :N Y :V {min_2d.y})\n' \
+            f'  (:PAR :N DX :V {width})\n' \
+            f'  (:PAR :N DY :V {height})\n' \
+            f'  (:RES :N OPENING-SCHEDULE :V ALWAYS_OFF))'
 
     return opening_idm
 
@@ -74,10 +82,19 @@ def face_to_idm(face: Face, origin: Point3D, index: int):
 
     windows = ''.join(windows)
 
+    # add doors
+    doors = ['']
+    for door in face.doors:
+        if door.user_data and door.user_data.get('ignore', False):
+            continue
+        doors.append(opening_to_idm(door, is_aperture=False))
+
+    doors = ''.join(doors)
+
     face = f'((ENCLOSING-ELEMENT :N "{name}" :T {type_} :INDEX {index})\n' \
         f' ((AGGREGATE :N GEOMETRY)\n' \
         f'  (:PAR :N CORNERS :DIM ({count} 3) :SP ({count} 3) :V #2A({vertices_idm}))\n' \
-        f'  (:PAR :N SLOPE :V {face.altitude + 90})){windows})'
+        f'  (:PAR :N SLOPE :V {face.altitude + 90})){windows}\n{doors})'
 
     return face
 
@@ -346,6 +363,20 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None):
         for grouped_room, floor_height in zip(grouped_rooms, floor_heights):
             section = section_to_idm(grouped_room, name=f'Level_{floor_height}')
             bldg.write(section)
+
+            # filter the doors
+            tolerance = 0.75  # assuming the door centers are not closer than this dist
+            door_tracker = []
+            for room in grouped_room:
+                for face in room.faces:
+                    for door in face.doors:
+                        center = door.geometry.center
+                        for pt in door_tracker:
+                            if pt.distance_to_point(center) <= tolerance:
+                                door.user_data = {'ignore': True}
+                                break
+                        door_tracker.append(center)
+
         # add rooms as zones
         for room in model.rooms:
             bldg.write(f'((CE-ZONE :N "{room.display_name}" :T ZONE))\n')
