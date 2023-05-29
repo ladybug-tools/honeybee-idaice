@@ -73,7 +73,12 @@ def get_floor_boundary(room: Room):
     geometry = geometry.flip()
 
     vertices = geometry.lower_left_counter_clockwise_vertices
-    pole = geometry.pole_of_inaccessibility(0.01)
+    center = geometry.center
+    if geometry.is_point_on_face(center, 0.01):
+        pole = center
+    else:
+        pole = geometry.pole_of_inaccessibility(0.01)
+
     return vertices, pole
 
 
