@@ -87,7 +87,8 @@ def face_to_idm(face: Face, origin: Point3D, index: int):
     for door in face.doors:
         if door.user_data and door.user_data.get('ignore', False):
             continue
-        doors.append(opening_to_idm(door, is_aperture=False))
+        is_aperture = True if door.is_glass else False
+        doors.append(opening_to_idm(door, is_aperture=is_aperture))
 
     doors = ''.join(doors)
 
