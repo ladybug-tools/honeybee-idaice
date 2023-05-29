@@ -36,7 +36,7 @@ def get_floor_boundary(room: Room):
 
     # insert missing points for the wall starting points
     wall_st_pts = [
-        face.geometry.lower_left_corner
+        face.geometry.lower_left_counter_clockwise_vertices[0]
         for face in room.faces
         if isinstance(face.type, Wall)
     ]
