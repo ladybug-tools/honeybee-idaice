@@ -499,10 +499,7 @@
 ((AGGREGATE :N PROJDATA)
  (:PAR :N RESP_ENG :V "Ladybug Tools")
  (:PAR :N DESCR :V "This model is auto-generated from an HBJSON file. At this point, the translator only translates the geometry information.Use the Pollination discourse forum if you have any questions or comments: https://discourse.pollination.cloud/"))
-((AGGREGATE :N THREE-D-MODEL :T THREE-D-PLAN)
- ((AGGREGATE :N VIEWPT :T VIEWPOINT)
-  (:PAR :N POSITION :V #(43.464907646758 -51.2386356058975 58.302492260347))
-  (:PAR :N FOCALPOINT :V #(25.0 9.99499988555908 2.5))))
+((AGGREGATE :N THREE-D-MODEL :T THREE-D-PLAN))
 (CONNECTIONS
  ((PLANT "Zone_rtn_cold") ((:LIB WATPLUG) OUTLET) 2 0 NIL)
  ((PLANT "Zone_sup_cold") ((:LIB WATPLUG) INLET) 2 0 NIL)
