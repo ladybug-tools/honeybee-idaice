@@ -1,10 +1,35 @@
+from typing import List
+
 from ladybug_geometry.geometry3d import Point3D, Face3D
 from ladybug_geometry.geometry2d import Polygon2D, Point2D
 from honeybee.facetype import Floor, Wall
 from honeybee.room import Room
 
 
-def get_floor_boundary(room: Room):
+def get_rooms_boundary(rooms: List[Room]) -> List[Polygon2D]:
+    """Get a list of boundaries vertices for a list of rooms."""
+    floor_geom = []
+    for room in rooms:
+        for face in room.faces:
+            if isinstance(face.type, Floor):
+                floor_geom.append(face.geometry)
+    boundaries = []
+    # floors are most likely horizontal - let's make them 2D polygons
+    for floor in floor_geom:
+        boundary = Polygon2D(
+            [
+                Point2D(v.x, v.y) for v in floor.lower_left_counter_clockwise_vertices
+            ]
+        )
+        boundaries.append(boundary)
+
+    # find the union of the boundary polygons - tolerance is set to 1 to count for
+    # wall thickness
+    boundaries = Polygon2D.boolean_union_all(boundaries, tolerance=1)
+    return boundaries
+
+
+def get_floor_boundary(room: Room, llc=True):
     """Get a list of vertices for floor boundary for a room.
 
     This function joins all the floor faces and returns a list of Point3D that define the
@@ -72,7 +97,11 @@ def get_floor_boundary(room: Room):
     geometry = Face3D(boundary, plane=floor_geom[0].plane)
     geometry = geometry.flip()
 
-    vertices = geometry.lower_left_counter_clockwise_vertices
+    if llc:
+        vertices = geometry.lower_left_counter_clockwise_vertices
+    else:
+        vertices = geometry.upper_right_counter_clockwise_vertices
+
     center = geometry.center
     if geometry.is_point_on_face(center, 0.01):
         pole = center

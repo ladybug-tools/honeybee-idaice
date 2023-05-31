@@ -1,229 +1,17 @@
 """Write an idm file from a HBJSON file."""
 import pathlib
 import shutil
-import math
-from typing import List, Union
+from typing import List
 
-from honeybee.model import Model, Room, Face, Aperture, Door, Shade
+from honeybee.model import Model, Room, Face
 from honeybee.facetype import RoofCeiling, Wall, Floor
-from ladybug_geometry.geometry3d import Point3D, Vector3D, Plane, Face3D, Polyface3D, \
-    Mesh3D
-from ladybug_geometry.bounding import bounding_box
+from ladybug_geometry.geometry3d import Point3D
 
-from .archive import create_idm
+from .archive import zip_folder_to_idm
 from .geometry_utils import get_floor_boundary, get_ceiling_boundary
-
-
-def _vertices_to_idm(vertices: List[Point3D]) -> str:
-    """Get a string for vertices in IDM format."""
-    vertices = ' '.join(f'({v.x} {v.y} {v.z})' for v in vertices)
-    return vertices
-
-
-def _shade_geometry_to_idm(geometry: Union[Face3D, Polyface3D], name: str):
-    """Create an IDM shade block from a Ladybug geometry.
-
-    Here is an exampel:
-
-        ((AGGREGATE :N "shade1" :T PICT3D)
-            (:PAR :N FILE :V "")
-            (:PAR :N POS :V #(0 0 0.0))
-            (:PAR :N SHADOWING :V :TRUE)
-            ((AGGREGATE :N "geom1" :T GEOM3D)
-            (:PAR :N NPOINTS :V 4)
-            (:PAR :N POINTS :DIM (4 3) :V #2A((-0.874454021453857 -0.59070497751236 -0.941487014293671) (1.0536140203476 -0.0591499991714954 -0.941487014293671) (-1.0536140203476 0.0591499991714954 0.941487014293671) (0.874454021453857 0.59070497751236 0.941487014293671)))
-            (:PAR :N CELLTYPE :V 1)
-            (:PAR :N NCELLS :V 2)
-            (:PAR :N NVERTICES :DIM (2) :V #(3 3))
-            (:PAR :N TOTNVERTS :V 6)
-            (:PAR :N VERTICES :DIM (6) :V #(0 1 2 2 1 3))
-        (:PAR :N PROPERTY :V #(1.0 1.0 1.0 0.699999988079071 1.0 1.0 1.0 0.5 1.0 1.0 1.0 0.0 1.0 1.0 1.0 0.0 0.0))))
-    """
-
-    if isinstance(geometry, Face3D):
-        mesh_3d = geometry.triangulated_mesh3d
-    else:
-        # it is a Polyface3D
-        meshes = [face.triangulated_mesh3d for face in geometry.faces]
-        mesh_3d = Mesh3D.join_meshes(meshes=meshes)
-
-    vertices = mesh_3d.vertices
-    faces = mesh_3d.faces
-    vertices_count = len(vertices)
-    face_count = len(faces)
-    face_length = [len(face) for face in faces]
-    total_vertices = sum(face_length)
-    faces_count = ' '.join(str(f) for f in face_length)
-    joined_faces = ' '.join(' '.join(str(f) for f in ff) for ff in faces)
-
-    shade = f' ((AGGREGATE :N "{name}" :T PICT3D)\n' \
-        '  (:PAR :N FILE :V "")\n' \
-        '  (:PAR :N SHADOWING :V :TRUE)\n' \
-        '  ((AGGREGATE :N "geom1" :T GEOM3D)\n' \
-        f'   (:PAR :N NPOINTS :V {vertices_count})\n' \
-        f'   (:PAR :N POINTS :DIM ({vertices_count} 3) :V #2A({_vertices_to_idm(vertices)}))\n' \
-        '   (:PAR :N CELLTYPE :V 1)\n' \
-        f'   (:PAR :N NCELLS :V {face_count})\n' \
-        f'   (:PAR :N NVERTICES :DIM ({face_count}) :V #({faces_count}))\n' \
-        f'   (:PAR :N TOTNVERTS :V {total_vertices})\n' \
-        f'   (:PAR :N VERTICES :DIM ({total_vertices}) :V #({joined_faces}))\n' \
-        '   (:PAR :N PROPERTY :V #(1.0 1.0 1.0 0.699999988079071 1.0 1.0 1.0 0.5 1.0 1.0 1.0 0.0 1.0 1.0 1.0 0.0 0.0))))'
-
-    return shade
-
-
-def _shade_group_to_idm(shades: List[Shade]) -> str:
-    """Convert a group of shades into a IDM string.
-
-    The files in the shade group should create a closed volume. The translator uses
-    the name of the first shade as the name of the group.
-    """
-    group_geometry = Polyface3D.from_faces(
-        [shade.geometry for shade in shades], tolerance=0.001
-    )
-    shade = shades[0]
-    # remove new lines from the name
-    name = '_'.join(
-        (' '.join(shade.display_name.split()), shade.identifier.replace('Shade_', ''))
-    )
-    return _shade_geometry_to_idm(group_geometry, name)
-
-
-def _shade_to_idm(shade: Shade):
-    shade_geo = shade.geometry
-    name = '_'.join(
-        (' '.join(shade.display_name.split()), shade.identifier.replace('Shade_', ''))
-    )
-    return _shade_geometry_to_idm(shade_geo, name)
-
-
-def shades_to_idm(shades: List[Shade]):
-    """Convert a list of Shades to a IDM string.
-
-    Args:
-        shades: A list of Shade faces.
-
-    Returns:
-        A formatted string that represents this shade in IDM format.
-
-    """
-    if not shades:
-        return ''
-
-    shade_groups = {}
-    no_groups = []
-    for shade in shades:
-        try:
-            group_id = shade.user_data['__group_id__']
-        except (TypeError, KeyError):
-            no_groups.append(shade)
-            continue
-        else:
-            if group_id not in shade_groups:
-                shade_groups[group_id] = [shade]
-            else:
-                shade_groups[group_id].append(shade)
-
-    filtered_groups = {}
-    for k, v in shade_groups.items():
-        if len(v) == 1:
-            no_groups.extend(v)
-        else:
-            filtered_groups[k] = v
-
-    single_shades = '\n'.join([_shade_to_idm(shade) for shade in no_groups])
-    group_shades = '\n'.join(
-        [_shade_group_to_idm(shades) for shades in filtered_groups.values()]
-        )
-
-    return f'((AGGREGATE :N ARCDATA)\n{single_shades}\n{group_shades})'
-
-
-def opening_to_idm(opening: Union[Aperture, Door], is_aperture=True) -> str:
-    """Translate a HBJSON aperture to an IDM Window."""
-    # name = opening.display_name
-    name = opening.identifier
-
-    # IDA-ICE looks to apertures from inside the room
-    parent: Face3D = opening.parent.geometry.flip()
-    opening: Face3D = opening.geometry.flip()
-    parent_llc = parent.lower_left_corner
-    rel_plane = parent.plane
-    apt_llc = opening.lower_left_corner
-    apt_urc = opening.upper_right_corner
-
-    # horizontal faces
-    # horizontal Face3D; use world XY
-    angle_tolerance = 0.01
-    if rel_plane.n.angle(Vector3D(0, 0, 1)) <= angle_tolerance or \
-            rel_plane.n.angle(Vector3D(0, 0, -1)) <= angle_tolerance:
-        proj_x = Vector3D(1, 0, 0)
-    else:
-        proj_y = Vector3D(0, 0, 1).project(rel_plane.n)
-        proj_x = proj_y.rotate(rel_plane.n, math.pi / -2)
-
-    ref_plane = Plane(rel_plane.n, parent_llc, proj_x)
-    min_2d = ref_plane.xyz_to_xy(apt_llc)
-    max_2d = ref_plane.xyz_to_xy(apt_urc)
-    height = max_2d.y - min_2d.y
-    width = max_2d.x - min_2d.x
-
-    if is_aperture:
-        opening_idm = f'\n ((CE-WINDOW :N "{name}" :T WINDOW)\n' \
-            f'  (:PAR :N X :V {min_2d.x})\n' \
-            f'  (:PAR :N Y :V {min_2d.y})\n' \
-            f'  (:PAR :N DX :V {width})\n' \
-            f'  (:PAR :N DY :V {height}))'
-    else:
-        opening_idm = f'\n ((OPENING :N "{name}" :T OPENING)\n' \
-            f'  (:PAR :N X :V {min_2d.x})\n' \
-            f'  (:PAR :N Y :V {min_2d.y})\n' \
-            f'  (:PAR :N DX :V {width})\n' \
-            f'  (:PAR :N DY :V {height})\n' \
-            f'  (:RES :N OPENING-SCHEDULE :V ALWAYS_OFF))'
-
-    return opening_idm
-
-
-def face_to_idm(face: Face, origin: Point3D, index: int):
-    """Translate a HBJSON face to an IDM ENCLOSING-ELEMENT."""
-    _face_mapper = {
-        'RoofCeiling': 'CEILING',
-        'Floor': 'FLOOR',
-        'Wall': 'WALL'
-    }
-    # name = face.display_name
-    name = face.identifier
-    type_ = _face_mapper[str(face.type)]
-    vertices = face.geometry.upper_right_counter_clockwise_vertices
-    count = len(vertices)
-    vertices_idm = ' '.join((
-        f'({v.x - origin.x} {v.y - origin.y} {v.z - origin.z})' for v in vertices
-    ))
-
-    # add apertures
-    windows = ['']
-    for aperture in face.apertures:
-        windows.append(opening_to_idm(aperture))
-
-    windows = ''.join(windows)
-
-    # add doors
-    doors = ['']
-    for door in face.doors:
-        if door.user_data and door.user_data.get('ignore', False):
-            continue
-        is_aperture = True if door.is_glass else False
-        doors.append(opening_to_idm(door, is_aperture=is_aperture))
-
-    doors = ''.join(doors)
-
-    face = f'((ENCLOSING-ELEMENT :N "{name}" :T {type_} :INDEX {index})\n' \
-        f' ((AGGREGATE :N GEOMETRY)\n' \
-        f'  (:PAR :N CORNERS :DIM ({count} 3) :SP ({count} 3) :V #2A({vertices_idm}))\n' \
-        f'  (:PAR :N SLOPE :V {face.altitude + 90})){windows}\n{doors})'
-
-    return face
+from .bldgbody import section_to_idm
+from .shade import shades_to_idm
+from .face import face_to_idm, opening_to_idm
 
 
 def ceilings_to_idm(faces: List[Face], origin: Point3D):
@@ -250,7 +38,6 @@ def ceilings_to_idm(faces: List[Face], origin: Point3D):
     ceiling_idm = [ceiling]
 
     for fc, face in enumerate(faces):
-        # name = f'{face.display_name}_{fc}'
         name = f'{face.identifier}_{fc}'
         vertices = face.geometry.upper_right_counter_clockwise_vertices
         count = len(vertices)
@@ -272,35 +59,6 @@ def ceilings_to_idm(faces: List[Face], origin: Point3D):
         ceiling_idm.append(cp)
 
     return '\n'.join(ceiling_idm) + ')'
-
-
-def deconstruct_room(room: Room):
-    """Deconstruct a room into walls, ceilings and floors."""
-    walls = []
-    floors = []
-    ceilings = []
-    for face in room.faces:
-        type_ = face.type
-        if isinstance(type_, Wall):
-            walls.append(face)
-        elif isinstance(type_, RoofCeiling):
-            ceilings.append(face)
-        elif isinstance(type_, Floor):
-            floors.append(face)
-        else:
-            # air boundary
-            print(f'Face from type {type_} is not currently supported.')
-
-    # if the geometry is not extrude then it should be modeled as protected
-    for w in walls:
-        if abs(w.altitude) > 5:
-            # non-vertical wall
-            return walls, ceilings, floors, True
-    for c in ceilings:
-        if abs(90 - c.altitude) > 5:
-            return walls, ceilings, floors, True
-
-    return walls, ceilings, floors, False
 
 
 def room_to_idm(room: Room):
@@ -339,9 +97,7 @@ def room_to_idm(room: Room):
         f'({v.x - origin.x} {v.y - origin.y})' for v in vertices
     )
 
-    walls, ceilings, floors, protected = deconstruct_room(room)
-
-    if protected:
+    if not room.user_data['_idm_is_extruded']:
         geometry = '((AGGREGATE :N GEOMETRY :X NIL)\n' \
             ' (:PAR :N PROTECTED_SHAPE :V :TRUE)\n' \
             f' (:PAR :N ORIGIN :V #({origin.x} {origin.y}))\n' \
@@ -357,6 +113,7 @@ def room_to_idm(room: Room):
 
     room_idm.append(geometry)
 
+    walls, ceilings, floors = deconstruct_room(room)
     # write faces
     used_index = []
     last_index = len(walls) + 1
@@ -383,93 +140,83 @@ def room_to_idm(room: Room):
     return '\n'.join(room_idm)
 
 
-def section_to_idm(rooms: List[Room], name: str):
-    """Create an IDM building section for a group of rooms."""
-    sections = []
-    geometry = [room.geometry for room in rooms]
-    min_pt, max_pt = bounding_box(geometry)
-    height = max_pt.z
-    bottom = min_pt.z
-    corners = ' '.join(
-        f'({v[0]} {v[1]})' for v in [
-            (max_pt.x, max_pt.y), (max_pt.x, min_pt.y),
-            (min_pt.x, min_pt.y), (min_pt.x, max_pt.y)
-            ]
-    )
-
-    header = f'((CE-SECTION :N "{name}" :T BUILDING-SECTION)\n' \
-        f'  (:PAR :N NCORN :V 4)\n' \
-        f'  (:PAR :N CORNERS :DIM (4 2) :V #2A({corners}))\n' \
-        f'  (:PAR :N HEIGHT :V {height})\n' \
-        f'  (:PAR :N BOTTOM :V {bottom})\n'
-
-    sections.append(header)
-
-    # create side faces
-    side_faces = (
-        [(max_pt.x, max_pt.y), (max_pt.x, min_pt.y)],
-        [(max_pt.x, min_pt.y), (min_pt.x, min_pt.y)],
-        [(min_pt.x, min_pt.y), (min_pt.x, max_pt.y)],
-        [(min_pt.x, max_pt.y), (max_pt.x, max_pt.y)]
-    )
-
-    for count, face in enumerate(side_faces):
-        if bottom < 0:
-            up_vertices = [
-                [face[0][0], face[0][1], height], [face[1][0], face[1][1], height],
-                [face[1][0], face[1][1], 0], [face[0][0], face[0][1], 0]
-            ]
-            btm_vertices = [
-                [face[0][0], face[0][1], 0], [face[1][0], face[1][1], 0],
-                [face[1][0], face[1][1], bottom], [face[0][0], face[0][1], bottom]
-            ]
+def deconstruct_room(room: Room):
+    """Deconstruct a room into walls, ceilings and floors."""
+    walls = []
+    floors = []
+    ceilings = []
+    for face in room.faces:
+        type_ = face.type
+        if isinstance(type_, RoofCeiling):
+            ceilings.append(face)
+        elif isinstance(type_, Floor):
+            floors.append(face)
         else:
-            up_vertices = [
-                [face[0][0], face[0][1], height], [face[1][0], face[1][1], height],
-                [face[1][0], face[1][1], bottom], [face[0][0], face[0][1], bottom]
-            ]
-            btm_vertices = []
-        up_count = len(up_vertices)
-        btm_count = len(btm_vertices)
-        up_vertices = ' '.join(f'({v[0]} {v[1]} {v[2]})' for v in up_vertices)
-        btm_vertices = ' '.join(f'({v[0]} {v[1]} {v[2]})' for v in btm_vertices)
+            # TODO: support air boundaries
+            walls.append(face)
 
-        section = f' ((FACE :N "f{count + 3}" :T WALL-FACE :INDEX {count + 1})\n' \
-            f'  (:PAR :N NCORN :V {up_count})\n' \
-            f'  (:PAR :N CORNERS :V #2A({up_vertices}))\n' \
-            f'  ((FACE :N GROUND-FACE)\n' \
-            f'  (:PAR :N NCORN :V {btm_count})\n' \
-            f'  (:PAR :N CORNERS :V #2A({btm_vertices}))))\n'
+    return walls, ceilings, floors
 
-        sections.append(section)
 
-    footer = \
-        ' ((FACE :N "Crawl space" :T CRAWL-FACE :INDEX -2000)\n' \
-        '  (:PAR :N NCORN :V 0)\n' \
-        '  (:PAR :N CORNERS :DIM (0 3) :V #2A())\n' \
-        ' ((FACE :N GROUND-FACE)\n' \
-        '  (:PAR :N NCORN :V 4)\n' \
-        f' (:PAR :N CORNERS :V #2A(({max_pt.x} {max_pt.y} {bottom}) ' \
-        f'({max_pt.x} {min_pt.y} {bottom}) ({min_pt.x} {min_pt.y} {bottom}) ' \
-        f'({min_pt.x} {max_pt.y} {bottom})))))\n' \
-        ' ((ROOF-FACE :N "Roof" :T ROOF-FACE :INDEX -1000)\n' \
-        '  (:PAR :N NCORN :V 4)\n' \
-        f' (:PAR :N CORNERS :DIM (4 3) :V #2A(({min_pt.x} {max_pt.y} {height}) ' \
-        f'({min_pt.x} {min_pt.y} {height}) ({max_pt.x} {min_pt.y} {height}) ' \
-        f'({max_pt.x} {max_pt.y} {height})))\n' \
-        ' ((FACE :N GROUND-FACE)\n' \
-        '  (:PAR :N NCORN :V 0)\n' \
-        '  (:PAR :N CORNERS :DIM (0 3) :V #2A()))))\n'
+def _is_room_extruded(room: Room) -> bool:
+    """Check if the room geometry is an extrusion in Z direction."""
+    for face in room.faces:
+        type_ = face.type
+        if isinstance(type_, Wall):
+            if abs(face.altitude) > 5:
+                return False
+        elif isinstance(type_, RoofCeiling):
+            if abs(90 - face.altitude) > 5:
+                return False
+        elif isinstance(type_, Floor):
+            if abs(face.altitude + 90) > 5:
+                return False
 
-    sections.append(footer)
+    return True
 
-    return ''.join(sections) + '\n'
+
+def prepare_model(model: Model) -> Model:
+    """This function prepares the model for translation to IDM.
+
+    * Ensures the model is meters.
+    * Check room display names and ensures they are unique
+    * Mark doors in the model to avoid writing duplicated doors.
+    """
+    model.convert_to_units(units='Meters')
+
+    room_names = {}
+    grouped_rooms, _ = Room.group_by_floor_height(model.rooms, min_difference=0.2)
+    tolerance = 0.75  # assuming the door centers are not closer than this dist
+    for grouped_room in grouped_rooms:
+        door_tracker = []
+        for room in grouped_room:
+            # check the display name and change it if it is not unique
+            if room.display_name in room_names:
+                original_name = room.display_name
+                room.display_name = \
+                    f'{room.display_name}_{room_names[original_name]}'
+                room_names[original_name] += 1
+            else:
+                room_names[room.display_name] = 1
+            room.user_data = {'_idm_is_extruded': _is_room_extruded(room)}
+            for face in room.faces:
+                for door in face.doors:
+                    center = door.geometry.center
+                    for pt in door_tracker:
+                        if pt.distance_to_point(center) <= tolerance:
+                            door.user_data = {'_idm_ignore': True}
+                            break
+                    door_tracker.append(center)
+
+    return model
 
 
 def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
                  debug: bool = True):
     """Translate a Honeybee model to an IDM file."""
-    model.convert_to_units(units='Meters')
+
+    model = prepare_model(model)
+
     __here__ = pathlib.Path(__file__).parent
     templates_folder = __here__.joinpath('templates')
     bldg_name = name or model.display_name
@@ -483,12 +230,6 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
     bldg_folder.mkdir(parents=True, exist_ok=True)
     bldg_file = model_folder.joinpath(f'{bldg_name}.idm')
 
-    grouped_rooms = []
-    floor_heights = []
-    if model.rooms:
-        grouped_rooms, floor_heights = \
-            Room.group_by_floor_height(model.rooms, min_difference=0.2)
-
     with bldg_file.open('w') as bldg:
         header = ';IDA 4.80002 Data UTF-8\n' \
             f'(DOCUMENT-HEADER :TYPE BUILDING :N "{bldg_name}" :MS 4 :CK ((RECENT (WINDEF . "Double Clear Air (WIN7)"))) :PARENT ICE :APP (ICE :VER 4.802))\n'
@@ -497,26 +238,21 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
         bldg_template = templates_folder.joinpath('building.idm')
         for line in bldg_template.open('r'):
             bldg.write(line)
-        # create a building section for each floor
-        for grouped_room, floor_height in zip(grouped_rooms, floor_heights):
-            section = section_to_idm(grouped_room, name=f'Level_{floor_height}')
-            bldg.write(section)
 
-            # filter the doors
-            tolerance = 0.75  # assuming the door centers are not closer than this dist
-            door_tracker = []
-            for room in grouped_room:
-                for face in room.faces:
-                    for door in face.doors:
-                        center = door.geometry.center
-                        for pt in door_tracker:
-                            if pt.distance_to_point(center) <= tolerance:
-                                door.user_data = {'ignore': True}
-                                break
-                        door_tracker.append(center)
+        # create a building section for each floor
+        sections = section_to_idm(model.rooms)
+        bldg.write(sections)
 
         # add rooms as zones
+        room_names = {}
         for room in model.rooms:
+            if room.display_name in room_names:
+                original_name = room.display_name
+                room.display_name = \
+                    f'{room.display_name}_{room_names[original_name]}'
+                room_names[original_name] += 1
+            else:
+                room_names[room.display_name] = 1
             bldg.write(f'((CE-ZONE :N "{room.display_name}" :T ZONE))\n')
 
         # collect all the shades from room
@@ -545,7 +281,7 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
             rm.write(footer)
 
     idm_file = base_folder.joinpath(f'{bldg_name}.idm')
-    create_idm(model_folder, idm_file)
+    zip_folder_to_idm(model_folder, idm_file)
 
     # clean up the folder
     if not debug:
