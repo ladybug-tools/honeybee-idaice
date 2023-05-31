@@ -8,7 +8,6 @@ Two comments on how the model should be prepared.
 
 1. IDA ICE expects the model to be exported at the finish line of the one instead of the center of the wall.
 1. IDA ICE intersects the faces automatically. Do not intersect the faces in HBJSON files.
-  If the model is already intersected, use Pollination Rhino's `PO_RebuildRooms` command to merge the faces
-  together.
+If the model is already intersected, use Pollination Rhino's `PO_RebuildRooms` command to merge the faces together.
 
 The exporter only exports the geometry. None of the energy or Radiance properties are exported.
