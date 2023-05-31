@@ -2,6 +2,7 @@
 from typing import List
 from ladybug_geometry.bounding import bounding_box
 from ladybug_geometry.geometry2d import Polygon2D, Point2D
+from ladybug_geometry.geometry3d import Plane, LineSegment3D, Face3D
 
 from honeybee.room import Room
 from honeybee.facetype import RoofCeiling, Floor
@@ -12,7 +13,7 @@ from .geometry_utils import get_floor_boundary, get_rooms_boundary
 def _section_to_idm_protected(rooms: List[Room]):
     if not rooms:
         return ''
-
+    XY_PLANE = Plane()
     sections = []
     for room in rooms:
         room_section = []
@@ -30,13 +31,8 @@ def _section_to_idm_protected(rooms: List[Room]):
         room_section.append(header)
         wall_count = 0
         floor_count = 0
-        roof_count = 0
         for face in room.faces:
-            if isinstance(face, RoofCeiling):
-                type_ = 'ROOF-FACE'
-                index = -1000 - roof_count
-                roof_count += 1
-            elif isinstance(face, Floor):
+            if isinstance(face.type, Floor):
                 type_ = 'CRAWL-FACE'
                 index = -2000 - floor_count
                 floor_count += 1
@@ -44,18 +40,75 @@ def _section_to_idm_protected(rooms: List[Room]):
                 type_ = 'WALL-FACE'
                 index = wall_count + 1
                 wall_count += 1
+
             vertices = face.geometry.upper_right_counter_clockwise_vertices
             count = len(vertices)
             vertices_idm = ' '.join((
                 f'({v.x} {v.y} {v.z})' for v in vertices
             ))
+
             body = f' ((FACE :N "{face.identifier}" :T {type_} :INDEX {index})\n' \
                 f'  (:PAR :N NCORN :V {count})\n' \
                 f'  (:PAR :N CORNERS :DIM ({count} 3) :V #2A({vertices_idm}))\n' \
                 f'  (:PAR :N SLOPE :V {face.altitude + 90})\n' \
-                f'  ((FACE :N GROUND-FACE)\n' \
-                f'  (:PAR :N NCORN :V 0)\n' \
-                f'  (:PAR :N CORNERS :DIM (0 3))))'
+                '  ((FACE :N GROUND-FACE)\n' \
+                '  (:PAR :N NCORN :V 0)\n' \
+                '  (:PAR :N CORNERS :DIM (0 3))))'
+
+            if type_ == 'WALL-FACE' and min_pt.z < -0.1:
+                # intersect the edges with the XY plane to create two separate segments
+                geometry = face.geometry
+                lines = geometry.intersect_plane(XY_PLANE)
+                if not lines:
+                    room_section.append(body)
+                    continue
+                # calculate the top and the bottom segments
+                line = lines[0]
+                pt_1 = line.p1
+                pt_2 = line.p2
+                vertices = list(geometry.upper_right_counter_clockwise_vertices)
+                top_part = [vertices[0]]
+                for vc, v in enumerate(vertices[1:]):
+                    line = LineSegment3D.from_end_points(top_part[-1], v)
+                    if line.distance_to_point(pt_1) < 0.001:
+                        top_part.extend([pt_1, pt_2])
+                        bottom_part = [pt_2, pt_1]
+                        other_point = pt_2
+                        break
+                    elif line.distance_to_point(pt_2) < 0.001:
+                        top_part.extend([pt_2, pt_1])
+                        bottom_part = [pt_1, pt_2]
+                        other_point = pt_1
+                        break
+                    top_part.append(v)
+
+                vertices_rev = list(reversed(vertices))[:-1]
+                top_part_2 = [vertices[0]]
+                for c, v in enumerate(vertices_rev):
+                    line = LineSegment3D.from_end_points(top_part_2[-1], v)
+                    if line.distance_to_point(other_point) < 0.001:
+                        indx = -(c + 1)
+                        if indx == -1:
+                            top_part = top_part + vertices[indx:-1]
+                            bottom_part = bottom_part + vertices[vc + 1:]
+                        else:
+                            top_part = top_part + vertices[indx + 1:]
+                            bottom_part = bottom_part + vertices[vc + 1:indx + 1]
+                    top_part_2.append(v)
+
+                up_count = len(top_part)
+                btm_count = len(bottom_part)
+                up_vertices = ' '.join(f'({v[0]} {v[1]} {v[2]})' for v in top_part)
+                btm_vertices = ' '.join(f'({v[0]} {v[1]} {v[2]})' for v in bottom_part)
+
+                body = \
+                    f' ((FACE :N "f{index}" :T WALL-FACE :INDEX {index})\n' \
+                    f'  (:PAR :N NCORN :V {up_count})\n' \
+                    f'  (:PAR :N CORNERS :V #2A({up_vertices}))\n' \
+                    f'  ((FACE :N GROUND-FACE)\n' \
+                    f'  (:PAR :N NCORN :V {btm_count})\n' \
+                    f'  (:PAR :N CORNERS :V #2A({btm_vertices}))))'
+
             room_section.append(body)
 
         sections.append('\n'.join(room_section) + ')')
