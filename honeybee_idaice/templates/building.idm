@@ -498,7 +498,7 @@
  (:VAR :N TAIR :V 6.92))
 ((AGGREGATE :N PROJDATA)
  (:PAR :N RESP_ENG :V "Ladybug Tools")
- (:PAR :N DESCR :V "This model is auto generated from an HBJSON file. At this point, only the geometry is translated. All the other information are set to default IDA ICE values."))
+ (:PAR :N DESCR :V "This model is auto-generated from an HBJSON file. At this point, the translator only translates the geometry information.Use the Pollination discourse forum if you have any questions or comments: https://discourse.pollination.cloud/"))
 ((AGGREGATE :N THREE-D-MODEL :T THREE-D-PLAN)
  ((AGGREGATE :N VIEWPT :T VIEWPOINT)
   (:PAR :N POSITION :V #(43.464907646758 -51.2386356058975 58.302492260347))
