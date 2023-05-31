@@ -47,13 +47,21 @@ def _section_to_idm_protected(rooms: List[Room]):
                 f'({v.x} {v.y} {v.z})' for v in vertices
             ))
 
-            body = f' ((FACE :N "{face.identifier}" :T {type_} :INDEX {index})\n' \
-                f'  (:PAR :N NCORN :V {count})\n' \
-                f'  (:PAR :N CORNERS :DIM ({count} 3) :V #2A({vertices_idm}))\n' \
-                f'  (:PAR :N SLOPE :V {face.altitude + 90})\n' \
-                '  ((FACE :N GROUND-FACE)\n' \
-                '  (:PAR :N NCORN :V 0)\n' \
-                '  (:PAR :N CORNERS :DIM (0 3))))'
+            if type_ == 'CRAWL-FACE':
+                body = f' ((FACE :N "{face.identifier}" :T {type_} :INDEX {index})\n' \
+                    '  (:PAR :N NCORN :V 0)\n' \
+                    '  (:PAR :N CORNERS :DIM (0 3) :V #2A())\n' \
+                    '  ((FACE :N GROUND-FACE)\n' \
+                    f'  (:PAR :N NCORN :V {count})\n' \
+                    f'  (:PAR :N CORNERS :DIM ({count} 3) :V #2A({vertices_idm}))))'
+            else:
+                body = f' ((FACE :N "{face.identifier}" :T {type_} :INDEX {index})\n' \
+                    f'  (:PAR :N NCORN :V {count})\n' \
+                    f'  (:PAR :N CORNERS :DIM ({count} 3) :V #2A({vertices_idm}))\n' \
+                    f'  (:PAR :N SLOPE :V {face.altitude + 90})\n' \
+                    '  ((FACE :N GROUND-FACE)\n' \
+                    '  (:PAR :N NCORN :V 0)\n' \
+                    '  (:PAR :N CORNERS :DIM (0 3))))'
 
             if type_ == 'WALL-FACE' and min_pt.z < -0.1:
                 # intersect the edges with the XY plane to create two separate segments
