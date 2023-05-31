@@ -4,7 +4,7 @@ import pathlib
 import lzma
 
 
-def create_idm(folder: pathlib.Path, idm_file: pathlib.Path):
+def zip_folder_to_idm(folder: pathlib.Path, idm_file: pathlib.Path):
     """
     Create an idm file from a folder.
 
@@ -19,12 +19,3 @@ def create_idm(folder: pathlib.Path, idm_file: pathlib.Path):
     with py7zr.SevenZipFile(idm_file, 'w', filters=filters) as archive:
         for f in pathlib.Path(folder).glob('*'):
             archive.writeall(f, f.relative_to(folder))
-
-
-if __name__ == '__main__':
-    in_folder = pathlib.Path(r"C:\Users\Mostapha\Documents\ladybug-tools\honeybee-idaice\tests\assets\building")
-    in_folder = pathlib.Path(
-      r"C:\Users\Mostapha\Documents\ladybug-tools\honeybee-idaice\tests\assets\b"
-    )
-    out_file = pathlib.Path(r"C:\Users\Mostapha\Documents\ladybug-tools\honeybee-idaice\tests\assets\b.idm")
-    create_idm(in_folder, out_file)
