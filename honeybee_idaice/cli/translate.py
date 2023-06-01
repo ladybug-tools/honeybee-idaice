@@ -37,7 +37,7 @@ def model_to_idm(model_json, name, folder):
         model = Model.from_file(model_json)
         folder = pathlib.Path(folder)
         folder.mkdir(parents=True, exist_ok=True)
-        model.to_idm(folder.as_posix(), name=name)
+        model.to_idm(folder.as_posix(), name=name, debug=False)
     except Exception as e:
         _logger.exception('Model translation failed.\n{}'.format(e))
         sys.exit(1)
