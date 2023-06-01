@@ -217,6 +217,10 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
 
     model = prepare_model(model)
 
+    # make sure names don't have subfolder or extension
+    original_name = name or model.display_name
+    name = pathlib.Path(original_name).stem
+
     __here__ = pathlib.Path(__file__).parent
     templates_folder = __here__.joinpath('templates')
     bldg_name = name or model.display_name
@@ -280,11 +284,13 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
             footer = f'\n;[end of {bldg_name}\\{room_name}.idm]\n'
             rm.write(footer)
 
-    idm_file = base_folder.joinpath(f'{bldg_name}.idm')
+    if not original_name.endswith('.idm'):
+        original_name = f'{original_name}.idm'
+    idm_file = base_folder.joinpath(original_name)
     zip_folder_to_idm(model_folder, idm_file)
 
     # clean up the folder
     if not debug:
-        shutil.rmtree(model_folder)
+        shutil.rmtree(model_folder, ignore_errors=True)
 
     return idm_file
