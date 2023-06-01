@@ -266,10 +266,12 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
 
     # copy template files
     templates = ['plant.idm', 'ahu.idc', 'ahu.idm', 'plant.idc']
-    for template_file in templates:
-        target_file = bldg_folder.joinpath(template_file)
-        shutil.copy(templates_folder.joinpath(template_file), target_file)
-        with target_file.open('a') as outf:
+    for template in templates:
+        template_file = templates_folder.joinpath(template)
+        target_file = bldg_folder.joinpath(template)
+        with target_file.open('w') as outf, template_file.open('r') as inf:
+            for line in inf:
+                outf.write(f'{line.rstrip()}\n')
             outf.write(f';[end of {bldg_name}\\{template_file}]\n')
 
     # write rooms
@@ -277,8 +279,9 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
     for room in model.rooms:
         room_name = room.display_name
         room_file = bldg_folder.joinpath(f'{room_name}.idm')
-        shutil.copy(template_room, room_file.as_posix())
-        with room_file.open('a') as rm:
+        with template_room.open('r') as inf, room_file.open('w') as rm:
+            for line in inf:
+                rm.write(f'{line.rstrip()}\n')
             geometry = room_to_idm(room)
             rm.write(geometry)
             footer = f'\n;[end of {bldg_name}\\{room_name}.idm]\n'
