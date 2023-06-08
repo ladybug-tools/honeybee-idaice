@@ -8,7 +8,7 @@ from honeybee.facetype import RoofCeiling, Wall, Floor
 from ladybug_geometry.geometry3d import Point3D
 
 from .archive import zip_folder_to_idm
-from .geometry_utils import get_floor_boundary, get_ceiling_boundary
+from .geometry_utils import get_floor_boundary, get_ceiling_boundary, prepare_apertures
 from .bldgbody import section_to_idm
 from .shade import shades_to_idm
 from .face import face_to_idm, opening_to_idm
@@ -47,7 +47,8 @@ def ceilings_to_idm(faces: List[Face], origin: Point3D):
 
         # add apertures
         windows = ['']
-        for aperture in face.apertures:
+        apertures = prepare_apertures(face.apertures)
+        for aperture in apertures:
             windows.append(opening_to_idm(aperture))
 
         windows = ''.join(windows)
