@@ -2,10 +2,10 @@
 from typing import List
 from ladybug_geometry.bounding import bounding_box
 from ladybug_geometry.geometry2d import Polygon2D, Point2D
-from ladybug_geometry.geometry3d import Plane, LineSegment3D, Face3D
+from ladybug_geometry.geometry3d import Plane, LineSegment3D
 
 from honeybee.room import Room
-from honeybee.facetype import RoofCeiling, Floor
+from honeybee.facetype import Floor
 
 from .geometry_utils import get_floor_boundary, get_rooms_boundary
 

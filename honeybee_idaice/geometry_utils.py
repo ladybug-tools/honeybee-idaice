@@ -13,7 +13,7 @@ def get_rooms_boundary(rooms: List[Room]) -> List[Polygon2D]:
         for face in room.faces:
             if isinstance(face.type, Floor):
                 floor_geom.append(face.geometry)
-    boundaries = []
+    in_boundaries = []
     # floors are most likely horizontal - let's make them 2D polygons
     for floor in floor_geom:
         boundary = Polygon2D(
@@ -21,11 +21,31 @@ def get_rooms_boundary(rooms: List[Room]) -> List[Polygon2D]:
                 Point2D(v.x, v.y) for v in floor.lower_left_counter_clockwise_vertices
             ]
         )
-        boundaries.append(boundary)
+        in_boundaries.append(boundary)
 
     # find the union of the boundary polygons - tolerance is set to 1 to count for
     # wall thickness
-    boundaries = Polygon2D.boolean_union_all(boundaries, tolerance=1)
+    boundaries = []
+    for tolerance in [1, 0.5, 0.2, 0.01]:
+        try:
+            boundaries = Polygon2D.boolean_union_all(in_boundaries, tolerance=tolerance)
+            if not boundaries and tolerance != 0.01:
+                raise ValueError
+        except Exception:
+            print(
+                f'Trying to merge the floors for the building story that includes '
+                f'{rooms[0].display_name} with a tolerance value of {tolerance} failed.'
+            )
+            if tolerance != 0.01:
+                print('Will try again with a lower tolerance value.')
+            else:
+                print(
+                    'Failed to merge the floors for the building story that includes '
+                    f'{rooms[0].display_name}.'
+                )
+            continue
+        else:
+            break
     return boundaries
 
 
