@@ -191,6 +191,8 @@ def prepare_model(model: Model) -> Model:
         door_tracker = []
         for room in grouped_room:
             # check the display name and change it if it is not unique
+            room.display_name = \
+                room.display_name.replace('/', '-').replace('\\', '-').replace('\n', ' ')
             if room.display_name in room_names:
                 original_name = room.display_name
                 room.display_name = \
