@@ -4,6 +4,8 @@ from typing import Union
 from honeybee.model import Face, Aperture, Door
 from ladybug_geometry.geometry3d import Point3D, Vector3D, Plane, Face3D
 
+from .geometry_utils import prepare_apertures
+
 
 def opening_to_idm(opening: Union[Aperture, Door], is_aperture=True) -> str:
     """Translate a HBJSON aperture to an IDM Window."""
@@ -69,7 +71,8 @@ def face_to_idm(face: Face, origin: Point3D, index: int):
 
     # add apertures
     windows = ['']
-    for aperture in face.apertures:
+    apertures = prepare_apertures(face.apertures)
+    for aperture in apertures:
         if aperture.user_data and aperture.user_data.get('_idm_ignore', False):
             continue
         windows.append(opening_to_idm(aperture))
