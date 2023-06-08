@@ -189,6 +189,7 @@ def prepare_model(model: Model) -> Model:
     tolerance = 0.75  # assuming the door centers are not closer than this dist
     for grouped_room in grouped_rooms:
         door_tracker = []
+        aperture_tracker = []
         for room in grouped_room:
             # check the display name and change it if it is not unique
             room.display_name = \
@@ -209,7 +210,15 @@ def prepare_model(model: Model) -> Model:
                             door.user_data = {'_idm_ignore': True}
                             break
                     door_tracker.append(center)
-
+                for aperture in face.apertures:
+                    center = aperture.geometry.center
+                    normal = aperture.geometry.normal
+                    for data in aperture_tracker:
+                        c, n = data
+                        if c.distance_to_point(center) <= tolerance \
+                                and abs(n.angle(normal) - 3.14159) < 0.1:
+                            aperture.user_data = {'_idm_ignore': True}
+                    aperture_tracker.append((center, normal))
     return model
 
 
@@ -250,15 +259,7 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
         bldg.write(sections)
 
         # add rooms as zones
-        room_names = {}
         for room in model.rooms:
-            if room.display_name in room_names:
-                original_name = room.display_name
-                room.display_name = \
-                    f'{room.display_name}_{room_names[original_name]}'
-                room_names[original_name] += 1
-            else:
-                room_names[room.display_name] = 1
             bldg.write(f'((CE-ZONE :N "{room.display_name}" :T ZONE))\n')
 
         # collect all the shades from room
