@@ -185,6 +185,13 @@ def prepare_model(model: Model) -> Model:
     """
     model.convert_to_units(units='Meters')
 
+    try:
+        model.remove_degenerate_geometry()
+    except ValueError as e:
+        # most likely an error with the units. It may or may not become a problem
+        # for IDA-ICE so let's continue the process.
+        print(str(e))
+
     room_names = {}
     grouped_rooms, _ = Room.group_by_floor_height(model.rooms, min_difference=0.2)
     tolerance = 0.75  # assuming the door centers are not closer than this dist
