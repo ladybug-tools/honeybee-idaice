@@ -7,7 +7,7 @@ from ladybug_geometry.geometry3d import Plane, LineSegment3D
 from honeybee.room import Room
 from honeybee.facetype import Floor
 
-from .geometry_utils import get_floor_boundary, get_rooms_boundary
+from .geometry_utils import get_floor_boundary, horizontal_room_boundary
 
 
 def _section_to_idm_protected(rooms: List[Room]):
@@ -145,7 +145,7 @@ def _section_to_idm_extruded(
         min_pt, max_pt = bounding_box(geometry)
         height = max_pt.z
         bottom = min_pt.z
-        boundaries = get_rooms_boundary(rooms)
+        boundaries = horizontal_room_boundary(rooms, min_separation=0.5)
         if not boundaries:
             # use bounding box instead as a fallback
             boundaries = [
@@ -154,6 +154,12 @@ def _section_to_idm_extruded(
                     Point2D(max_pt.x, max_pt.y), Point2D(min_pt.x, max_pt.y)
                 ])
             ]
+        else:
+            # this will be updated to support boundaries with holes
+            boundaries = [
+                Polygon2D([Point2D(v.x, v.y) for v in boundaries[0].boundary])
+            ]
+
         for count, boundary in enumerate(boundaries):
             bv = list(boundary.vertices)
             vc = len(bv)
