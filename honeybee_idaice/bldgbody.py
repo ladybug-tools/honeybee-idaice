@@ -2,12 +2,12 @@
 from typing import List
 from ladybug_geometry.bounding import bounding_box
 from ladybug_geometry.geometry2d import Polygon2D, Point2D
-from ladybug_geometry.geometry3d import Plane, LineSegment3D
+from ladybug_geometry.geometry3d import Plane, LineSegment3D, Face3D, Point3D
 
 from honeybee.room import Room
 from honeybee.facetype import Floor
 
-from .geometry_utils import get_floor_boundary, horizontal_room_boundary
+from .geometry_utils import get_floor_boundary, grouped_horizontal_boundary
 
 
 def _section_to_idm_protected(rooms: List[Room]):
@@ -125,7 +125,9 @@ def _section_to_idm_protected(rooms: List[Room]):
 
 
 def _section_to_idm_extruded(
-        extruded_rooms: List[Room], name: str, tolerance: float = 0.5):
+    extruded_rooms: List[Room], name: str, max_int_wall_thickness: float = 0.45,
+    height_tolerance: float = 0.5,
+        ):
     """Create an IDM building section for a group of extruded rooms."""
     if not extruded_rooms:
         return ''
@@ -133,7 +135,7 @@ def _section_to_idm_extruded(
     for room in extruded_rooms:
         _, max_pt = bounding_box(room.geometry)
         for z in groups:
-            if abs(max_pt.z - z) <= tolerance:
+            if abs(max_pt.z - z) <= height_tolerance:
                 groups[z].append(room)
                 break
         else:
@@ -145,20 +147,34 @@ def _section_to_idm_extruded(
         min_pt, max_pt = bounding_box(geometry)
         height = max_pt.z
         bottom = min_pt.z
-        boundaries = horizontal_room_boundary(rooms, min_separation=0.5)
+        try:
+            boundaries = grouped_horizontal_boundary(
+                rooms, min_separation=max_int_wall_thickness
+            )
+        except Exception as e:
+            print(
+                'Failed to calculate the horizontal boundary for level containing '
+                f'{rooms[0].display_name}. Will use a bounding box for this floor.\n'
+                f'{str(e)}'
+            )
+            boundaries = []
+
+        # use bounding box instead as a fallback
+        bb_boundaries = [
+            Face3D([
+                Point3D(min_pt.x, min_pt.y, bottom), Point3D(max_pt.x, min_pt.y, bottom),
+                Point3D(max_pt.x, max_pt.y, bottom), Point3D(min_pt.x, max_pt.y, bottom)
+            ])
+        ]
+
         if not boundaries:
-            # use bounding box instead as a fallback
-            boundaries = [
-                Polygon2D([
-                    Point2D(min_pt.x, min_pt.y), Point2D(max_pt.x, min_pt.y),
-                    Point2D(max_pt.x, max_pt.y), Point2D(min_pt.x, max_pt.y)
-                ])
-            ]
+            boundaries = bb_boundaries
         else:
-            # this will be updated to support boundaries with holes
-            boundaries = [
-                Polygon2D([Point2D(v.x, v.y) for v in boundaries[0].boundary])
-            ]
+            rooms_area = sum(room.floor_area for room in rooms)
+            boundary_area = sum(b.area for b in boundaries)
+            if abs(1 - (rooms_area / boundary_area)) > 0.2:
+                # the boundary is incorrect
+                boundaries = bb_boundaries
 
         for count, boundary in enumerate(boundaries):
             bv = list(boundary.vertices)
@@ -175,7 +191,7 @@ def _section_to_idm_extruded(
 
             bv.append(bv[0])
             for f_count, st in enumerate(bv[:-1]):
-                end = bv[count + 1]
+                end = bv[f_count + 1]
                 if bottom < 0:
                     up_vertices = [
                         [st.x, st.y, height], [end.x, end.y, height], [st.x, st.y, 0],
@@ -226,7 +242,7 @@ def _section_to_idm_extruded(
     return '\n'.join(sections)
 
 
-def section_to_idm(rooms: List[Room]):
+def section_to_idm(rooms: List[Room], max_int_wall_thickness: float):
 
     sections = []
     grouped_rooms, floor_heights = Room.group_by_floor_height(rooms, min_difference=0.2)
@@ -239,7 +255,10 @@ def section_to_idm(rooms: List[Room]):
             else:
                 ext_rooms.append(room)
         if ext_rooms:
-            section = _section_to_idm_extruded(ext_rooms, f'Level_{round(height, 2)}')
+            section = _section_to_idm_extruded(
+                ext_rooms, f'Level_{round(height, 2)}',
+                max_int_wall_thickness=max_int_wall_thickness
+            )
             sections.append(section)
 
     sections_protected = _section_to_idm_protected(no_ext_rooms)

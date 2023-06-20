@@ -231,8 +231,20 @@ def prepare_model(model: Model) -> Model:
 
 
 def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
-                 debug: bool = True):
-    """Translate a Honeybee model to an IDM file."""
+                 max_int_wall_thickness: int = 0.45, debug: bool = False):
+    """Translate a Honeybee model to an IDM file.
+
+    Args:
+        model: A honeybee model.
+        out_folder: Output folder for idm file.
+        name: Output IDM file name.
+        max_int_wall_thickness: Maximum thickness of the interior wall in meters. IDA-ICE
+            expects the input model to have a gap between the rooms that represents
+            the wall thickness. For models where the walls are touching each other use
+            the values of 0.
+        debug: Set to True to not to delete the IDM folder before zipping it into a
+            single file.
+    """
 
     model = prepare_model(model)
 
@@ -263,7 +275,9 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
             bldg.write(line)
 
         # create a building section for each floor
-        sections = section_to_idm(model.rooms)
+        sections = section_to_idm(
+            model.rooms, max_int_wall_thickness=max_int_wall_thickness
+        )
         bldg.write(sections)
 
         # add rooms as zones
