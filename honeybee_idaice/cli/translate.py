@@ -21,11 +21,15 @@ def translate():
     '--name', '-n', help='Name of the output file.', default="model", show_default=True
 )
 @click.option(
+    '--wall-thickness', '-t', help='Maximum wall thickness for the interior walls in '
+    'the input model in meters.', default=0.45, show_default=True
+)
+@click.option(
     '--folder', '-f', help='Path to target folder.',
     type=click.Path(exists=False, file_okay=False, resolve_path=True,
                     dir_okay=True), default='.', show_default=True
 )
-def model_to_idm(model_json, name, folder):
+def model_to_idm(model_json, wall_thickness, name, folder):
     """Translate a Model JSON file to an IDA-ICE IDM file.
     \b
 
@@ -37,7 +41,10 @@ def model_to_idm(model_json, name, folder):
         model = Model.from_file(model_json)
         folder = pathlib.Path(folder)
         folder.mkdir(parents=True, exist_ok=True)
-        model.to_idm(folder.as_posix(), name=name, debug=False)
+        model.to_idm(
+            folder.as_posix(), name=name, debug=False,
+            max_int_wall_thickness=wall_thickness
+        )
     except Exception as e:
         _logger.exception('Model translation failed.\n{}'.format(e))
         sys.exit(1)

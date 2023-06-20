@@ -118,69 +118,26 @@ def closest_end_point2d_between_line2d(line_a, line_b):
     return dists[0], pts[i[0]]
 
 
-def horizontal_room_boundary(
-    rooms: List[Room], min_separation: float, tolerance: float = 0.01
-        ) -> List[Face3D]:
-    """Get a list of Face3D representing the boundary around a set of Rooms.
+def gap_crossing_boundary(floor_polys, min_separation, tolerance):
+    """Get the floor boundary by jumping over gaps as wide as the min_separation.
 
-    This method will attempt to produce a boundary that follows along the 
-    exterior parts of the Floors of the Rooms so it is not suitable for
-    Rooms that lack Floors or Rooms with overlapping Floors in plan. Rooms with
-    such conditions will be ignored in the result and, when the input rooms
-    are composed entirely  of Rooms with these criteria, this method will return
-    an empty list. This method may also return an empty list if the
-    min_separation is so large that a continuous boundary could not
-    be determined.
+    This method is less reliable than the joined_intersected_boundary because
+    higher values of min_separation can cause important elements to disappear.
+    However, when used appropriately, it can provide a boundary that jumps
+    across interior wall thicknesses.
 
     Args:
-        rooms: A list of Honeybee Rooms for which the horizontal boundary will
-            be computed.
+        floor_polys: The polygons to be joined into a boundary. These should have
+            colinear vertices removed and they should not contain degenerate
+            polygons at the tolerance.
         min_separation: A number for the minimum distance between Rooms that
-            is considered a meaningful separation. Gaps between Rooms that
-            are less than this distance will be ignored and the boundary
-            will continue across the gap. When the input rooms represent
-            volumes of interior Faces, this input can be thought of as the
-            maximum interior wall thickness, which should be ignored in
-            the calculation of the overall boundary of the Rooms. Note that
-            care should be taken not to set this value higher than the length
-            of exterior wall segments. Otherwise, the exterior segments
-            will be ignored in the result. This can be particularly dangerous
-            around curved exterior walls that have been planarized through
-            subdivision into small segments.
+            is considered a meaningful separation.
         tolerance: The maximum difference between coordinate values of two
-            vertices at which they can be considered equivalent. (Default: 0.01,
-            suitable for objects in meters).
-    """
-    # get the floor geometries of the rooms, which are used to compute the boundary
-    floor_geos = []
-    for room in rooms:
-        flr_faces = [f.geometry for f in room.faces if isinstance(f.type, Floor)]
-        if len(flr_faces) == 0:
-            continue
-        elif len(flr_faces) == 1:
-            floor_geos.append(flr_faces[0])
-        else:
-            flr_geos = join_floor_geometries(
-                flr_faces, room.geometry.min.z, tolerance)
-            floor_geos.extend(flr_geos)
-    if len(floor_geos) == 0:
-        return []  # no Room boundary to be found
+            vertices at which they can be considered equivalent.
 
-    # convert the floor Face3Ds into counterclockwise Polygon2D
-    floor_polys, z_vals = [], []
-    for flr_geo in floor_geos:
-        z_vals.append(flr_geo.min.z)
-        b_poly = Polygon2D([Point2D(pt.x, pt.y) for pt in flr_geo.boundary])
-        if b_poly.is_clockwise:
-            b_poly = b_poly.reverse()
-        floor_polys.append(b_poly)
-        if flr_geo.has_holes:
-            for hole in flr_geo.holes:
-                h_poly = Polygon2D([Point2D(pt.x, pt.y) for pt in hole])
-                if h_poly.is_clockwise:
-                    h_poly = h_poly.reverse()
-                floor_polys.append(b_poly)
-    z_min = min(z_vals)
+    Returns:
+        A list of Polygon2D that represent the boundary around the input floor_polys.
+    """
 
     # determine which Polygon2D segments are exterior using the min_separation
     right_ang = -math.pi / 2
@@ -192,26 +149,67 @@ def horizontal_room_boundary(
         test_segs = []
         for _s in rel_segs:
             d_vec = _s.v.rotate(right_ang).normalize()
-            m_pt = _s.midpoint.move(d_vec * -tolerance)
-            test_segs.append(LineSegment2D(m_pt, d_vec * min_separation))
-        # remove any segments that intersect within the min_separation
+            seg_pts = _s.subdivide(min_separation)
+            if len(seg_pts) <= 3:
+                seg_pts = [_s.midpoint]
+            else:
+                seg_pts = seg_pts[1:-1]
+            spec_test_segs = []
+            for spt in seg_pts:
+                m_pt = spt.move(d_vec * -tolerance)
+                spec_test_segs.append(LineSegment2D(m_pt, d_vec * min_separation))
+            test_segs.append(spec_test_segs)
+        # make a series of line segments to test whether a segment is interior
         non_int_segs = []
         other_poly = [p for j, p in enumerate(floor_polys) if j != i]
-        for j, (_s, int_lin) in enumerate(zip(rel_segs, test_segs)):
-            for _oth_p in other_poly:
-                if _oth_p.intersect_line_ray(int_lin):  # intersection!
-                    break
-            else:
-                # if the polygon is concave, also check for self intersection
-                if poly.is_convex:
-                    non_int_segs.append(_s)
-                else:
+        for j, (_s, int_lins) in enumerate(zip(rel_segs, test_segs)):
+            int_vals = [0] * len(int_lins)
+            for l, int_lin in enumerate(int_lins):
+                for _oth_p in other_poly:
+                    if _oth_p.intersect_line_ray(int_lin):  # intersection!
+                        int_vals[l] = 1
+                        break
+            if sum(int_vals) == len(int_lins):  # fully internal line
+                continue
+            else: # if the polygon is concave, also check for self intersection
+                if not poly.is_convex:
                     _other_segs = [x for k, x in enumerate(rel_segs) if k != j]
-                    for _oth_s in _other_segs:
-                        if int_lin.intersect_line_ray(_oth_s) is not None:  # intersection!
-                            break
+                    for l, int_lin in enumerate(int_lins):
+                        for _oth_s in _other_segs:
+                            if int_lin.intersect_line_ray(_oth_s) is not None:  # intersection!
+                                int_vals[l] = 1
+                                break
+
+            # determine the exterior segments using the intersections
+            check_sum = sum(int_vals)
+            if check_sum == 0:  # fully external line
+                non_int_segs.append(_s)
+            elif len(int_vals) == 1 or check_sum == len(int_vals):  # fully internal line
+                continue
+            else:  # line that extends from inside to outside
+                # first see if the exterior part is meaningful
+                count_in_a_rows, repeat_count = [], 0
+                for v in int_vals:
+                    if v == 0:
+                        repeat_count += 1
+                        count_in_a_rows.append(repeat_count)
                     else:
-                        non_int_segs.append(_s)
+                        repeat_count = 0
+                max_repeat = max(count_in_a_rows)
+                # if the exterior part is meaningful, split it
+                if max_repeat != 1:
+                    last_pt = _s.p1 if int_vals[0] == 0 else None
+                    for v, ts in zip(int_vals, int_lins):
+                        if v == 0 and last_pt is None:
+                            last_pt = ts.p1
+                        elif v == 1 and last_pt is not None:
+                            lin_seg = LineSegment2D.from_end_points(last_pt, ts.p1)
+                            last_pt = None
+                            non_int_segs.append(lin_seg)
+                    if last_pt is not None:
+                        lin_seg = LineSegment2D.from_end_points(last_pt, _s.p2)
+                        non_int_segs.append(lin_seg)
+
         ext_segs.extend(non_int_segs)
 
     # loop through exterior segments and add segments across the max_wall_thickness
@@ -239,7 +237,7 @@ def horizontal_room_boundary(
 
     # if the resulting polylines are not closed, join the nearest end points
     if len(closed_polys) != len(ext_bounds):
-        extra_segs = []
+        extra_segs, extra_pts = [], []
         for i, s_bnd in enumerate(open_bounds):
             self_seg = LineSegment2D.from_end_points(s_bnd.p1, s_bnd.p2)
             poss_segs = [self_seg]
@@ -282,6 +280,146 @@ def horizontal_room_boundary(
                     closed_polys.append(bnd.to_polygon(tolerance))
                 except AssertionError:  # not a valid polygon
                     pass
+    return closed_polys
+
+
+def joined_intersected_boundary(floor_polys, is_holes, tolerance):
+    """Get the floor boundary by intersecting and joining the faces.
+
+    This method is faster and more reliable than the gap_crossing_boundary
+    but requires that the faces be touching one another within the tolerance.
+
+    Args:
+        floor_polys: The polygons to be joined into a boundary. These should have
+            colinear vertices removed and they should not contain degenerate
+            polygons at the tolerance.
+        is_holes: A list of booleans that align with the floor_polys and note
+            whether each polygon is a hole nor not.
+        tolerance: The tolerance at which the horizontal faces are joined.
+
+    Returns:
+        A list of Polygon2D that represent the boundary around the input floor_polys.
+    """
+    # intersect the polygons with one another
+    int_poly = Polygon2D.intersect_polygon_segments(floor_polys, tolerance)
+
+    # convert the resulting coordinates into Face3D
+    face_pts = []
+    for poly, is_hole in zip(int_poly, is_holes):
+        pt_3d = [Point3D(pt.x, pt.y, 0) for pt in poly]
+        if not is_hole:
+            face_pts.append((pt_3d, []))
+        else:
+            face_pts[-1][1].append(pt_3d)
+    intersected_faces = []
+    for i, face_loops in enumerate(face_pts):
+        if len(face_loops[1]) == 0:  # no holes
+            new_geo = Face3D(face_loops[0])
+        else:  # ensure holes are included
+            new_geo = Face3D(face_loops[0], holes=face_loops[1])
+        intersected_faces.append(new_geo)
+
+    # create a joined Polyface3D from the Face3D
+    joined_pface = Polyface3D.from_faces(intersected_faces, tolerance)
+
+    # join the naked edges of the Polyface into closed polygons
+    ext_edges = []
+    for edg in joined_pface.naked_edges:
+        pts_2d = (Point2D(edg.p1.x, edg.p1.y), Point2D(edg.p2.x, edg.p2.y))
+        ext_edges.append(LineSegment2D.from_end_points(*pts_2d))
+    outlines = Polyline2D.join_segments(ext_edges, tolerance)
+    closed_polys = []
+    for bnd in outlines:
+        if isinstance(bnd, Polyline2D) and bnd.is_closed(tolerance):
+            closed_polys.append(bnd.to_polygon(tolerance))
+    return closed_polys
+
+
+def grouped_horizontal_boundary(rooms, min_separation=0, tolerance=0.01):
+    """Get a list of Face3D representing the boundary around a set of Rooms.
+
+    This method will attempt to produce a boundary that follows along the 
+    exterior parts of the Floors of several Rooms so it is not suitable for
+    Rooms that lack Floors or Rooms with overlapping Floors in plan. Rooms with
+    such conditions will be ignored in the result and, when the input rooms
+    are composed entirely  of Rooms with these criteria, this method will
+    return an empty list. This method may also return an empty list if the
+    min_separation is so large that a continuous boundary could not
+    be determined.
+
+    Args:
+        rooms: A list of Honeybee Rooms for which the horizontal boundary will
+            be computed.
+        min_separation: A number for the minimum distance between Rooms that
+            is considered a meaningful separation. Gaps between Rooms that
+            are less than this distance will be ignored and the boundary
+            will continue across the gap. When the input rooms represent
+            volumes of interior Faces, this input can be thought of as the
+            maximum interior wall thickness, which should be ignored in
+            the calculation of the overall boundary of the Rooms. When Rooms
+            are touching one another (with Room volumes representing centerlines
+            of walls), this value can be set to zero or anything less than
+            or equal to the tolerance. Doing so will yield a cleaner result for
+            the boundary, which will be faster. Note that care should be taken
+            not to set this value higher than the length of any meaningful
+            exterior wall segments. Otherwise, the exterior segments
+            will be ignored in the result. This can be particularly dangerous
+            around curved exterior walls that have been planarized through
+            subdivision into small segments. (Default: 0).
+        tolerance: The maximum difference between coordinate values of two
+            vertices at which they can be considered equivalent. (Default: 0.01,
+            suitable for objects in meters).
+
+    Returns:
+        A list of Face3D that represent the horizontal boundaries around the
+        input rooms.
+    """
+    # get the floor geometries of the rooms, which are used to compute the boundary
+    floor_geos = []
+    for room in rooms:
+        flr_faces = [f.geometry for f in room.faces if isinstance(f.type, Floor)]
+        if len(flr_faces) == 0:
+            continue
+        elif len(flr_faces) == 1:
+            floor_geos.append(flr_faces[0])
+        else:
+            flr_geos = join_floor_geometries(
+                flr_faces, room.geometry.min.z, tolerance)
+            floor_geos.extend(flr_geos)
+
+    # check that floor geometry was found and remove colinear vertices
+    clean_floor_geos = []
+    for geo in floor_geos:
+        try:
+            clean_floor_geos.append(geo.remove_colinear_vertices(tolerance))
+        except AssertionError:  # degenerate geometry to ignore
+            pass
+    if len(clean_floor_geos) == 0:
+        return []  # no Room boundary to be found
+
+    # convert the floor Face3Ds into counterclockwise Polygon2Ds
+    floor_polys, is_holes, z_vals = [], [], []
+    for flr_geo in clean_floor_geos:
+        z_vals.append(flr_geo.min.z)
+        b_poly = Polygon2D([Point2D(pt.x, pt.y) for pt in flr_geo.boundary])
+        if b_poly.is_clockwise:
+            b_poly = b_poly.reverse()
+        floor_polys.append(b_poly)
+        is_holes.append(False)
+        if flr_geo.has_holes:
+            for hole in flr_geo.holes:
+                h_poly = Polygon2D([Point2D(pt.x, pt.y) for pt in hole])
+                if h_poly.is_clockwise:
+                    h_poly = h_poly.reverse()
+                floor_polys.append(h_poly)
+                is_holes.append(True)
+    z_min = min(z_vals)
+
+    # if the min_separation is small, use the more reliable intersection method
+    if min_separation <= tolerance:
+        closed_polys = joined_intersected_boundary(floor_polys, is_holes, tolerance)
+    else: # otherwise, use the more intense and less reliable gap crossing method
+        closed_polys = gap_crossing_boundary(floor_polys, min_separation, tolerance)
 
     # remove colinear vertices from the polygons
     clean_polys = []
@@ -307,9 +445,7 @@ def horizontal_room_boundary(
         base_face = faces[0]
         remain_faces = list(faces[1:])
         while len(remain_faces) > 0:
-            horizontal_bound.append(
-                _match_holes_to_face(base_face, remain_faces, tolerance)
-            )
+            horizontal_bound.append(_match_holes_to_face(base_face, remain_faces, tolerance))
             if len(remain_faces) > 1:
                 base_face = remain_faces[0]
                 del remain_faces[0]
@@ -345,10 +481,11 @@ def get_floor_boundary(room: Room, llc=True):
         boundaries.append(boundary)
 
     # find the union of the boundary polygons
-    boundaries = Polygon2D.boolean_union_all(boundaries, tolerance=0.001)
+    pf = Polyface3D.from_faces(floor_geom, tolerance=0.01)
+    boundaries = Polyline3D.join_segments(pf.naked_edges, tolerance=0.01)
 
     assert boundaries, f'Failed to calculate the floor boundary for {room.display_name}'
-    boundary = boundaries[0]
+    boundary = Polyline2D([Point2D(v.x, v.y) for v in boundaries[0].vertices])
 
     # insert missing points for the wall starting points
     wall_st_pts = [
