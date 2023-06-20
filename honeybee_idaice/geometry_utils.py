@@ -645,20 +645,24 @@ def prepare_apertures(apertures: List[Aperture]):
         Polygon2D(ref_plane.xyz_to_xy(v) for v in apt.vertices)
         for apt in non_rect_apts
     ]
-    # 0.01 for the case that the apertures are touching and 0.1 for the case of a frame
-    for tolerance in (0.01, 0.1):
+    polys = []
+    for boundary in in_boundaries:
         try:
-            out_boundaries = Polygon2D.boolean_union_all(in_boundaries, tolerance)
+            cb = boundary.remove_colinear_vertices(0.001)
         except Exception:
-            out_boundaries = []
             continue
         else:
-            if out_boundaries:
-                break
+            polys.append(cb)
+
+    has_holes = [False] * len(polys)
+    # 0.01 for the case that the apertures are touching and 0.1 for the case of a frame
+    closed_polys = joined_intersected_boundary(polys, has_holes, tolerance=0.001)
+    out_boundaries = gap_crossing_boundary(closed_polys, 0.1, tolerance=0.001)
+
     if not out_boundaries:
         return apertures
     print(
-        f'Merged {len(in_boundaries)} non-rectangular apertures into '
+        f'Merged {len(non_rect_apts)} non-rectangular apertures into '
         f'{len(out_boundaries)} apertures in {face} in {room}.'
     )
     merged_apts = []

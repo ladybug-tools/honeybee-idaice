@@ -1,7 +1,7 @@
 """Write an idm file from a HBJSON file."""
 import pathlib
 import shutil
-from typing import List
+from typing import List, Tuple
 
 from honeybee.model import Model, Room, Face
 from honeybee.facetype import RoofCeiling, Wall, Floor
@@ -110,6 +110,7 @@ def room_to_idm(room: Room):
             f' (:PAR :N ORIGIN :V #({origin.x} {origin.y}))\n' \
             f' (:PAR :N NCORN :V {count})\n' \
             f' (:PAR :N CORNERS :DIM ({count} 2) :V #2A({vertices_idm}))\n' \
+            f' (:PAR :N CEILING-HEIGHT :V {room.user_data["_idm_flr_ceil_height"]})\n' \
             f' (:PAR :N FLOOR_HEIGHT_FROM_GROUND :V {elevation}))'
 
     room_idm.append(geometry)
@@ -159,21 +160,25 @@ def deconstruct_room(room: Room):
     return walls, ceilings, floors
 
 
-def _is_room_extruded(room: Room) -> bool:
+def _is_room_extruded(room: Room) -> Tuple:
     """Check if the room geometry is an extrusion in Z direction."""
+    f_h = 0
+    c_h = 0
     for face in room.faces:
         type_ = face.type
         if isinstance(type_, Wall):
             if abs(face.altitude) > 5:
-                return False
+                return False, -1
         elif isinstance(type_, RoofCeiling):
             if abs(90 - face.altitude) > 5:
-                return False
+                return False, -1
+            c_h = face.vertices[0].z
         elif isinstance(type_, Floor):
             if abs(face.altitude + 90) > 5:
-                return False
+                return False, -1
+            f_h = face.vertices[0].z
 
-    return True
+    return True, round(c_h - f_h, 2)
 
 
 def prepare_model(model: Model) -> Model:
@@ -209,7 +214,11 @@ def prepare_model(model: Model) -> Model:
                 room_names[original_name] += 1
             else:
                 room_names[room.display_name] = 1
-            room.user_data = {'_idm_is_extruded': _is_room_extruded(room)}
+            is_extruded, floor_to_ceiling_height = _is_room_extruded(room) 
+            room.user_data = {
+                '_idm_is_extruded': is_extruded,
+                '_idm_flr_ceil_height': floor_to_ceiling_height
+            }
             for face in room.faces:
                 for door in face.doors:
                     center = door.geometry.center
