@@ -1,7 +1,6 @@
 """A module for functions related to IDM building-bodies."""
 from typing import List
 from ladybug_geometry.bounding import bounding_box
-from ladybug_geometry.geometry2d import Polygon2D, Point2D
 from ladybug_geometry.geometry3d import Plane, LineSegment3D, Face3D, Point3D
 
 from honeybee.room import Room
