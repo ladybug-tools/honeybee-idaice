@@ -273,6 +273,8 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
         debug: Set to True to not to delete the IDM folder before zipping it into a
             single file.
     """
+    if not model.rooms:
+        raise ValueError('The input model should at least have one room.')
 
     model = prepare_model(model)
 
