@@ -184,9 +184,12 @@ def _is_room_extruded(room: Room) -> Tuple:
 def prepare_model(model: Model) -> Model:
     """This function prepares the model for translation to IDM.
 
-    * Ensures the model is meters.
+    * Ensures the model is meters
     * Check room display names and ensures they are unique
-    * Mark doors in the model to avoid writing duplicated doors.
+    * Mark rooms as extruded and non-extruded
+    * Mark doors and apertures in the model to avoid writing duplicated doors and
+      apertures
+
     """
     model.convert_to_units(units='Meters')
 
@@ -199,7 +202,7 @@ def prepare_model(model: Model) -> Model:
 
     room_names = {}
     grouped_rooms, _ = Room.group_by_floor_height(model.rooms, min_difference=0.2)
-    tolerance = 0.75  # assuming the door centers are not closer than this dist
+    door_adj_tol = 0.75  # assuming the door centers are not closer than this distance
     for grouped_room in grouped_rooms:
         door_tracker = []
         aperture_tracker = []
@@ -214,7 +217,7 @@ def prepare_model(model: Model) -> Model:
                 room_names[original_name] += 1
             else:
                 room_names[room.display_name] = 1
-            is_extruded, floor_to_ceiling_height = _is_room_extruded(room) 
+            is_extruded, floor_to_ceiling_height = _is_room_extruded(room)
             room.user_data = {
                 '_idm_is_extruded': is_extruded,
                 '_idm_flr_ceil_height': floor_to_ceiling_height
@@ -223,7 +226,7 @@ def prepare_model(model: Model) -> Model:
                 for door in face.doors:
                     center = door.geometry.center
                     for pt in door_tracker:
-                        if pt.distance_to_point(center) <= tolerance:
+                        if pt.distance_to_point(center) <= door_adj_tol:
                             door.user_data = {'_idm_ignore': True}
                             break
                     door_tracker.append(center)
@@ -232,11 +235,26 @@ def prepare_model(model: Model) -> Model:
                     normal = aperture.geometry.normal
                     for data in aperture_tracker:
                         c, n = data
-                        if c.distance_to_point(center) <= tolerance \
+                        if c.distance_to_point(center) <= door_adj_tol \
                                 and abs(n.angle(normal) - 3.14159) < 0.1:
                             aperture.user_data = {'_idm_ignore': True}
                     aperture_tracker.append((center, normal))
     return model
+
+
+def prepare_folder(bldg_name: str, out_folder: str) -> List[pathlib.Path]:
+    """Prepare folders for IDM file."""
+    base_folder = pathlib.Path(out_folder)
+    model_folder = base_folder.joinpath(bldg_name)
+    if model_folder.exists():
+        shutil.rmtree(model_folder.as_posix())
+    model_folder.mkdir(parents=True, exist_ok=True)
+    # create the entry file
+    bldg_folder = model_folder.joinpath(f'{bldg_name}')
+    bldg_folder.mkdir(parents=True, exist_ok=True)
+    bldg_file = model_folder.joinpath(f'{bldg_name}.idm')
+
+    return base_folder, model_folder, bldg_folder, bldg_file
 
 
 def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
@@ -260,20 +278,15 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
     # make sure names don't have subfolder or extension
     original_name = name or model.display_name
     name = pathlib.Path(original_name).stem
+    bldg_name = name or model.display_name
+
+    base_folder, model_folder, bldg_folder, bldg_file = \
+        prepare_folder(bldg_name, out_folder)
 
     __here__ = pathlib.Path(__file__).parent
     templates_folder = __here__.joinpath('templates')
-    bldg_name = name or model.display_name
-    base_folder = pathlib.Path(out_folder)
-    model_folder = base_folder.joinpath(bldg_name)
-    if model_folder.exists():
-        shutil.rmtree(model_folder.as_posix())
-    model_folder.mkdir(parents=True, exist_ok=True)
-    # create the entry file
-    bldg_folder = model_folder.joinpath(f'{bldg_name}')
-    bldg_folder.mkdir(parents=True, exist_ok=True)
-    bldg_file = model_folder.joinpath(f'{bldg_name}.idm')
 
+    # create building file that includes building bodies and a reference to the rooms
     with bldg_file.open('w') as bldg:
         header = ';IDA 4.80002 Data UTF-8\n' \
             f'(DOCUMENT-HEADER :TYPE BUILDING :N "{bldg_name}" :MS 4 :CK ((RECENT (WINDEF . "Double Clear Air (WIN7)"))) :PARENT ICE :APP (ICE :VER 4.802))\n'
@@ -283,22 +296,22 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
         for line in bldg_template.open('r'):
             bldg.write(line)
 
-        # create a building section for each floor
+        # create a building sections/bodies for the building
         sections = section_to_idm(
             model.rooms, max_int_wall_thickness=max_int_wall_thickness
         )
         bldg.write(sections)
 
-        # add rooms as zones
+        # add reference to rooms as zones
         for room in model.rooms:
             bldg.write(f'((CE-ZONE :N "{room.display_name}" :T ZONE))\n')
 
-        # collect all the shades from room
+        # add shades to building
         shades_idm = shades_to_idm(model.shades)
         bldg.write(shades_idm)
         bldg.write(f'\n;[end of {bldg_name}.idm]\n')
 
-    # copy template files
+    # copy all the template files
     templates = ['plant.idm', 'ahu.idc', 'ahu.idm', 'plant.idc']
     for template in templates:
         template_file = templates_folder.joinpath(template)
