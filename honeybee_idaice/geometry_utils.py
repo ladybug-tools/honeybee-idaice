@@ -481,11 +481,14 @@ def get_floor_boundary(room: Room, llc=True):
         boundaries.append(boundary)
 
     # find the union of the boundary polygons
-    pf = Polyface3D.from_faces(floor_geom, tolerance=0.01)
-    boundaries = Polyline3D.join_segments(pf.naked_edges, tolerance=0.01)
-
-    assert boundaries, f'Failed to calculate the floor boundary for {room.display_name}'
-    boundary = Polyline2D([Point2D(v.x, v.y) for v in boundaries[0].vertices])
+    if len(boundaries) > 1 and not boundaries[0].has_holes:
+        boundary = boundaries[0]
+    else:
+        pf = Polyface3D.from_faces(floor_geom, tolerance=0.01)
+        boundaries = Polyline3D.join_segments(pf.naked_edges, tolerance=0.01)
+        assert boundaries, \
+            f'Failed to calculate the floor boundary for {room.display_name}'
+        boundary = Polyline2D([Point2D(v.x, v.y) for v in boundaries[0].vertices[:-1]])
 
     # insert missing points for the wall starting points
     wall_st_pts = [
