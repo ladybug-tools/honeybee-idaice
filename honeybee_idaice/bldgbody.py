@@ -176,66 +176,82 @@ def _section_to_idm_extruded(
                 boundaries = bb_boundaries
 
         for count, boundary in enumerate(boundaries):
-            bv = list(boundary.vertices)
-            vc = len(bv)
-            corners = ' '.join(f'({v.x} {v.y})' for v in bv)
             sec_name = f'{name}_{group_count}_{count}_SEC'
+            bv = list(boundary.boundary)
+            holes = boundary.holes
+            if not holes:
+                contours = [bv]
+                vc = len(bv)
+                contours_formatted = ''
+            else:
+                contours = [bv] + [list(h) for h in holes]
+                vc = sum(len(c) for c in contours)
+                contours_formatted = ' '.join(str(len(c)) for c in contours)
 
+            corners = ' '.join(f'({v.x} {v.y})' for vv in contours for v in vv)
             header = f'((CE-SECTION :N "{sec_name}" :T BUILDING-SECTION)\n' \
                 f'  (:PAR :N NCORN :V {vc})\n' \
                 f'  (:PAR :N CORNERS :DIM ({vc} 2) :V #2A({corners}))\n' \
+                f'  (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
                 f'  (:PAR :N HEIGHT :V {height})\n' \
                 f'  (:PAR :N BOTTOM :V {bottom})'
+
             sections.append(header)
 
-            bv.append(bv[0])
-            for f_count, st in enumerate(bv[:-1]):
-                end = bv[f_count + 1]
-                if bottom < 0:
-                    up_vertices = [
-                        [st.x, st.y, height], [end.x, end.y, height], [st.x, st.y, 0],
-                        [end.x, end.y, 0]
-                    ]
-                    btm_vertices = [
-                        [st.x, st.y, 0], [end.x, end.y, 0], [end.x, end.y, bottom],
-                        [st.x, st.y, bottom]
-                    ]
-                else:
-                    up_vertices = [
-                        [st.x, st.y, height], [end.x, end.y, height],
-                        [st.x, st.y, bottom], [end.x, end.y, bottom]
-                    ]
-                    btm_vertices = []
-                up_count = len(up_vertices)
-                btm_count = len(btm_vertices)
-                up_vertices = ' '.join(f'({v[0]} {v[1]} {v[2]})' for v in up_vertices)
-                btm_vertices = ' '.join(f'({v[0]} {v[1]} {v[2]})' for v in btm_vertices)
+            for cc, bv in enumerate(contours):
+                bv.append(bv[0])
+                starter = 0 if cc == 0 else sum(len(c) - 1 for c in contours[:cc])
+                for f_count, st in enumerate(bv[:-1]):
+                    identifier = starter + f_count + 1
+                    end = bv[f_count + 1]
+                    if bottom < 0:
+                        up_vertices = [
+                            [st.x, st.y, height], [end.x, end.y, height],
+                            [st.x, st.y, 0], [end.x, end.y, 0]
+                        ]
+                        btm_vertices = [
+                            [st.x, st.y, 0], [end.x, end.y, 0], [end.x, end.y, bottom],
+                            [st.x, st.y, bottom]
+                        ]
+                    else:
+                        up_vertices = [
+                            [st.x, st.y, height], [end.x, end.y, height],
+                            [st.x, st.y, bottom], [end.x, end.y, bottom]
+                        ]
+                        btm_vertices = []
+                    up_count = len(up_vertices)
+                    btm_count = len(btm_vertices)
+                    up_vertices = ' '.join(f'({v[0]} {v[1]} {v[2]})' for v in up_vertices)
+                    btm_vertices = ' '.join(f'({v[0]} {v[1]} {v[2]})' for v in btm_vertices)
 
-                section = \
-                    f' ((FACE :N "f{f_count + 1}" :T WALL-FACE :INDEX {f_count + 1})\n' \
-                    f'  (:PAR :N NCORN :V {up_count})\n' \
-                    f'  (:PAR :N CORNERS :V #2A({up_vertices}))\n' \
-                    f'  ((FACE :N GROUND-FACE)\n' \
-                    f'  (:PAR :N NCORN :V {btm_count})\n' \
-                    f'  (:PAR :N CORNERS :V #2A({btm_vertices}))))'
-                sections.append(section)
+                    section = \
+                        f' ((FACE :N "f{identifier}" :T WALL-FACE :INDEX {identifier})\n' \
+                        f'  (:PAR :N NCORN :V {up_count})\n' \
+                        f'  (:PAR :N CORNERS :V #2A({up_vertices}))\n' \
+                        f'  ((FACE :N GROUND-FACE)\n' \
+                        f'  (:PAR :N NCORN :V {btm_count})\n' \
+                        f'  (:PAR :N CORNERS :V #2A({btm_vertices}))))'
+                    sections.append(section)
 
-            ccount = len(bv) - 1
-            crawl_corners = ' '.join(f'({v.x} {v.y} {bottom})' for v in bv[:-1])
-            roof_corners = ' '.join(f'({v.x} {v.y} {height})' for v in bv[:-1])
+            crawl_corners = \
+                ' '.join(f'({v.x} {v.y} {bottom})' for vv in contours for v in vv)
+            roof_corners = \
+                ' '.join(f'({v.x} {v.y} {height})' for vv in contours for v in vv)
             footer = \
                 f' ((FACE :N "Crawl space_{sec_name}" :T CRAWL-FACE :INDEX -2000)\n' \
                 '  (:PAR :N NCORN :V 0)\n' \
                 '  (:PAR :N CORNERS :DIM (0 3) :V #2A())\n' \
                 ' ((FACE :N GROUND-FACE)\n' \
-                f'  (:PAR :N NCORN :V {ccount})\n' \
-                f' (:PAR :N CORNERS :V #2A({crawl_corners}))))\n' \
+                f'  (:PAR :N NCORN :V {vc})\n' \
+                f'  (:PAR :N CORNERS :V #2A({crawl_corners})))\n' \
+                f'  (:PAR :N CONTOURS :V ({contours_formatted})))\n' \
                 f' ((ROOF-FACE :N "Roof_{sec_name}" :T ROOF-FACE :INDEX -1000)\n' \
-                f'  (:PAR :N NCORN :V {ccount})\n' \
-                f' (:PAR :N CORNERS :DIM ({ccount} 3) :V #2A({roof_corners}))\n' \
-                ' ((FACE :N GROUND-FACE)\n' \
-                '  (:PAR :N NCORN :V 0)\n' \
-                '  (:PAR :N CORNERS :DIM (0 3) :V #2A()))))'
+                f'  (:PAR :N NCORN :V {vc})\n' \
+                f' (:PAR :N CORNERS :DIM ({vc} 3) :V #2A({roof_corners}))\n' \
+                f' (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
+                '  ((FACE :N GROUND-FACE)\n' \
+                '   (:PAR :N NCORN :V 0)\n' \
+                '   (:PAR :N CORNERS :DIM (0 3) :V #2A()))))'
             sections.append(footer)
 
     return '\n'.join(sections)

@@ -63,10 +63,21 @@ def face_to_idm(face: Face, origin: Point3D, index: int):
     # name = face.display_name
     name = face.identifier
     type_ = _face_mapper[str(face.type)]
-    vertices = face.geometry.upper_right_counter_clockwise_vertices
-    count = len(vertices)
+    geometry = face.geometry
+    holes = geometry.holes
+    bv = list(geometry.boundary)
+    if not holes:
+        contours = [bv]
+        count = len(bv)
+        contours_formatted = ''
+    else:
+        contours = [bv] + [list(h) for h in holes]
+        count = sum(len(c) for c in contours)
+        contours_formatted = ' '.join(str(len(c)) for c in contours)
+
     vertices_idm = ' '.join((
-        f'({v.x - origin.x} {v.y - origin.y} {v.z - origin.z})' for v in vertices
+        f'({v.x - origin.x} {v.y - origin.y} {v.z - origin.z})'
+        for vertices in contours for v in vertices
     ))
 
     # add apertures
@@ -92,6 +103,7 @@ def face_to_idm(face: Face, origin: Point3D, index: int):
     face = f'((ENCLOSING-ELEMENT :N "{name}" :T {type_} :INDEX {index})\n' \
         f' ((AGGREGATE :N GEOMETRY)\n' \
         f'  (:PAR :N CORNERS :DIM ({count} 3) :SP ({count} 3) :V #2A({vertices_idm}))\n' \
+        f'  (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
         f'  (:PAR :N SLOPE :V {face.altitude + 90})){windows}\n{doors})'
 
     return face

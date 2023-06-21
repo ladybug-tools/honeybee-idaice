@@ -26,6 +26,7 @@ def ceilings_to_idm(faces: List[Face], origin: Point3D):
         # all the ceilings are the same height
         return '\n'.join(face_to_idm(face, origin, index) for face in faces)
 
+    # TODO: add support for ceiling parts with holes
     vertices_idm = ' '.join((
         f'({v.x - origin.x} {v.y - origin.y} {v.z - origin.z})' for v in vertices
     ))
