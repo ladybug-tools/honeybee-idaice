@@ -287,7 +287,7 @@ def _section_to_idm_extruded(
 
 
 def section_to_idm(rooms: List[Room], max_int_wall_thickness: float):
-
+    """Create an IDA-ICE building body for rooms."""
     sections = []
     grouped_rooms, floor_heights = Room.group_by_floor_height(rooms, min_difference=0.2)
     no_ext_rooms = []

@@ -40,11 +40,14 @@ def ceilings_to_idm(faces: List[Face], origin: Point3D):
 
     for fc, face in enumerate(faces):
         name = f'{face.identifier}_{fc}'
-        vertices = face.geometry.upper_right_counter_clockwise_vertices
-        count = len(vertices)
-        vertices_idm = ' '.join((
-            f'({v.x - origin.x} {v.y - origin.y} {v.z - origin.z})' for v in vertices
-        ))
+        holes = face.geometry.holes or []
+        contours = [list(face.geometry.boundary)] + [list(h) for h in holes]
+        vc = sum(len(c) for c in contours)
+        contours_formatted = ' '.join(str(len(c)) for c in contours)
+        vertices_idm = ' '.join(
+            f'({v.x - origin.x} {v.y - origin.y} {v.z - origin.z})'
+            for vv in contours for v in vv
+        )
 
         # add apertures
         windows = ['']
@@ -56,7 +59,8 @@ def ceilings_to_idm(faces: List[Face], origin: Point3D):
 
         cp = f' ((ENCLOSING-ELEMENT :N "{name}" :T CEILING-PART :INDEX {-1001 - fc})\n' \
             '  ((AGGREGATE :N GEOMETRY)\n' \
-            f'   (:PAR :N CORNERS :DIM ({count} 3) :SP ({count} 3) :V #2A({vertices_idm}))\n' \
+            f'   (:PAR :N CORNERS :DIM ({vc} 3) :SP ({vc} 3) :V #2A({vertices_idm}))\n' \
+            f'   (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
             f'   (:PAR :N SLOPE :V {face.altitude + 90})){windows})'
         ceiling_idm.append(cp)
 
