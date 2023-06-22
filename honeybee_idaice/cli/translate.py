@@ -22,7 +22,7 @@ def translate():
 )
 @click.option(
     '--wall-thickness', '-t', help='Maximum wall thickness for the interior walls in '
-    'the input model in meters.', default=0.45, show_default=True
+    'the input model in meters.', default=0.40, show_default=True
 )
 @click.option(
     '--folder', '-f', help='Path to target folder.',
