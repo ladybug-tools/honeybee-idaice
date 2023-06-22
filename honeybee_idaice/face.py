@@ -82,8 +82,7 @@ def face_to_idm(face: Face, origin: Point3D, index: int):
 
     # add apertures
     windows = ['']
-    apertures = prepare_apertures(face.apertures)
-    for aperture in apertures:
+    for aperture in face.apertures:
         if aperture.user_data and aperture.user_data.get('_idm_ignore', False):
             continue
         windows.append(opening_to_idm(aperture))
