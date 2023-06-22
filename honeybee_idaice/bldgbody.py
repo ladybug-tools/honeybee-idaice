@@ -4,7 +4,7 @@ from ladybug_geometry.bounding import bounding_box
 from ladybug_geometry.geometry3d import Plane, LineSegment3D, Face3D, Point3D
 
 from honeybee.room import Room
-from honeybee.facetype import Floor
+from honeybee.facetype import Floor, RoofCeiling
 
 from .geometry_utils import get_floor_boundary, grouped_horizontal_boundary
 
@@ -16,15 +16,31 @@ def _section_to_idm_protected(rooms: List[Room]):
     sections = []
     for room in rooms:
         room_section = []
-        vertices, _ = get_floor_boundary(room)
+        try:
+            boundary = grouped_horizontal_boundary([room], min_separation=0)
+            bv = list(boundary.boundary)
+            holes = boundary.holes
+        except Exception:
+            bv, _ = get_floor_boundary(room)
+            holes = None
+
+        if not holes:
+            contours = [bv]
+        else:
+            contours = [bv] + [list(h) for h in holes]
+
+        vc = sum(len(c) for c in contours)
+        contours_formatted = ' '.join(str(len(c)) for c in contours)
+
+        idm_vertices = ' '.join(f'({v.x} {v.y})' for vv in contours for v in vv)
+
         min_pt, max_pt = bounding_box(room.geometry)
-        ver_count = len(vertices)
-        idm_vertices = ' '.join(f'({v.x} {v.y})' for v in vertices)
+
         header = f'((CE-SECTION :N "{room.display_name}_SEC" :T BUILDING-SECTION)\n' \
             ' (:PAR :N PROTECTED_SHAPE :V :TRUE)\n' \
-            f' (:PAR :N NCORN :V {ver_count})\n' \
-            f' (:PAR :N CORNERS :DIM ({ver_count} 2) :V #2A({idm_vertices}))\n' \
-            f' (:PAR :N CONTOURS :V ({ver_count}))\n' \
+            f' (:PAR :N NCORN :V {vc})\n' \
+            f' (:PAR :N CORNERS :DIM ({vc} 2) :V #2A({idm_vertices}))\n' \
+            f' (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
             f' (:PAR :N HEIGHT :V {max_pt.z - min_pt.z})\n' \
             f' (:PAR :N BOTTOM :V {min_pt.z})'
         room_section.append(header)
@@ -35,32 +51,45 @@ def _section_to_idm_protected(rooms: List[Room]):
                 type_ = 'CRAWL-FACE'
                 index = -2000 - floor_count
                 floor_count += 1
+                holes = face.geometry.holes or []
+                contours = [list(face.geometry.boundary)] + [list(h) for h in holes]
+            elif isinstance(face.type, RoofCeiling):
+                type_ = 'WALL-FACE'
+                index = wall_count + 1
+                wall_count += 1
+                holes = face.geometry.holes or []
+                contours = [list(face.geometry.boundary)] + [list(h) for h in holes]
             else:
                 type_ = 'WALL-FACE'
                 index = wall_count + 1
                 wall_count += 1
+                holes = []
+                contours = [list(face.geometry.boundary)]
 
-            vertices = face.geometry.upper_right_counter_clockwise_vertices
-            count = len(vertices)
-            vertices_idm = ' '.join((
-                f'({v.x} {v.y} {v.z})' for v in vertices
-            ))
+            vc = sum(len(c) for c in contours)
+            contours_formatted = ' '.join(str(len(c)) for c in contours)
+
+            vertices_idm = ' '.join(
+                f'({v.x} {v.y} {v.z})' for vv in contours for v in vv
+            )
 
             if type_ == 'CRAWL-FACE':
                 body = f' ((FACE :N "{face.identifier}" :T {type_} :INDEX {index})\n' \
                     '  (:PAR :N NCORN :V 0)\n' \
                     '  (:PAR :N CORNERS :DIM (0 3) :V #2A())\n' \
                     '  ((FACE :N GROUND-FACE)\n' \
-                    f'  (:PAR :N NCORN :V {count})\n' \
-                    f'  (:PAR :N CORNERS :DIM ({count} 3) :V #2A({vertices_idm}))))'
+                    f'   (:PAR :N NCORN :V {vc})\n' \
+                    f'   (:PAR :N CORNERS :DIM ({vc} 3) :V #2A({vertices_idm}))\n' \
+                    f'   (:PAR :N CONTOURS :V ({contours_formatted}))))'
             else:
                 body = f' ((FACE :N "{face.identifier}" :T {type_} :INDEX {index})\n' \
-                    f'  (:PAR :N NCORN :V {count})\n' \
-                    f'  (:PAR :N CORNERS :DIM ({count} 3) :V #2A({vertices_idm}))\n' \
+                    f'  (:PAR :N NCORN :V {vc})\n' \
+                    f'  (:PAR :N CORNERS :DIM ({vc} 3) :V #2A({vertices_idm}))\n' \
+                    f'  (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
                     f'  (:PAR :N SLOPE :V {face.altitude + 90})\n' \
                     '  ((FACE :N GROUND-FACE)\n' \
-                    '  (:PAR :N NCORN :V 0)\n' \
-                    '  (:PAR :N CORNERS :DIM (0 3))))'
+                    '   (:PAR :N NCORN :V 0)\n' \
+                    '   (:PAR :N CORNERS :DIM (0 3))))'
 
             if type_ == 'WALL-FACE' and min_pt.z < -0.1:
                 # intersect the edges with the XY plane to create two separate segments
