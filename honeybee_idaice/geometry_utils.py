@@ -620,7 +620,7 @@ def _is_rectangle(aperture: Aperture) -> bool:
     return bb.area / aperture.geometry.boundary_polygon2d.area < 1.01
 
 
-def prepare_apertures(apertures: List[Aperture]):
+def prepare_apertures(apertures: List[Aperture]) -> List[Aperture]:
     """Merge non-rectangular apertures into merged boundaries."""
 
     # get a list of non-rectangular apertures

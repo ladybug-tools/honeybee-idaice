@@ -51,8 +51,7 @@ def ceilings_to_idm(faces: List[Face], origin: Point3D):
 
         # add apertures
         windows = ['']
-        apertures = prepare_apertures(face.apertures)
-        for aperture in apertures:
+        for aperture in face.apertures:
             windows.append(opening_to_idm(aperture))
 
         windows = ''.join(windows)
@@ -205,12 +204,16 @@ def prepare_model(model: Model) -> Model:
         # for IDA-ICE so let's continue the process.
         print(str(e))
 
+    for face in model.faces:
+        if face.apertures:
+            face._apertures = prepare_apertures(face.apertures)
+
     room_names = {}
     grouped_rooms, _ = Room.group_by_floor_height(model.rooms, min_difference=0.2)
     door_adj_tol = 0.75  # assuming the door centers are not closer than this distance
+    door_tracker = []
+    aperture_tracker = []
     for grouped_room in grouped_rooms:
-        door_tracker = []
-        aperture_tracker = []
         for room in grouped_room:
             # check the display name and change it if it is not unique
             room.display_name = \
