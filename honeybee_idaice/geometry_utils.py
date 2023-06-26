@@ -478,10 +478,11 @@ def get_floor_boundary(room: Room, llc=True):
                 Point2D(v.x, v.y) for v in floor.lower_left_counter_clockwise_vertices
             ]
         )
+        boundary = boundary.remove_colinear_vertices(0.01)
         boundaries.append(boundary)
 
     # find the union of the boundary polygons
-    if len(boundaries) > 1 and not boundaries[0].has_holes:
+    if len(boundaries) == 1 and not floor_geom[0].has_holes:
         boundary = boundaries[0]
     else:
         pf = Polyface3D.from_faces(floor_geom, tolerance=0.01)
