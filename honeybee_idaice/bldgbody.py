@@ -72,9 +72,9 @@ def _section_to_idm_protected(rooms: List[Room]):
             vertices_idm = ' '.join(
                 f'({v.x} {v.y} {v.z})' for vv in contours for v in vv
             )
-
+            identifier = wall_count + floor_count
             if type_ == 'CRAWL-FACE':
-                body = f' ((FACE :N "{face.identifier}" :T {type_} :INDEX {index})\n' \
+                body = f' ((FACE :N "f{identifier}" :T {type_} :INDEX {index})\n' \
                     '  (:PAR :N NCORN :V 0)\n' \
                     '  (:PAR :N CORNERS :DIM (0 3) :V #2A())\n' \
                     '  ((FACE :N GROUND-FACE)\n' \
@@ -82,7 +82,7 @@ def _section_to_idm_protected(rooms: List[Room]):
                     f'   (:PAR :N CORNERS :DIM ({vc} 3) :V #2A({vertices_idm}))\n' \
                     f'   (:PAR :N CONTOURS :V ({contours_formatted}))))'
             else:
-                body = f' ((FACE :N "{face.identifier}" :T {type_} :INDEX {index})\n' \
+                body = f' ((FACE :N "f{identifier}" :T {type_} :INDEX {index})\n' \
                     f'  (:PAR :N NCORN :V {vc})\n' \
                     f'  (:PAR :N CORNERS :DIM ({vc} 3) :V #2A({vertices_idm}))\n' \
                     f'  (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
