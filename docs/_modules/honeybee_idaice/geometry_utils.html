@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>honeybee_idaice.geometry_utils &#8212; honeybee-idaice  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          honeybee-idaice</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cli/index.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli/index.html#commands">Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cli/translate.html">translate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../cli/translate.html#honeybee-idaice-translate">honeybee-idaice translate</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../cli/translate.html#honeybee-idaice-translate-model-to-idm">model-to-idm</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.cli.html">honeybee_idaice.cli package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.cli.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../honeybee_idaice.cli.translate.html">honeybee_idaice.cli.translate module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.cli.html#module-honeybee_idaice.cli">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.archive.html">honeybee_idaice.archive module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.archive.html#honeybee_idaice.archive.zip_folder_to_idm"><code class="docutils literal notranslate"><span class="pre">zip_folder_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.bldgbody.html">honeybee_idaice.bldgbody module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.bldgbody.html#honeybee_idaice.bldgbody.section_to_idm"><code class="docutils literal notranslate"><span class="pre">section_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.face.html">honeybee_idaice.face module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.face.html#honeybee_idaice.face.face_to_idm"><code class="docutils literal notranslate"><span class="pre">face_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.face.html#honeybee_idaice.face.opening_to_idm"><code class="docutils literal notranslate"><span class="pre">opening_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html">honeybee_idaice.geometry_utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.closest_end_point2d_between_line2d"><code class="docutils literal notranslate"><span class="pre">closest_end_point2d_between_line2d()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.gap_crossing_boundary"><code class="docutils literal notranslate"><span class="pre">gap_crossing_boundary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.get_ceiling_boundary"><code class="docutils literal notranslate"><span class="pre">get_ceiling_boundary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.get_floor_boundary"><code class="docutils literal notranslate"><span class="pre">get_floor_boundary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.grouped_horizontal_boundary"><code class="docutils literal notranslate"><span class="pre">grouped_horizontal_boundary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.join_floor_geometries"><code class="docutils literal notranslate"><span class="pre">join_floor_geometries()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.joined_intersected_boundary"><code class="docutils literal notranslate"><span class="pre">joined_intersected_boundary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.prepare_apertures"><code class="docutils literal notranslate"><span class="pre">prepare_apertures()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.shade.html">honeybee_idaice.shade module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.shade.html#honeybee_idaice.shade.shades_to_idm"><code class="docutils literal notranslate"><span class="pre">shades_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.writer.html">honeybee_idaice.writer module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.ceilings_to_idm"><code class="docutils literal notranslate"><span class="pre">ceilings_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.deconstruct_room"><code class="docutils literal notranslate"><span class="pre">deconstruct_room()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.model_to_idm"><code class="docutils literal notranslate"><span class="pre">model_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.prepare_folder"><code class="docutils literal notranslate"><span class="pre">prepare_folder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.prepare_model"><code class="docutils literal notranslate"><span class="pre">prepare_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.room_to_idm"><code class="docutils literal notranslate"><span class="pre">room_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.writer_obj.html">honeybee_idaice.writer_obj module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer_obj.html#honeybee_idaice.writer_obj.hbjson_to_idm_obj"><code class="docutils literal notranslate"><span class="pre">hbjson_to_idm_obj()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#module-honeybee_idaice">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-4">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="body col-md-8 content" role="main">
+      
+  <h1>Source code for honeybee_idaice.geometry_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">ladybug_geometry.geometry3d</span> <span class="kn">import</span> <span class="n">Point3D</span><span class="p">,</span> <span class="n">Face3D</span><span class="p">,</span> <span class="n">Vector3D</span><span class="p">,</span> <span class="n">Plane</span><span class="p">,</span> <span class="n">Polyface3D</span><span class="p">,</span> \
+    <span class="n">Polyline3D</span>
+<span class="kn">from</span> <span class="nn">ladybug_geometry.geometry2d</span> <span class="kn">import</span> <span class="n">Polygon2D</span><span class="p">,</span> <span class="n">Point2D</span><span class="p">,</span> <span class="n">Polyline2D</span><span class="p">,</span> <span class="n">LineSegment2D</span>
+<span class="kn">from</span> <span class="nn">honeybee.facetype</span> <span class="kn">import</span> <span class="n">Floor</span><span class="p">,</span> <span class="n">Wall</span>
+<span class="kn">from</span> <span class="nn">honeybee.room</span> <span class="kn">import</span> <span class="n">Room</span>
+<span class="kn">from</span> <span class="nn">honeybee.aperture</span> <span class="kn">import</span> <span class="n">Aperture</span>
+
+
+<span class="k">def</span> <span class="nf">_match_holes_to_face</span><span class="p">(</span><span class="n">base_face</span><span class="p">:</span> <span class="n">Face3D</span><span class="p">,</span> <span class="n">other_faces</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Face3D</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Attempt to merge other faces into a base face as holes.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        base_face: A Face3D to serve as the base.</span>
+<span class="sd">        other_faces: A list of other Face3D objects to attempt to merge into</span>
+<span class="sd">            the base_face as a hole. This method will delete any faces</span>
+<span class="sd">            that are successfully merged into the output from this list.</span>
+<span class="sd">        tol: The tolerance to be used for evaluating sub-faces.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A Face3D which has holes in it if any of the other_faces is a valid</span>
+<span class="sd">        sub face.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">holes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">more_to_check</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">while</span> <span class="n">more_to_check</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r_face</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">other_faces</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">base_face</span><span class="o">.</span><span class="n">is_sub_face</span><span class="p">(</span><span class="n">r_face</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">holes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r_face</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">other_faces</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">more_to_check</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">holes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">base_face</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">hole_vertices</span> <span class="o">=</span> <span class="p">[</span><span class="n">hole</span><span class="o">.</span><span class="n">vertices</span> <span class="k">for</span> <span class="n">hole</span> <span class="ow">in</span> <span class="n">holes</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">Face3D</span><span class="p">(</span><span class="n">base_face</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">Plane</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">Vector3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">hole_vertices</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="join_floor_geometries"><a class="viewcode-back" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.join_floor_geometries">[docs]</a><span class="k">def</span> <span class="nf">join_floor_geometries</span><span class="p">(</span>
+        <span class="n">floor_faces</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Face3D</span><span class="p">],</span> <span class="n">floor_height</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Face3D</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Join a list of Face3Ds together to get as few as possible at the floor_height.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        floor_faces: A list of Face3D objects to be joined together.</span>
+<span class="sd">        floor_height: a number for the floor_height of the resulting horizontal</span>
+<span class="sd">            Face3Ds.</span>
+<span class="sd">        tolerance: The maximum difference between values at which point vertices</span>
+<span class="sd">            are considered to be the same.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A list of horizontal Face3Ds for the minimum number joined together.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># join all of the floor geometries into a single Polyface3D</span>
+    <span class="n">room_floors</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">fg</span> <span class="ow">in</span> <span class="n">floor_faces</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">fg</span><span class="o">.</span><span class="n">is_horizontal</span><span class="p">(</span><span class="n">tolerance</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">floor_height</span> <span class="o">-</span> <span class="n">fg</span><span class="o">.</span><span class="n">min</span><span class="o">.</span><span class="n">z</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">tolerance</span><span class="p">:</span>
+            <span class="n">room_floors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fg</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># project the face geometry into the XY plane</span>
+            <span class="n">bound</span> <span class="o">=</span> <span class="p">[</span><span class="n">Point3D</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">floor_height</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">fg</span><span class="o">.</span><span class="n">boundary</span><span class="p">]</span>
+            <span class="n">holes</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">fg</span><span class="o">.</span><span class="n">has_holes</span><span class="p">:</span>
+                <span class="n">holes</span> <span class="o">=</span> <span class="p">[[</span><span class="n">Point3D</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">floor_height</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">hole</span><span class="p">]</span>
+                         <span class="k">for</span> <span class="n">hole</span> <span class="ow">in</span> <span class="n">fg</span><span class="o">.</span><span class="n">holes</span><span class="p">]</span>
+            <span class="n">room_floors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Face3D</span><span class="p">(</span><span class="n">bound</span><span class="p">,</span> <span class="n">holes</span><span class="o">=</span><span class="n">holes</span><span class="p">))</span>
+    <span class="n">flr_pf</span> <span class="o">=</span> <span class="n">Polyface3D</span><span class="o">.</span><span class="n">from_faces</span><span class="p">(</span><span class="n">room_floors</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+
+    <span class="c1"># convert the Polyface3D into as few Face3Ds as possible</span>
+    <span class="n">flr_pl</span> <span class="o">=</span> <span class="n">Polyline3D</span><span class="o">.</span><span class="n">join_segments</span><span class="p">(</span><span class="n">flr_pf</span><span class="o">.</span><span class="n">naked_edges</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">flr_pl</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># can be represented with a single Face3D</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Face3D</span><span class="p">(</span><span class="n">flr_pl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])]</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># need to separate holes from distinct Face3Ds</span>
+        <span class="n">faces</span> <span class="o">=</span> <span class="p">[</span><span class="n">Face3D</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">pl</span> <span class="ow">in</span> <span class="n">flr_pl</span><span class="p">]</span>
+        <span class="n">faces</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">base_face</span> <span class="o">=</span> <span class="n">faces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">remain_faces</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">faces</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+        <span class="n">all_face3ds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">remain_faces</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">all_face3ds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_match_holes_to_face</span><span class="p">(</span><span class="n">base_face</span><span class="p">,</span> <span class="n">remain_faces</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">remain_faces</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">base_face</span> <span class="o">=</span> <span class="n">remain_faces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">del</span> <span class="n">remain_faces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">remain_faces</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># lone last Face3D</span>
+                <span class="n">all_face3ds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">remain_faces</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">del</span> <span class="n">remain_faces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">all_face3ds</span></div>
+
+
+<div class="viewcode-block" id="closest_end_point2d_between_line2d"><a class="viewcode-back" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.closest_end_point2d_between_line2d">[docs]</a><span class="k">def</span> <span class="nf">closest_end_point2d_between_line2d</span><span class="p">(</span><span class="n">line_a</span><span class="p">,</span> <span class="n">line_b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the two closest end Point2Ds between two LineSegment2D objects.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        line_a: A LineSegment2D object.</span>
+<span class="sd">        line_b: Another LineSegment2D to which closest points will</span>
+<span class="sd">            be determined.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tuple with two elements</span>
+
+<span class="sd">        - dist: The distance between the two LineSegment2D objects.</span>
+<span class="sd">        - pts: A tuple of two Point2D objects representing:</span>
+
+<span class="sd">        1) The point on line_a that is closest to line_b</span>
+<span class="sd">        2) The point on line_b that is closest to line_a</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># one of the 4 endpoints must be a closest point</span>
+    <span class="n">pts</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">line_a</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="n">line_b</span><span class="o">.</span><span class="n">p1</span><span class="p">),</span> <span class="p">(</span><span class="n">line_a</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="n">line_b</span><span class="o">.</span><span class="n">p2</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">line_a</span><span class="o">.</span><span class="n">p2</span><span class="p">,</span> <span class="n">line_b</span><span class="o">.</span><span class="n">p1</span><span class="p">),</span> <span class="p">(</span><span class="n">line_a</span><span class="o">.</span><span class="n">p2</span><span class="p">,</span> <span class="n">line_b</span><span class="o">.</span><span class="n">p2</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">dists</span> <span class="o">=</span> <span class="p">[</span><span class="n">p1</span><span class="o">.</span><span class="n">distance_to_point</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span> <span class="k">for</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span> <span class="ow">in</span> <span class="n">pts</span><span class="p">]</span>
+    <span class="c1"># sort the closest points based on their distance</span>
+    <span class="n">dists</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">dists</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pts</span><span class="p">)))))</span>
+    <span class="k">return</span> <span class="n">dists</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pts</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span></div>
+
+
+<div class="viewcode-block" id="gap_crossing_boundary"><a class="viewcode-back" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.gap_crossing_boundary">[docs]</a><span class="k">def</span> <span class="nf">gap_crossing_boundary</span><span class="p">(</span><span class="n">floor_polys</span><span class="p">,</span> <span class="n">min_separation</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the floor boundary by jumping over gaps as wide as the min_separation.</span>
+
+<span class="sd">    This method is less reliable than the joined_intersected_boundary because</span>
+<span class="sd">    higher values of min_separation can cause important elements to disappear.</span>
+<span class="sd">    However, when used appropriately, it can provide a boundary that jumps</span>
+<span class="sd">    across interior wall thicknesses.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        floor_polys: The polygons to be joined into a boundary. These should have</span>
+<span class="sd">            colinear vertices removed and they should not contain degenerate</span>
+<span class="sd">            polygons at the tolerance.</span>
+<span class="sd">        min_separation: A number for the minimum distance between Rooms that</span>
+<span class="sd">            is considered a meaningful separation.</span>
+<span class="sd">        tolerance: The maximum difference between coordinate values of two</span>
+<span class="sd">            vertices at which they can be considered equivalent.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A list of Polygon2D that represent the boundary around the input floor_polys.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># determine which Polygon2D segments are exterior using the min_separation</span>
+    <span class="n">right_ang</span> <span class="o">=</span> <span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">ext_segs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">poly</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">floor_polys</span><span class="p">):</span>
+        <span class="c1"># remove any short segments</span>
+        <span class="n">rel_segs</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">poly</span><span class="o">.</span><span class="n">segments</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="n">min_separation</span><span class="p">]</span>
+        <span class="c1"># create min_separation line segments to be used to test intersection</span>
+        <span class="n">test_segs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_s</span> <span class="ow">in</span> <span class="n">rel_segs</span><span class="p">:</span>
+            <span class="n">d_vec</span> <span class="o">=</span> <span class="n">_s</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">right_ang</span><span class="p">)</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+            <span class="n">seg_pts</span> <span class="o">=</span> <span class="n">_s</span><span class="o">.</span><span class="n">subdivide</span><span class="p">(</span><span class="n">min_separation</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seg_pts</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">seg_pts</span> <span class="o">=</span> <span class="p">[</span><span class="n">_s</span><span class="o">.</span><span class="n">midpoint</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">seg_pts</span> <span class="o">=</span> <span class="n">seg_pts</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">spec_test_segs</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">spt</span> <span class="ow">in</span> <span class="n">seg_pts</span><span class="p">:</span>
+                <span class="n">m_pt</span> <span class="o">=</span> <span class="n">spt</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">d_vec</span> <span class="o">*</span> <span class="o">-</span><span class="n">tolerance</span><span class="p">)</span>
+                <span class="n">spec_test_segs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LineSegment2D</span><span class="p">(</span><span class="n">m_pt</span><span class="p">,</span> <span class="n">d_vec</span> <span class="o">*</span> <span class="n">min_separation</span><span class="p">))</span>
+            <span class="n">test_segs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spec_test_segs</span><span class="p">)</span>
+        <span class="c1"># make a series of line segments to test whether a segment is interior</span>
+        <span class="n">non_int_segs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">other_poly</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">floor_polys</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="p">(</span><span class="n">_s</span><span class="p">,</span> <span class="n">int_lins</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">rel_segs</span><span class="p">,</span> <span class="n">test_segs</span><span class="p">)):</span>
+            <span class="n">int_vals</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">int_lins</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">int_lin</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">int_lins</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">_oth_p</span> <span class="ow">in</span> <span class="n">other_poly</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">_oth_p</span><span class="o">.</span><span class="n">intersect_line_ray</span><span class="p">(</span><span class="n">int_lin</span><span class="p">):</span>  <span class="c1"># intersection!</span>
+                        <span class="n">int_vals</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                        <span class="k">break</span>
+            <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">int_vals</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">int_lins</span><span class="p">):</span>  <span class="c1"># fully internal line</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1"># if the polygon is concave, also check for self intersection</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">poly</span><span class="o">.</span><span class="n">is_convex</span><span class="p">:</span>
+                    <span class="n">_other_segs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rel_segs</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="n">j</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">int_lin</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">int_lins</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">_oth_s</span> <span class="ow">in</span> <span class="n">_other_segs</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">int_lin</span><span class="o">.</span><span class="n">intersect_line_ray</span><span class="p">(</span><span class="n">_oth_s</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># intersection!</span>
+                                <span class="n">int_vals</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                                <span class="k">break</span>
+
+            <span class="c1"># determine the exterior segments using the intersections</span>
+            <span class="n">check_sum</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">int_vals</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">check_sum</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># fully external line</span>
+                <span class="n">non_int_segs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_s</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">int_vals</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">check_sum</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">int_vals</span><span class="p">):</span>  <span class="c1"># fully internal line</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># line that extends from inside to outside</span>
+                <span class="c1"># first see if the exterior part is meaningful</span>
+                <span class="n">count_in_a_rows</span><span class="p">,</span> <span class="n">repeat_count</span> <span class="o">=</span> <span class="p">[],</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">int_vals</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">repeat_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">count_in_a_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">repeat_count</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">repeat_count</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">max_repeat</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">count_in_a_rows</span><span class="p">)</span>
+                <span class="c1"># if the exterior part is meaningful, split it</span>
+                <span class="k">if</span> <span class="n">max_repeat</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">last_pt</span> <span class="o">=</span> <span class="n">_s</span><span class="o">.</span><span class="n">p1</span> <span class="k">if</span> <span class="n">int_vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">None</span>
+                    <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">ts</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">int_vals</span><span class="p">,</span> <span class="n">int_lins</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">last_pt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">last_pt</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">p1</span>
+                        <span class="k">elif</span> <span class="n">v</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">last_pt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">lin_seg</span> <span class="o">=</span> <span class="n">LineSegment2D</span><span class="o">.</span><span class="n">from_end_points</span><span class="p">(</span><span class="n">last_pt</span><span class="p">,</span> <span class="n">ts</span><span class="o">.</span><span class="n">p1</span><span class="p">)</span>
+                            <span class="n">last_pt</span> <span class="o">=</span> <span class="kc">None</span>
+                            <span class="n">non_int_segs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lin_seg</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">last_pt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">lin_seg</span> <span class="o">=</span> <span class="n">LineSegment2D</span><span class="o">.</span><span class="n">from_end_points</span><span class="p">(</span><span class="n">last_pt</span><span class="p">,</span> <span class="n">_s</span><span class="o">.</span><span class="n">p2</span><span class="p">)</span>
+                        <span class="n">non_int_segs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lin_seg</span><span class="p">)</span>
+
+        <span class="n">ext_segs</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">non_int_segs</span><span class="p">)</span>
+
+    <span class="c1"># loop through exterior segments and add segments across the max_wall_thickness</span>
+    <span class="n">joining_segs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">e_seg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ext_segs</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">o_seg</span> <span class="ow">in</span> <span class="n">ext_segs</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]:</span>
+                <span class="n">dist</span><span class="p">,</span> <span class="n">pts</span> <span class="o">=</span> <span class="n">closest_end_point2d_between_line2d</span><span class="p">(</span><span class="n">e_seg</span><span class="p">,</span> <span class="n">o_seg</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">tolerance</span> <span class="o">&lt;</span> <span class="n">dist</span> <span class="o">&lt;=</span> <span class="n">min_separation</span><span class="p">:</span>
+                    <span class="n">joining_segs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LineSegment2D</span><span class="o">.</span><span class="n">from_end_points</span><span class="p">(</span><span class="o">*</span><span class="n">pts</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># we have reached the end of the list</span>
+
+    <span class="c1"># join all of the segments together into polylines</span>
+    <span class="n">all_segs</span> <span class="o">=</span> <span class="n">ext_segs</span> <span class="o">+</span> <span class="n">joining_segs</span>
+    <span class="n">ext_bounds</span> <span class="o">=</span> <span class="n">Polyline2D</span><span class="o">.</span><span class="n">join_segments</span><span class="p">(</span><span class="n">all_segs</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+
+    <span class="c1"># separate valid closed boundaries from open ones</span>
+    <span class="n">closed_polys</span><span class="p">,</span> <span class="n">open_bounds</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">bnd</span> <span class="ow">in</span> <span class="n">ext_bounds</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bnd</span><span class="p">,</span> <span class="n">Polyline2D</span><span class="p">)</span> <span class="ow">and</span> <span class="n">bnd</span><span class="o">.</span><span class="n">is_closed</span><span class="p">(</span><span class="n">tolerance</span><span class="p">):</span>
+            <span class="n">closed_polys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bnd</span><span class="o">.</span><span class="n">to_polygon</span><span class="p">(</span><span class="n">tolerance</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">open_bounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bnd</span><span class="p">)</span>
+
+    <span class="c1"># if the resulting polylines are not closed, join the nearest end points</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">closed_polys</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ext_bounds</span><span class="p">):</span>
+        <span class="n">extra_segs</span><span class="p">,</span> <span class="n">extra_pts</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s_bnd</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">open_bounds</span><span class="p">):</span>
+            <span class="n">self_seg</span> <span class="o">=</span> <span class="n">LineSegment2D</span><span class="o">.</span><span class="n">from_end_points</span><span class="p">(</span><span class="n">s_bnd</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="n">s_bnd</span><span class="o">.</span><span class="n">p2</span><span class="p">)</span>
+            <span class="n">poss_segs</span> <span class="o">=</span> <span class="p">[</span><span class="n">self_seg</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">o_bnd</span> <span class="ow">in</span> <span class="n">open_bounds</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]:</span>
+                    <span class="n">pts</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="p">(</span><span class="n">s_bnd</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="n">o_bnd</span><span class="o">.</span><span class="n">p1</span><span class="p">),</span> <span class="p">(</span><span class="n">s_bnd</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="n">o_bnd</span><span class="o">.</span><span class="n">p2</span><span class="p">),</span>
+                        <span class="p">(</span><span class="n">s_bnd</span><span class="o">.</span><span class="n">p2</span><span class="p">,</span> <span class="n">o_bnd</span><span class="o">.</span><span class="n">p1</span><span class="p">),</span> <span class="p">(</span><span class="n">s_bnd</span><span class="o">.</span><span class="n">p2</span><span class="p">,</span> <span class="n">o_bnd</span><span class="o">.</span><span class="n">p2</span><span class="p">)]</span>
+                    <span class="k">for</span> <span class="n">comb</span> <span class="ow">in</span> <span class="n">pts</span><span class="p">:</span>
+                        <span class="n">poss_segs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LineSegment2D</span><span class="o">.</span><span class="n">from_end_points</span><span class="p">(</span><span class="o">*</span><span class="n">comb</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="k">continue</span>  <span class="c1"># we have reached the end of the list</span>
+            <span class="c1"># sort the possible segments by their length</span>
+            <span class="n">poss_segs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">length</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">poss_segs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="n">self_seg</span><span class="p">:</span>
+                <span class="n">extra_segs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poss_segs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># two possible connecting segments</span>
+                <span class="n">extra_segs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poss_segs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">extra_segs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poss_segs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1"># remove any duplicates from the extra segment list</span>
+        <span class="n">non_dup_segs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">e_seg</span> <span class="ow">in</span> <span class="n">extra_segs</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">f_seg</span> <span class="ow">in</span> <span class="n">non_dup_segs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">e_seg</span><span class="o">.</span><span class="n">is_equivalent</span><span class="p">(</span><span class="n">f_seg</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">):</span>
+                    <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">non_dup_segs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e_seg</span><span class="p">)</span>
+        <span class="n">extra_segs</span> <span class="o">=</span> <span class="n">non_dup_segs</span>
+        <span class="c1"># take the best available segments that fit the criteria</span>
+        <span class="n">extra_segs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">length</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">extra_segs</span> <span class="o">=</span> <span class="n">extra_segs</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">open_bounds</span><span class="p">)]</span>
+
+        <span class="c1"># join all segments, hopefully into a final closed polyline</span>
+        <span class="n">all_segs</span> <span class="o">=</span> <span class="n">ext_segs</span> <span class="o">+</span> <span class="n">joining_segs</span> <span class="o">+</span> <span class="n">extra_segs</span>
+        <span class="n">ext_bounds</span> <span class="o">=</span> <span class="n">Polyline2D</span><span class="o">.</span><span class="n">join_segments</span><span class="p">(</span><span class="n">all_segs</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+        <span class="n">closed_polys</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">bnd</span> <span class="ow">in</span> <span class="n">ext_bounds</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bnd</span><span class="p">,</span> <span class="n">Polyline2D</span><span class="p">)</span> <span class="ow">and</span> <span class="n">bnd</span><span class="o">.</span><span class="n">is_closed</span><span class="p">(</span><span class="n">tolerance</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">closed_polys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bnd</span><span class="o">.</span><span class="n">to_polygon</span><span class="p">(</span><span class="n">tolerance</span><span class="p">))</span>
+                <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>  <span class="c1"># not a valid polygon</span>
+                    <span class="k">pass</span>
+    <span class="k">return</span> <span class="n">closed_polys</span></div>
+
+
+<div class="viewcode-block" id="joined_intersected_boundary"><a class="viewcode-back" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.joined_intersected_boundary">[docs]</a><span class="k">def</span> <span class="nf">joined_intersected_boundary</span><span class="p">(</span><span class="n">floor_polys</span><span class="p">,</span> <span class="n">is_holes</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the floor boundary by intersecting and joining the faces.</span>
+
+<span class="sd">    This method is faster and more reliable than the gap_crossing_boundary</span>
+<span class="sd">    but requires that the faces be touching one another within the tolerance.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        floor_polys: The polygons to be joined into a boundary. These should have</span>
+<span class="sd">            colinear vertices removed and they should not contain degenerate</span>
+<span class="sd">            polygons at the tolerance.</span>
+<span class="sd">        is_holes: A list of booleans that align with the floor_polys and note</span>
+<span class="sd">            whether each polygon is a hole nor not.</span>
+<span class="sd">        tolerance: The tolerance at which the horizontal faces are joined.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A list of Polygon2D that represent the boundary around the input floor_polys.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># intersect the polygons with one another</span>
+    <span class="n">int_poly</span> <span class="o">=</span> <span class="n">Polygon2D</span><span class="o">.</span><span class="n">intersect_polygon_segments</span><span class="p">(</span><span class="n">floor_polys</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+
+    <span class="c1"># convert the resulting coordinates into Face3D</span>
+    <span class="n">face_pts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">poly</span><span class="p">,</span> <span class="n">is_hole</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">int_poly</span><span class="p">,</span> <span class="n">is_holes</span><span class="p">):</span>
+        <span class="n">pt_3d</span> <span class="o">=</span> <span class="p">[</span><span class="n">Point3D</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">poly</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_hole</span><span class="p">:</span>
+            <span class="n">face_pts</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">pt_3d</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">face_pts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pt_3d</span><span class="p">)</span>
+    <span class="n">intersected_faces</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">face_loops</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">face_pts</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">face_loops</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># no holes</span>
+            <span class="n">new_geo</span> <span class="o">=</span> <span class="n">Face3D</span><span class="p">(</span><span class="n">face_loops</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># ensure holes are included</span>
+            <span class="n">new_geo</span> <span class="o">=</span> <span class="n">Face3D</span><span class="p">(</span><span class="n">face_loops</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">holes</span><span class="o">=</span><span class="n">face_loops</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">intersected_faces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_geo</span><span class="p">)</span>
+
+    <span class="c1"># create a joined Polyface3D from the Face3D</span>
+    <span class="n">joined_pface</span> <span class="o">=</span> <span class="n">Polyface3D</span><span class="o">.</span><span class="n">from_faces</span><span class="p">(</span><span class="n">intersected_faces</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+
+    <span class="c1"># join the naked edges of the Polyface into closed polygons</span>
+    <span class="n">ext_edges</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">edg</span> <span class="ow">in</span> <span class="n">joined_pface</span><span class="o">.</span><span class="n">naked_edges</span><span class="p">:</span>
+        <span class="n">pts_2d</span> <span class="o">=</span> <span class="p">(</span><span class="n">Point2D</span><span class="p">(</span><span class="n">edg</span><span class="o">.</span><span class="n">p1</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">edg</span><span class="o">.</span><span class="n">p1</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">Point2D</span><span class="p">(</span><span class="n">edg</span><span class="o">.</span><span class="n">p2</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">edg</span><span class="o">.</span><span class="n">p2</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+        <span class="n">ext_edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LineSegment2D</span><span class="o">.</span><span class="n">from_end_points</span><span class="p">(</span><span class="o">*</span><span class="n">pts_2d</span><span class="p">))</span>
+    <span class="n">outlines</span> <span class="o">=</span> <span class="n">Polyline2D</span><span class="o">.</span><span class="n">join_segments</span><span class="p">(</span><span class="n">ext_edges</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+    <span class="n">closed_polys</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">bnd</span> <span class="ow">in</span> <span class="n">outlines</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bnd</span><span class="p">,</span> <span class="n">Polyline2D</span><span class="p">)</span> <span class="ow">and</span> <span class="n">bnd</span><span class="o">.</span><span class="n">is_closed</span><span class="p">(</span><span class="n">tolerance</span><span class="p">):</span>
+            <span class="n">closed_polys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bnd</span><span class="o">.</span><span class="n">to_polygon</span><span class="p">(</span><span class="n">tolerance</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">closed_polys</span></div>
+
+
+<div class="viewcode-block" id="grouped_horizontal_boundary"><a class="viewcode-back" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.grouped_horizontal_boundary">[docs]</a><span class="k">def</span> <span class="nf">grouped_horizontal_boundary</span><span class="p">(</span><span class="n">rooms</span><span class="p">,</span> <span class="n">min_separation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a list of Face3D representing the boundary around a set of Rooms.</span>
+
+<span class="sd">    This method will attempt to produce a boundary that follows along the </span>
+<span class="sd">    exterior parts of the Floors of several Rooms so it is not suitable for</span>
+<span class="sd">    Rooms that lack Floors or Rooms with overlapping Floors in plan. Rooms with</span>
+<span class="sd">    such conditions will be ignored in the result and, when the input rooms</span>
+<span class="sd">    are composed entirely  of Rooms with these criteria, this method will</span>
+<span class="sd">    return an empty list. This method may also return an empty list if the</span>
+<span class="sd">    min_separation is so large that a continuous boundary could not</span>
+<span class="sd">    be determined.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rooms: A list of Honeybee Rooms for which the horizontal boundary will</span>
+<span class="sd">            be computed.</span>
+<span class="sd">        min_separation: A number for the minimum distance between Rooms that</span>
+<span class="sd">            is considered a meaningful separation. Gaps between Rooms that</span>
+<span class="sd">            are less than this distance will be ignored and the boundary</span>
+<span class="sd">            will continue across the gap. When the input rooms represent</span>
+<span class="sd">            volumes of interior Faces, this input can be thought of as the</span>
+<span class="sd">            maximum interior wall thickness, which should be ignored in</span>
+<span class="sd">            the calculation of the overall boundary of the Rooms. When Rooms</span>
+<span class="sd">            are touching one another (with Room volumes representing centerlines</span>
+<span class="sd">            of walls), this value can be set to zero or anything less than</span>
+<span class="sd">            or equal to the tolerance. Doing so will yield a cleaner result for</span>
+<span class="sd">            the boundary, which will be faster. Note that care should be taken</span>
+<span class="sd">            not to set this value higher than the length of any meaningful</span>
+<span class="sd">            exterior wall segments. Otherwise, the exterior segments</span>
+<span class="sd">            will be ignored in the result. This can be particularly dangerous</span>
+<span class="sd">            around curved exterior walls that have been planarized through</span>
+<span class="sd">            subdivision into small segments. (Default: 0).</span>
+<span class="sd">        tolerance: The maximum difference between coordinate values of two</span>
+<span class="sd">            vertices at which they can be considered equivalent. (Default: 0.01,</span>
+<span class="sd">            suitable for objects in meters).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A list of Face3D that represent the horizontal boundaries around the</span>
+<span class="sd">        input rooms.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># get the floor geometries of the rooms, which are used to compute the boundary</span>
+    <span class="n">floor_geos</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="n">rooms</span><span class="p">:</span>
+        <span class="n">flr_faces</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">geometry</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">room</span><span class="o">.</span><span class="n">faces</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">Floor</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">flr_faces</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">flr_faces</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">floor_geos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">flr_faces</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">flr_geos</span> <span class="o">=</span> <span class="n">join_floor_geometries</span><span class="p">(</span>
+                <span class="n">flr_faces</span><span class="p">,</span> <span class="n">room</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">min</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+            <span class="n">floor_geos</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">flr_geos</span><span class="p">)</span>
+
+    <span class="c1"># check that floor geometry was found and remove colinear vertices</span>
+    <span class="n">clean_floor_geos</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">geo</span> <span class="ow">in</span> <span class="n">floor_geos</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">clean_floor_geos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">geo</span><span class="o">.</span><span class="n">remove_colinear_vertices</span><span class="p">(</span><span class="n">tolerance</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>  <span class="c1"># degenerate geometry to ignore</span>
+            <span class="k">pass</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">clean_floor_geos</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>  <span class="c1"># no Room boundary to be found</span>
+
+    <span class="c1"># convert the floor Face3Ds into counterclockwise Polygon2Ds</span>
+    <span class="n">floor_polys</span><span class="p">,</span> <span class="n">is_holes</span><span class="p">,</span> <span class="n">z_vals</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">flr_geo</span> <span class="ow">in</span> <span class="n">clean_floor_geos</span><span class="p">:</span>
+        <span class="n">z_vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">flr_geo</span><span class="o">.</span><span class="n">min</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+        <span class="n">b_poly</span> <span class="o">=</span> <span class="n">Polygon2D</span><span class="p">([</span><span class="n">Point2D</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">flr_geo</span><span class="o">.</span><span class="n">boundary</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">b_poly</span><span class="o">.</span><span class="n">is_clockwise</span><span class="p">:</span>
+            <span class="n">b_poly</span> <span class="o">=</span> <span class="n">b_poly</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+        <span class="n">floor_polys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b_poly</span><span class="p">)</span>
+        <span class="n">is_holes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">flr_geo</span><span class="o">.</span><span class="n">has_holes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">hole</span> <span class="ow">in</span> <span class="n">flr_geo</span><span class="o">.</span><span class="n">holes</span><span class="p">:</span>
+                <span class="n">h_poly</span> <span class="o">=</span> <span class="n">Polygon2D</span><span class="p">([</span><span class="n">Point2D</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">hole</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">h_poly</span><span class="o">.</span><span class="n">is_clockwise</span><span class="p">:</span>
+                    <span class="n">h_poly</span> <span class="o">=</span> <span class="n">h_poly</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+                <span class="n">floor_polys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h_poly</span><span class="p">)</span>
+                <span class="n">is_holes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">z_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">z_vals</span><span class="p">)</span>
+
+    <span class="c1"># if the min_separation is small, use the more reliable intersection method</span>
+    <span class="k">if</span> <span class="n">min_separation</span> <span class="o">&lt;=</span> <span class="n">tolerance</span><span class="p">:</span>
+        <span class="n">closed_polys</span> <span class="o">=</span> <span class="n">joined_intersected_boundary</span><span class="p">(</span><span class="n">floor_polys</span><span class="p">,</span> <span class="n">is_holes</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># otherwise, use the more intense and less reliable gap crossing method</span>
+        <span class="n">closed_polys</span> <span class="o">=</span> <span class="n">gap_crossing_boundary</span><span class="p">(</span><span class="n">floor_polys</span><span class="p">,</span> <span class="n">min_separation</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+
+    <span class="c1"># remove colinear vertices from the polygons</span>
+    <span class="n">clean_polys</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">poly</span> <span class="ow">in</span> <span class="n">closed_polys</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">clean_polys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poly</span><span class="o">.</span><span class="n">remove_colinear_vertices</span><span class="p">(</span><span class="n">tolerance</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># degenerate polygon to ignore</span>
+
+    <span class="c1"># figure out if polygons represent holes in the others and make Face3D</span>
+    <span class="n">horizontal_bound</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">clean_polys</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">clean_polys</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># can be represented with a single Face3D</span>
+        <span class="n">pts3d</span> <span class="o">=</span> <span class="p">[</span><span class="n">Point3D</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">z_min</span><span class="p">)</span> <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">clean_polys</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">horizontal_bound</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Face3D</span><span class="p">(</span><span class="n">pts3d</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># need to separate holes from distinct Face3Ds</span>
+        <span class="n">faces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">poly</span> <span class="ow">in</span> <span class="n">clean_polys</span><span class="p">:</span>
+            <span class="n">pts3d</span> <span class="o">=</span> <span class="p">[</span><span class="n">Point3D</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">z_min</span><span class="p">)</span> <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">poly</span><span class="p">]</span>
+            <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Face3D</span><span class="p">(</span><span class="n">pts3d</span><span class="p">))</span>
+        <span class="n">faces</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">base_face</span> <span class="o">=</span> <span class="n">faces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">remain_faces</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">faces</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">remain_faces</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">horizontal_bound</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_match_holes_to_face</span><span class="p">(</span><span class="n">base_face</span><span class="p">,</span> <span class="n">remain_faces</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">remain_faces</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">base_face</span> <span class="o">=</span> <span class="n">remain_faces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">del</span> <span class="n">remain_faces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">remain_faces</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># lone last Face3D</span>
+                <span class="n">horizontal_bound</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">remain_faces</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">del</span> <span class="n">remain_faces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">horizontal_bound</span></div>
+
+
+<div class="viewcode-block" id="get_floor_boundary"><a class="viewcode-back" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.get_floor_boundary">[docs]</a><span class="k">def</span> <span class="nf">get_floor_boundary</span><span class="p">(</span><span class="n">room</span><span class="p">:</span> <span class="n">Room</span><span class="p">,</span> <span class="n">llc</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a list of vertices for floor boundary for a room.</span>
+
+<span class="sd">    This function joins all the floor faces and returns a list of Point3D that define the</span>
+<span class="sd">    border of the floor in counter clockwise order starting from the lower left corner.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">floor_geom</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">room</span><span class="o">.</span><span class="n">faces</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">face</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">Floor</span><span class="p">):</span>
+            <span class="n">floor_geom</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">face</span><span class="o">.</span><span class="n">geometry</span><span class="p">)</span>
+
+    <span class="c1"># get the minimum z and use it for all the floors</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">geo</span><span class="o">.</span><span class="n">plane</span><span class="o">.</span><span class="n">o</span><span class="o">.</span><span class="n">z</span> <span class="k">for</span> <span class="n">geo</span> <span class="ow">in</span> <span class="n">floor_geom</span><span class="p">)</span>
+    <span class="n">boundaries</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># floors are most likely horizontal - let&#39;s make them 2D polygons</span>
+    <span class="k">for</span> <span class="n">floor</span> <span class="ow">in</span> <span class="n">floor_geom</span><span class="p">:</span>
+        <span class="n">boundary</span> <span class="o">=</span> <span class="n">Polygon2D</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">Point2D</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">floor</span><span class="o">.</span><span class="n">lower_left_counter_clockwise_vertices</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">boundary</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">remove_colinear_vertices</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Ignored invalid floor segment in </span><span class="si">{</span><span class="n">room</span><span class="o">.</span><span class="n">display_name</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">boundaries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">boundary</span><span class="p">)</span>
+
+    <span class="c1"># find the union of the boundary polygons</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">boundaries</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">floor_geom</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">has_holes</span><span class="p">:</span>
+        <span class="n">boundary</span> <span class="o">=</span> <span class="n">boundaries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pf</span> <span class="o">=</span> <span class="n">Polyface3D</span><span class="o">.</span><span class="n">from_faces</span><span class="p">(</span><span class="n">floor_geom</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="n">boundaries</span> <span class="o">=</span> <span class="n">Polyline3D</span><span class="o">.</span><span class="n">join_segments</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">naked_edges</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">boundaries</span><span class="p">,</span> \
+            <span class="sa">f</span><span class="s1">&#39;Failed to calculate the floor boundary for </span><span class="si">{</span><span class="n">room</span><span class="o">.</span><span class="n">display_name</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="n">boundary</span> <span class="o">=</span> <span class="n">Polyline2D</span><span class="p">([</span><span class="n">Point2D</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">boundaries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+
+    <span class="c1"># insert missing points for the wall starting points</span>
+    <span class="n">wall_st_pts</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">face</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">lower_left_counter_clockwise_vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">room</span><span class="o">.</span><span class="n">faces</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">face</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">Wall</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="n">vertices</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">vertices</span>
+    <span class="n">wall_st_pts_2d</span> <span class="o">=</span> <span class="p">[</span><span class="n">Point2D</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">wall_st_pts</span><span class="p">]</span>
+    <span class="n">polygon_update</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">wall_st_pts_2d</span><span class="p">:</span>
+        <span class="c1"># check if pt is already included</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pt</span><span class="o">.</span><span class="n">distance_to_point</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">0.001</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">seg</span><span class="o">.</span><span class="n">distance_to_point</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span> <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">boundary</span><span class="o">.</span><span class="n">segments</span><span class="p">]</span>
+            <span class="n">index_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="n">values</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">)</span>
+            <span class="n">polygon_update</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">index_min</span><span class="p">,</span> <span class="n">pt</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">polygon_update</span><span class="p">:</span>
+        <span class="n">boundary</span> <span class="o">=</span> <span class="n">Polygon2D</span><span class="o">.</span><span class="n">_insert_updates_in_order</span><span class="p">(</span><span class="n">boundary</span><span class="p">,</span> <span class="n">polygon_update</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wall_st_pts</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">boundary</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">room</span><span class="o">.</span><span class="n">display_name</span><span class="si">}</span><span class="s1">: Number of walls (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">wall_st_pts</span><span class="p">)</span><span class="si">}</span><span class="s1">) and &#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;vertices (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">boundary</span><span class="p">)</span><span class="si">}</span><span class="s1">) do not match. This is most likely &#39;</span>
+            <span class="s1">&#39;because the wall is splitted vertically. Merge the faces and try &#39;</span>
+            <span class="s1">&#39;again.&#39;</span>
+        <span class="p">)</span>
+
+    <span class="n">boundary</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Point3D</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">point</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">boundary</span><span class="o">.</span><span class="n">vertices</span>
+    <span class="p">]</span>
+
+    <span class="n">geometry</span> <span class="o">=</span> <span class="n">Face3D</span><span class="p">(</span><span class="n">boundary</span><span class="p">,</span> <span class="n">plane</span><span class="o">=</span><span class="n">floor_geom</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plane</span><span class="p">)</span>
+    <span class="n">geometry</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">llc</span><span class="p">:</span>
+        <span class="n">vertices</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">lower_left_counter_clockwise_vertices</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">vertices</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">upper_right_counter_clockwise_vertices</span>
+
+    <span class="n">center</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">center</span>
+    <span class="k">if</span> <span class="n">geometry</span><span class="o">.</span><span class="n">is_point_on_face</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">):</span>
+        <span class="n">pole</span> <span class="o">=</span> <span class="n">center</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pole</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">pole_of_inaccessibility</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">pole</span></div>
+
+
+<div class="viewcode-block" id="get_ceiling_boundary"><a class="viewcode-back" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.get_ceiling_boundary">[docs]</a><span class="k">def</span> <span class="nf">get_ceiling_boundary</span><span class="p">(</span><span class="n">ceilings</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a list of vertices for ceiling boundary for a room.</span>
+
+<span class="sd">    This function joins all the floor faces and returns a list of Point3D that define the</span>
+<span class="sd">    border of the floor in counter clockwise order starting from the lower left corner.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">geometries</span> <span class="o">=</span> <span class="p">[</span><span class="n">face</span><span class="o">.</span><span class="n">geometry</span> <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">ceilings</span><span class="p">]</span>
+
+    <span class="c1"># get the maximum z and use it for all the ceilings</span>
+    <span class="n">vertices</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">boundaries</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">geometries</span><span class="p">:</span>
+        <span class="n">boundary</span> <span class="o">=</span> <span class="n">Polygon2D</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">Point2D</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">lower_left_counter_clockwise_vertices</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">boundaries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">boundary</span><span class="p">)</span>
+        <span class="n">vertices</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
+
+    <span class="n">zz</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">z</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">]</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">zz</span><span class="p">)</span>
+    <span class="n">z_range</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">zz</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">zz</span><span class="p">)]</span>
+    <span class="c1"># find the union of the boundary polygons</span>
+    <span class="n">boundaries</span> <span class="o">=</span> <span class="n">Polygon2D</span><span class="o">.</span><span class="n">boolean_union_all</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+
+    <span class="n">boundary</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Point3D</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">point</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">boundaries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">vertices</span>
+    <span class="p">]</span>
+
+    <span class="n">geometry</span> <span class="o">=</span> <span class="n">Face3D</span><span class="p">(</span><span class="n">boundary</span><span class="p">)</span>
+
+    <span class="n">vertices</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">lower_left_counter_clockwise_vertices</span>
+
+    <span class="k">return</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">z_range</span></div>
+
+
+<span class="k">def</span> <span class="nf">_get_reference_plane</span><span class="p">(</span><span class="n">aperture</span><span class="p">:</span> <span class="n">Aperture</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Plane</span><span class="p">:</span>
+    <span class="n">parent_llc</span> <span class="o">=</span> <span class="n">aperture</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">lower_left_corner</span>
+    <span class="n">rel_plane</span> <span class="o">=</span> <span class="n">aperture</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">plane</span>
+
+    <span class="c1"># horizontal faces</span>
+    <span class="c1"># horizontal Face3D; use world XY</span>
+    <span class="n">angle_tolerance</span> <span class="o">=</span> <span class="mf">0.01</span>
+    <span class="k">if</span> <span class="n">rel_plane</span><span class="o">.</span><span class="n">n</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">Vector3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="n">angle_tolerance</span> <span class="ow">or</span> \
+            <span class="n">rel_plane</span><span class="o">.</span><span class="n">n</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">Vector3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="n">angle_tolerance</span><span class="p">:</span>
+        <span class="n">proj_x</span> <span class="o">=</span> <span class="n">Vector3D</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">proj_y</span> <span class="o">=</span> <span class="n">Vector3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">rel_plane</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">proj_x</span> <span class="o">=</span> <span class="n">proj_y</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">rel_plane</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">ref_plane</span> <span class="o">=</span> <span class="n">Plane</span><span class="p">(</span><span class="n">rel_plane</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">parent_llc</span><span class="p">,</span> <span class="n">proj_x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ref_plane</span>
+
+
+<span class="k">def</span> <span class="nf">_is_rectangle</span><span class="p">(</span><span class="n">aperture</span><span class="p">:</span> <span class="n">Aperture</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if an aperture is a rectangle.&quot;&quot;&quot;</span>
+    <span class="n">apt_llc</span> <span class="o">=</span> <span class="n">aperture</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">lower_left_corner</span>
+    <span class="n">apt_urc</span> <span class="o">=</span> <span class="n">aperture</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">upper_right_corner</span>
+    <span class="n">ref_plane</span> <span class="o">=</span> <span class="n">_get_reference_plane</span><span class="p">(</span><span class="n">aperture</span><span class="p">)</span>
+
+    <span class="n">min_2d</span> <span class="o">=</span> <span class="n">ref_plane</span><span class="o">.</span><span class="n">xyz_to_xy</span><span class="p">(</span><span class="n">apt_llc</span><span class="p">)</span>
+    <span class="n">max_2d</span> <span class="o">=</span> <span class="n">ref_plane</span><span class="o">.</span><span class="n">xyz_to_xy</span><span class="p">(</span><span class="n">apt_urc</span><span class="p">)</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">max_2d</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">min_2d</span><span class="o">.</span><span class="n">y</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="n">max_2d</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">min_2d</span><span class="o">.</span><span class="n">x</span>
+
+    <span class="c1"># find the bounding box of the polygon and use the area to identify the</span>
+    <span class="c1"># rectangular ones</span>
+    <span class="n">bb_vertices</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">min_2d</span><span class="p">,</span> <span class="n">min_2d</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">Point2D</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="n">max_2d</span><span class="p">,</span>
+        <span class="n">min_2d</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">Point2D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+    <span class="p">]</span>
+
+    <span class="n">bb</span> <span class="o">=</span> <span class="n">Polygon2D</span><span class="p">(</span><span class="n">bb_vertices</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">bb</span><span class="o">.</span><span class="n">area</span> <span class="o">/</span> <span class="n">aperture</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">boundary_polygon2d</span><span class="o">.</span><span class="n">area</span> <span class="o">&lt;</span> <span class="mf">1.01</span>
+
+
+<div class="viewcode-block" id="prepare_apertures"><a class="viewcode-back" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.prepare_apertures">[docs]</a><span class="k">def</span> <span class="nf">prepare_apertures</span><span class="p">(</span><span class="n">apertures</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Aperture</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Aperture</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Merge non-rectangular apertures into merged boundaries.&quot;&quot;&quot;</span>
+
+    <span class="c1"># get a list of non-rectangular apertures</span>
+    <span class="c1"># Try to merge them into one before creating the stripes</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">apertures</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">apertures</span>
+    <span class="n">rect_apts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">non_rect_apts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">room</span> <span class="o">=</span> <span class="n">apertures</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">display_name</span>
+    <span class="n">face</span> <span class="o">=</span> <span class="n">apertures</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">display_name</span>
+    <span class="k">for</span> <span class="n">aperture</span> <span class="ow">in</span> <span class="n">apertures</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_is_rectangle</span><span class="p">(</span><span class="n">aperture</span><span class="p">):</span>
+            <span class="n">rect_apts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aperture</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">non_rect_apts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aperture</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">non_rect_apts</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">apertures</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">non_rect_apts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">apertures</span>
+
+    <span class="c1"># try to merge the</span>
+    <span class="n">ref_plane</span> <span class="o">=</span> <span class="n">_get_reference_plane</span><span class="p">(</span><span class="n">non_rect_apts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">in_boundaries</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Polygon2D</span><span class="p">(</span><span class="n">ref_plane</span><span class="o">.</span><span class="n">xyz_to_xy</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">apt</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">apt</span> <span class="ow">in</span> <span class="n">non_rect_apts</span>
+    <span class="p">]</span>
+    <span class="n">polys</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">boundary</span> <span class="ow">in</span> <span class="n">in_boundaries</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cb</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">remove_colinear_vertices</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">polys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cb</span><span class="p">)</span>
+
+    <span class="n">has_holes</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">polys</span><span class="p">)</span>
+    <span class="c1"># 0.01 for the case that the apertures are touching and 0.1 for the case of a frame</span>
+    <span class="n">closed_polys</span> <span class="o">=</span> <span class="n">joined_intersected_boundary</span><span class="p">(</span><span class="n">polys</span><span class="p">,</span> <span class="n">has_holes</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+    <span class="n">out_boundaries</span> <span class="o">=</span> <span class="n">gap_crossing_boundary</span><span class="p">(</span><span class="n">closed_polys</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">out_boundaries</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">apertures</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;Merged </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">non_rect_apts</span><span class="p">)</span><span class="si">}</span><span class="s1"> non-rectangular apertures into &#39;</span>
+        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">out_boundaries</span><span class="p">)</span><span class="si">}</span><span class="s1"> apertures in </span><span class="si">{</span><span class="n">face</span><span class="si">}</span><span class="s1"> in </span><span class="si">{</span><span class="n">room</span><span class="si">}</span><span class="s1">.&#39;</span>
+    <span class="p">)</span>
+    <span class="n">merged_apts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">geo</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">out_boundaries</span><span class="p">):</span>
+        <span class="n">rep_apt</span><span class="p">:</span> <span class="n">Aperture</span> <span class="o">=</span> <span class="n">non_rect_apts</span><span class="p">[</span><span class="n">count</span><span class="p">]</span>
+        <span class="n">geometry</span> <span class="o">=</span> <span class="n">Face3D</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">ref_plane</span><span class="o">.</span><span class="n">xy_to_xyz</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">geo</span><span class="o">.</span><span class="n">vertices</span><span class="p">],</span>
+            <span class="n">plane</span><span class="o">=</span><span class="n">ref_plane</span>
+        <span class="p">)</span>
+        <span class="n">apt</span> <span class="o">=</span> <span class="n">Aperture</span><span class="p">(</span>
+            <span class="n">identifier</span><span class="o">=</span><span class="n">rep_apt</span><span class="o">.</span><span class="n">identifier</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">geometry</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">apt</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="n">rep_apt</span><span class="o">.</span><span class="n">parent</span>
+        <span class="n">apt</span><span class="o">.</span><span class="n">user_data</span> <span class="o">=</span> <span class="n">rep_apt</span><span class="o">.</span><span class="n">user_data</span>
+        <span class="n">merged_apts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">apt</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">rect_apts</span> <span class="o">+</span> <span class="n">merged_apts</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2023, Ladybug Tools.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

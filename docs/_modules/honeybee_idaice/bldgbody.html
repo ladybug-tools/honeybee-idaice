@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>honeybee_idaice.bldgbody &#8212; honeybee-idaice  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          honeybee-idaice</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cli/index.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli/index.html#commands">Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cli/translate.html">translate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../cli/translate.html#honeybee-idaice-translate">honeybee-idaice translate</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../cli/translate.html#honeybee-idaice-translate-model-to-idm">model-to-idm</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.cli.html">honeybee_idaice.cli package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.cli.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../honeybee_idaice.cli.translate.html">honeybee_idaice.cli.translate module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.cli.html#module-honeybee_idaice.cli">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.archive.html">honeybee_idaice.archive module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.archive.html#honeybee_idaice.archive.zip_folder_to_idm"><code class="docutils literal notranslate"><span class="pre">zip_folder_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.bldgbody.html">honeybee_idaice.bldgbody module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.bldgbody.html#honeybee_idaice.bldgbody.section_to_idm"><code class="docutils literal notranslate"><span class="pre">section_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.face.html">honeybee_idaice.face module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.face.html#honeybee_idaice.face.face_to_idm"><code class="docutils literal notranslate"><span class="pre">face_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.face.html#honeybee_idaice.face.opening_to_idm"><code class="docutils literal notranslate"><span class="pre">opening_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html">honeybee_idaice.geometry_utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.closest_end_point2d_between_line2d"><code class="docutils literal notranslate"><span class="pre">closest_end_point2d_between_line2d()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.gap_crossing_boundary"><code class="docutils literal notranslate"><span class="pre">gap_crossing_boundary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.get_ceiling_boundary"><code class="docutils literal notranslate"><span class="pre">get_ceiling_boundary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.get_floor_boundary"><code class="docutils literal notranslate"><span class="pre">get_floor_boundary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.grouped_horizontal_boundary"><code class="docutils literal notranslate"><span class="pre">grouped_horizontal_boundary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.join_floor_geometries"><code class="docutils literal notranslate"><span class="pre">join_floor_geometries()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.joined_intersected_boundary"><code class="docutils literal notranslate"><span class="pre">joined_intersected_boundary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.geometry_utils.html#honeybee_idaice.geometry_utils.prepare_apertures"><code class="docutils literal notranslate"><span class="pre">prepare_apertures()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.shade.html">honeybee_idaice.shade module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.shade.html#honeybee_idaice.shade.shades_to_idm"><code class="docutils literal notranslate"><span class="pre">shades_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.writer.html">honeybee_idaice.writer module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.ceilings_to_idm"><code class="docutils literal notranslate"><span class="pre">ceilings_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.deconstruct_room"><code class="docutils literal notranslate"><span class="pre">deconstruct_room()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.model_to_idm"><code class="docutils literal notranslate"><span class="pre">model_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.prepare_folder"><code class="docutils literal notranslate"><span class="pre">prepare_folder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.prepare_model"><code class="docutils literal notranslate"><span class="pre">prepare_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.room_to_idm"><code class="docutils literal notranslate"><span class="pre">room_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.writer_obj.html">honeybee_idaice.writer_obj module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer_obj.html#honeybee_idaice.writer_obj.hbjson_to_idm_obj"><code class="docutils literal notranslate"><span class="pre">hbjson_to_idm_obj()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#module-honeybee_idaice">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-4">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="body col-md-8 content" role="main">
+      
+  <h1>Source code for honeybee_idaice.bldgbody</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;A module for functions related to IDM building-bodies.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">ladybug_geometry.bounding</span> <span class="kn">import</span> <span class="n">bounding_box</span>
+<span class="kn">from</span> <span class="nn">ladybug_geometry.geometry3d</span> <span class="kn">import</span> <span class="n">Plane</span><span class="p">,</span> <span class="n">LineSegment3D</span><span class="p">,</span> <span class="n">Face3D</span><span class="p">,</span> <span class="n">Point3D</span>
+
+<span class="kn">from</span> <span class="nn">honeybee.room</span> <span class="kn">import</span> <span class="n">Room</span>
+<span class="kn">from</span> <span class="nn">honeybee.facetype</span> <span class="kn">import</span> <span class="n">Floor</span><span class="p">,</span> <span class="n">RoofCeiling</span>
+
+<span class="kn">from</span> <span class="nn">.geometry_utils</span> <span class="kn">import</span> <span class="n">get_floor_boundary</span><span class="p">,</span> <span class="n">grouped_horizontal_boundary</span>
+
+
+<span class="k">def</span> <span class="nf">_section_to_idm_protected</span><span class="p">(</span><span class="n">rooms</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Room</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rooms</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">XY_PLANE</span> <span class="o">=</span> <span class="n">Plane</span><span class="p">()</span>
+    <span class="n">sections</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="n">rooms</span><span class="p">:</span>
+        <span class="n">room_section</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">boundary</span> <span class="o">=</span> <span class="n">grouped_horizontal_boundary</span><span class="p">([</span><span class="n">room</span><span class="p">],</span> <span class="n">min_separation</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">bv</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">boundary</span><span class="o">.</span><span class="n">boundary</span><span class="p">)</span>
+            <span class="n">holes</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">holes</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">bv</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_floor_boundary</span><span class="p">(</span><span class="n">room</span><span class="p">)</span>
+            <span class="n">holes</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">holes</span><span class="p">:</span>
+            <span class="n">contours</span> <span class="o">=</span> <span class="p">[</span><span class="n">bv</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">contours</span> <span class="o">=</span> <span class="p">[</span><span class="n">bv</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">holes</span><span class="p">]</span>
+
+        <span class="n">vc</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">)</span>
+        <span class="n">contours_formatted</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">)</span>
+
+        <span class="n">idm_vertices</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s1">)&#39;</span> <span class="k">for</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">contours</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vv</span><span class="p">)</span>
+
+        <span class="n">min_pt</span><span class="p">,</span> <span class="n">max_pt</span> <span class="o">=</span> <span class="n">bounding_box</span><span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">geometry</span><span class="p">)</span>
+
+        <span class="n">header</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;((CE-SECTION :N &quot;</span><span class="si">{</span><span class="n">room</span><span class="o">.</span><span class="n">display_name</span><span class="si">}</span><span class="s1">_SEC&quot; :T BUILDING-SECTION)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+            <span class="s1">&#39; (:PAR :N PROTECTED_SHAPE :V :TRUE)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+            <span class="sa">f</span><span class="s1">&#39; (:PAR :N NCORN :V </span><span class="si">{</span><span class="n">vc</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+            <span class="sa">f</span><span class="s1">&#39; (:PAR :N CORNERS :DIM (</span><span class="si">{</span><span class="n">vc</span><span class="si">}</span><span class="s1"> 2) :V #2A(</span><span class="si">{</span><span class="n">idm_vertices</span><span class="si">}</span><span class="s1">))</span><span class="se">\n</span><span class="s1">&#39;</span> \
+            <span class="sa">f</span><span class="s1">&#39; (:PAR :N CONTOURS :V (</span><span class="si">{</span><span class="n">contours_formatted</span><span class="si">}</span><span class="s1">))</span><span class="se">\n</span><span class="s1">&#39;</span> \
+            <span class="sa">f</span><span class="s1">&#39; (:PAR :N HEIGHT :V </span><span class="si">{</span><span class="n">max_pt</span><span class="o">.</span><span class="n">z</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">min_pt</span><span class="o">.</span><span class="n">z</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+            <span class="sa">f</span><span class="s1">&#39; (:PAR :N BOTTOM :V </span><span class="si">{</span><span class="n">min_pt</span><span class="o">.</span><span class="n">z</span><span class="si">}</span><span class="s1">)&#39;</span>
+        <span class="n">room_section</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+        <span class="n">wall_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">floor_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">room</span><span class="o">.</span><span class="n">faces</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">face</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">Floor</span><span class="p">):</span>
+                <span class="n">type_</span> <span class="o">=</span> <span class="s1">&#39;CRAWL-FACE&#39;</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2000</span> <span class="o">-</span> <span class="n">floor_count</span>
+                <span class="n">floor_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">holes</span> <span class="o">=</span> <span class="n">face</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">holes</span> <span class="ow">or</span> <span class="p">[]</span>
+                <span class="n">contours</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">face</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">boundary</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">holes</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">face</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">RoofCeiling</span><span class="p">):</span>
+                <span class="n">type_</span> <span class="o">=</span> <span class="s1">&#39;WALL-FACE&#39;</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">wall_count</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">wall_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">holes</span> <span class="o">=</span> <span class="n">face</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">holes</span> <span class="ow">or</span> <span class="p">[]</span>
+                <span class="n">contours</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">face</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">boundary</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">holes</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">type_</span> <span class="o">=</span> <span class="s1">&#39;WALL-FACE&#39;</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">wall_count</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">wall_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">holes</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">contours</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">face</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">boundary</span><span class="p">)]</span>
+
+            <span class="n">vc</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">)</span>
+            <span class="n">contours_formatted</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">)</span>
+
+            <span class="n">vertices_idm</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">z</span><span class="si">}</span><span class="s1">)&#39;</span> <span class="k">for</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">contours</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vv</span>
+            <span class="p">)</span>
+            <span class="n">identifier</span> <span class="o">=</span> <span class="n">wall_count</span> <span class="o">+</span> <span class="n">floor_count</span>
+            <span class="k">if</span> <span class="n">type_</span> <span class="o">==</span> <span class="s1">&#39;CRAWL-FACE&#39;</span><span class="p">:</span>
+                <span class="n">body</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39; ((FACE :N &quot;f</span><span class="si">{</span><span class="n">identifier</span><span class="si">}</span><span class="s1">&quot; :T </span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s1"> :INDEX </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="s1">&#39;  (:PAR :N NCORN :V 0)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="s1">&#39;  (:PAR :N CORNERS :DIM (0 3) :V #2A())</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="s1">&#39;  ((FACE :N GROUND-FACE)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;   (:PAR :N NCORN :V </span><span class="si">{</span><span class="n">vc</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;   (:PAR :N CORNERS :DIM (</span><span class="si">{</span><span class="n">vc</span><span class="si">}</span><span class="s1"> 3) :V #2A(</span><span class="si">{</span><span class="n">vertices_idm</span><span class="si">}</span><span class="s1">))</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;   (:PAR :N CONTOURS :V (</span><span class="si">{</span><span class="n">contours_formatted</span><span class="si">}</span><span class="s1">))))&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">body</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39; ((FACE :N &quot;f</span><span class="si">{</span><span class="n">identifier</span><span class="si">}</span><span class="s1">&quot; :T </span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s1"> :INDEX </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;  (:PAR :N NCORN :V </span><span class="si">{</span><span class="n">vc</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;  (:PAR :N CORNERS :DIM (</span><span class="si">{</span><span class="n">vc</span><span class="si">}</span><span class="s1"> 3) :V #2A(</span><span class="si">{</span><span class="n">vertices_idm</span><span class="si">}</span><span class="s1">))</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;  (:PAR :N CONTOURS :V (</span><span class="si">{</span><span class="n">contours_formatted</span><span class="si">}</span><span class="s1">))</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;  (:PAR :N SLOPE :V </span><span class="si">{</span><span class="n">face</span><span class="o">.</span><span class="n">altitude</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">90</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="s1">&#39;  ((FACE :N GROUND-FACE)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="s1">&#39;   (:PAR :N NCORN :V 0)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="s1">&#39;   (:PAR :N CORNERS :DIM (0 3))))&#39;</span>
+
+            <span class="k">if</span> <span class="n">type_</span> <span class="o">==</span> <span class="s1">&#39;WALL-FACE&#39;</span> <span class="ow">and</span> <span class="n">min_pt</span><span class="o">.</span><span class="n">z</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">:</span>
+                <span class="c1"># intersect the edges with the XY plane to create two separate segments</span>
+                <span class="n">geometry</span> <span class="o">=</span> <span class="n">face</span><span class="o">.</span><span class="n">geometry</span>
+                <span class="n">lines</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">intersect_plane</span><span class="p">(</span><span class="n">XY_PLANE</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">lines</span><span class="p">:</span>
+                    <span class="n">room_section</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="c1"># calculate the top and the bottom segments</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">pt_1</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">p1</span>
+                <span class="n">pt_2</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">p2</span>
+                <span class="n">vertices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">geometry</span><span class="o">.</span><span class="n">upper_right_counter_clockwise_vertices</span><span class="p">)</span>
+                <span class="n">top_part</span> <span class="o">=</span> <span class="p">[</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                <span class="k">for</span> <span class="n">vc</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vertices</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="n">LineSegment3D</span><span class="o">.</span><span class="n">from_end_points</span><span class="p">(</span><span class="n">top_part</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">v</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">distance_to_point</span><span class="p">(</span><span class="n">pt_1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.001</span><span class="p">:</span>
+                        <span class="n">top_part</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">pt_1</span><span class="p">,</span> <span class="n">pt_2</span><span class="p">])</span>
+                        <span class="n">bottom_part</span> <span class="o">=</span> <span class="p">[</span><span class="n">pt_2</span><span class="p">,</span> <span class="n">pt_1</span><span class="p">]</span>
+                        <span class="n">other_point</span> <span class="o">=</span> <span class="n">pt_2</span>
+                        <span class="k">break</span>
+                    <span class="k">elif</span> <span class="n">line</span><span class="o">.</span><span class="n">distance_to_point</span><span class="p">(</span><span class="n">pt_2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.001</span><span class="p">:</span>
+                        <span class="n">top_part</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">pt_2</span><span class="p">,</span> <span class="n">pt_1</span><span class="p">])</span>
+                        <span class="n">bottom_part</span> <span class="o">=</span> <span class="p">[</span><span class="n">pt_1</span><span class="p">,</span> <span class="n">pt_2</span><span class="p">]</span>
+                        <span class="n">other_point</span> <span class="o">=</span> <span class="n">pt_1</span>
+                        <span class="k">break</span>
+                    <span class="n">top_part</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+                <span class="n">vertices_rev</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">vertices</span><span class="p">))[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">top_part_2</span> <span class="o">=</span> <span class="p">[</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vertices_rev</span><span class="p">):</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="n">LineSegment3D</span><span class="o">.</span><span class="n">from_end_points</span><span class="p">(</span><span class="n">top_part_2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">v</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">distance_to_point</span><span class="p">(</span><span class="n">other_point</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.001</span><span class="p">:</span>
+                        <span class="n">indx</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">c</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">indx</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                            <span class="n">top_part</span> <span class="o">=</span> <span class="n">top_part</span> <span class="o">+</span> <span class="n">vertices</span><span class="p">[</span><span class="n">indx</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                            <span class="n">bottom_part</span> <span class="o">=</span> <span class="n">bottom_part</span> <span class="o">+</span> <span class="n">vertices</span><span class="p">[</span><span class="n">vc</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">top_part</span> <span class="o">=</span> <span class="n">top_part</span> <span class="o">+</span> <span class="n">vertices</span><span class="p">[</span><span class="n">indx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+                            <span class="n">bottom_part</span> <span class="o">=</span> <span class="n">bottom_part</span> <span class="o">+</span> <span class="n">vertices</span><span class="p">[</span><span class="n">vc</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">indx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="n">top_part_2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+                <span class="n">up_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">top_part</span><span class="p">)</span>
+                <span class="n">btm_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bottom_part</span><span class="p">)</span>
+                <span class="n">up_vertices</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">top_part</span><span class="p">)</span>
+                <span class="n">btm_vertices</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bottom_part</span><span class="p">)</span>
+
+                <span class="n">body</span> <span class="o">=</span> \
+                    <span class="sa">f</span><span class="s1">&#39; ((FACE :N &quot;f</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1">&quot; :T WALL-FACE :INDEX </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;  (:PAR :N NCORN :V </span><span class="si">{</span><span class="n">up_count</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;  (:PAR :N CORNERS :V #2A(</span><span class="si">{</span><span class="n">up_vertices</span><span class="si">}</span><span class="s1">))</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;  ((FACE :N GROUND-FACE)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;  (:PAR :N NCORN :V </span><span class="si">{</span><span class="n">btm_count</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                    <span class="sa">f</span><span class="s1">&#39;  (:PAR :N CORNERS :V #2A(</span><span class="si">{</span><span class="n">btm_vertices</span><span class="si">}</span><span class="s1">))))&#39;</span>
+
+            <span class="n">room_section</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+
+        <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">room_section</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sections</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_section_to_idm_extruded</span><span class="p">(</span>
+    <span class="n">extruded_rooms</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Room</span><span class="p">],</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_int_wall_thickness</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.45</span><span class="p">,</span>
+    <span class="n">height_tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an IDM building section for a group of extruded rooms.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">extruded_rooms</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">groups</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="n">extruded_rooms</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">max_pt</span> <span class="o">=</span> <span class="n">bounding_box</span><span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">geometry</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">max_pt</span><span class="o">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">z</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">height_tolerance</span><span class="p">:</span>
+                <span class="n">groups</span><span class="p">[</span><span class="n">z</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">room</span><span class="p">)</span>
+                <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">groups</span><span class="p">[</span><span class="n">max_pt</span><span class="o">.</span><span class="n">z</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">room</span><span class="p">]</span>
+
+    <span class="n">sections</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">group_count</span><span class="p">,</span> <span class="n">rooms</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">groups</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+        <span class="n">geometry</span> <span class="o">=</span> <span class="p">[</span><span class="n">room</span><span class="o">.</span><span class="n">geometry</span> <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="n">rooms</span><span class="p">]</span>
+        <span class="n">min_pt</span><span class="p">,</span> <span class="n">max_pt</span> <span class="o">=</span> <span class="n">bounding_box</span><span class="p">(</span><span class="n">geometry</span><span class="p">)</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">max_pt</span><span class="o">.</span><span class="n">z</span>
+        <span class="n">bottom</span> <span class="o">=</span> <span class="n">min_pt</span><span class="o">.</span><span class="n">z</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">boundaries</span> <span class="o">=</span> <span class="n">grouped_horizontal_boundary</span><span class="p">(</span>
+                <span class="n">rooms</span><span class="p">,</span> <span class="n">min_separation</span><span class="o">=</span><span class="n">max_int_wall_thickness</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s1">&#39;Failed to calculate the horizontal boundary for level containing &#39;</span>
+                <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">rooms</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">display_name</span><span class="si">}</span><span class="s1">. Will use a bounding box for this floor.</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="p">)</span>
+            <span class="n">boundaries</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># use bounding box instead as a fallback</span>
+        <span class="n">bb_boundaries</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Face3D</span><span class="p">([</span>
+                <span class="n">Point3D</span><span class="p">(</span><span class="n">min_pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">min_pt</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">bottom</span><span class="p">),</span> <span class="n">Point3D</span><span class="p">(</span><span class="n">max_pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">min_pt</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">bottom</span><span class="p">),</span>
+                <span class="n">Point3D</span><span class="p">(</span><span class="n">max_pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">max_pt</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">bottom</span><span class="p">),</span> <span class="n">Point3D</span><span class="p">(</span><span class="n">min_pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">max_pt</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">bottom</span><span class="p">)</span>
+            <span class="p">])</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">boundaries</span><span class="p">:</span>
+            <span class="n">boundaries</span> <span class="o">=</span> <span class="n">bb_boundaries</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rooms_area</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">floor_area</span> <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="n">rooms</span><span class="p">)</span>
+            <span class="n">boundary_area</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">area</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">boundaries</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">rooms_area</span> <span class="o">/</span> <span class="n">boundary_area</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mf">0.2</span><span class="p">:</span>
+                <span class="c1"># the boundary is incorrect</span>
+                <span class="n">boundaries</span> <span class="o">=</span> <span class="n">bb_boundaries</span>
+
+        <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">boundary</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">boundaries</span><span class="p">):</span>
+            <span class="n">sec_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">group_count</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s1">_SEC&#39;</span>
+            <span class="n">bv</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">boundary</span><span class="o">.</span><span class="n">boundary</span><span class="p">)</span>
+            <span class="n">holes</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">holes</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">holes</span><span class="p">:</span>
+                <span class="n">contours</span> <span class="o">=</span> <span class="p">[</span><span class="n">bv</span><span class="p">]</span>
+                <span class="n">vc</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span>
+                <span class="n">contours_formatted</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">contours</span> <span class="o">=</span> <span class="p">[</span><span class="n">bv</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">holes</span><span class="p">]</span>
+                <span class="n">vc</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">)</span>
+                <span class="n">contours_formatted</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">)</span>
+
+            <span class="n">corners</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s1">)&#39;</span> <span class="k">for</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">contours</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vv</span><span class="p">)</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;((CE-SECTION :N &quot;</span><span class="si">{</span><span class="n">sec_name</span><span class="si">}</span><span class="s1">&quot; :T BUILDING-SECTION)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;  (:PAR :N NCORN :V </span><span class="si">{</span><span class="n">vc</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;  (:PAR :N CORNERS :DIM (</span><span class="si">{</span><span class="n">vc</span><span class="si">}</span><span class="s1"> 2) :V #2A(</span><span class="si">{</span><span class="n">corners</span><span class="si">}</span><span class="s1">))</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;  (:PAR :N CONTOURS :V (</span><span class="si">{</span><span class="n">contours_formatted</span><span class="si">}</span><span class="s1">))</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;  (:PAR :N HEIGHT :V </span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;  (:PAR :N BOTTOM :V </span><span class="si">{</span><span class="n">bottom</span><span class="si">}</span><span class="s1">)&#39;</span>
+
+            <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">cc</span><span class="p">,</span> <span class="n">bv</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">contours</span><span class="p">):</span>
+                <span class="n">bv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">starter</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">cc</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">[:</span><span class="n">cc</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">f_count</span><span class="p">,</span> <span class="n">st</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bv</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="n">identifier</span> <span class="o">=</span> <span class="n">starter</span> <span class="o">+</span> <span class="n">f_count</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="n">end</span> <span class="o">=</span> <span class="n">bv</span><span class="p">[</span><span class="n">f_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">bottom</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">up_vertices</span> <span class="o">=</span> <span class="p">[</span>
+                            <span class="p">[</span><span class="n">st</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">height</span><span class="p">],</span> <span class="p">[</span><span class="n">end</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">end</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">height</span><span class="p">],</span>
+                            <span class="p">[</span><span class="n">st</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">end</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">end</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+                        <span class="p">]</span>
+                        <span class="n">btm_vertices</span> <span class="o">=</span> <span class="p">[</span>
+                            <span class="p">[</span><span class="n">st</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">end</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">end</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">end</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">end</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">bottom</span><span class="p">],</span>
+                            <span class="p">[</span><span class="n">st</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">bottom</span><span class="p">]</span>
+                        <span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">up_vertices</span> <span class="o">=</span> <span class="p">[</span>
+                            <span class="p">[</span><span class="n">st</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">height</span><span class="p">],</span> <span class="p">[</span><span class="n">end</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">end</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">height</span><span class="p">],</span>
+                            <span class="p">[</span><span class="n">st</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">bottom</span><span class="p">],</span> <span class="p">[</span><span class="n">end</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">end</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">bottom</span><span class="p">]</span>
+                        <span class="p">]</span>
+                        <span class="n">btm_vertices</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">up_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">up_vertices</span><span class="p">)</span>
+                    <span class="n">btm_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">btm_vertices</span><span class="p">)</span>
+                    <span class="n">up_vertices</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">up_vertices</span><span class="p">)</span>
+                    <span class="n">btm_vertices</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">btm_vertices</span><span class="p">)</span>
+
+                    <span class="n">section</span> <span class="o">=</span> \
+                        <span class="sa">f</span><span class="s1">&#39; ((FACE :N &quot;f</span><span class="si">{</span><span class="n">identifier</span><span class="si">}</span><span class="s1">&quot; :T WALL-FACE :INDEX </span><span class="si">{</span><span class="n">identifier</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                        <span class="sa">f</span><span class="s1">&#39;  (:PAR :N NCORN :V </span><span class="si">{</span><span class="n">up_count</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                        <span class="sa">f</span><span class="s1">&#39;  (:PAR :N CORNERS :V #2A(</span><span class="si">{</span><span class="n">up_vertices</span><span class="si">}</span><span class="s1">))</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                        <span class="sa">f</span><span class="s1">&#39;  ((FACE :N GROUND-FACE)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                        <span class="sa">f</span><span class="s1">&#39;  (:PAR :N NCORN :V </span><span class="si">{</span><span class="n">btm_count</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                        <span class="sa">f</span><span class="s1">&#39;  (:PAR :N CORNERS :V #2A(</span><span class="si">{</span><span class="n">btm_vertices</span><span class="si">}</span><span class="s1">))))&#39;</span>
+                    <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>
+
+            <span class="n">crawl_corners</span> <span class="o">=</span> \
+                <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">bottom</span><span class="si">}</span><span class="s1">)&#39;</span> <span class="k">for</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">contours</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vv</span><span class="p">)</span>
+            <span class="n">roof_corners</span> <span class="o">=</span> \
+                <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s1">)&#39;</span> <span class="k">for</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">contours</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vv</span><span class="p">)</span>
+            <span class="n">footer</span> <span class="o">=</span> \
+                <span class="sa">f</span><span class="s1">&#39; ((FACE :N &quot;Crawl space_</span><span class="si">{</span><span class="n">sec_name</span><span class="si">}</span><span class="s1">&quot; :T CRAWL-FACE :INDEX -2000)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="s1">&#39;  (:PAR :N NCORN :V 0)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="s1">&#39;  (:PAR :N CORNERS :DIM (0 3) :V #2A())</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="s1">&#39; ((FACE :N GROUND-FACE)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;  (:PAR :N NCORN :V </span><span class="si">{</span><span class="n">vc</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;  (:PAR :N CORNERS :V #2A(</span><span class="si">{</span><span class="n">crawl_corners</span><span class="si">}</span><span class="s1">)))</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;  (:PAR :N CONTOURS :V (</span><span class="si">{</span><span class="n">contours_formatted</span><span class="si">}</span><span class="s1">)))</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39; ((ROOF-FACE :N &quot;Roof_</span><span class="si">{</span><span class="n">sec_name</span><span class="si">}</span><span class="s1">&quot; :T ROOF-FACE :INDEX -1000)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39;  (:PAR :N NCORN :V </span><span class="si">{</span><span class="n">vc</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39; (:PAR :N CORNERS :DIM (</span><span class="si">{</span><span class="n">vc</span><span class="si">}</span><span class="s1"> 3) :V #2A(</span><span class="si">{</span><span class="n">roof_corners</span><span class="si">}</span><span class="s1">))</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="sa">f</span><span class="s1">&#39; (:PAR :N CONTOURS :V (</span><span class="si">{</span><span class="n">contours_formatted</span><span class="si">}</span><span class="s1">))</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="s1">&#39;  ((FACE :N GROUND-FACE)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="s1">&#39;   (:PAR :N NCORN :V 0)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                <span class="s1">&#39;   (:PAR :N CORNERS :DIM (0 3) :V #2A()))))&#39;</span>
+            <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">footer</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sections</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="section_to_idm"><a class="viewcode-back" href="../../honeybee_idaice.bldgbody.html#honeybee_idaice.bldgbody.section_to_idm">[docs]</a><span class="k">def</span> <span class="nf">section_to_idm</span><span class="p">(</span><span class="n">rooms</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Room</span><span class="p">],</span> <span class="n">max_int_wall_thickness</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an IDA-ICE building body for rooms.&quot;&quot;&quot;</span>
+    <span class="n">sections</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">grouped_rooms</span><span class="p">,</span> <span class="n">floor_heights</span> <span class="o">=</span> <span class="n">Room</span><span class="o">.</span><span class="n">group_by_floor_height</span><span class="p">(</span><span class="n">rooms</span><span class="p">,</span> <span class="n">min_difference</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">no_ext_rooms</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">grouped_room</span><span class="p">,</span> <span class="n">height</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">grouped_rooms</span><span class="p">,</span> <span class="n">floor_heights</span><span class="p">):</span>
+        <span class="n">ext_rooms</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="n">grouped_room</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">room</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;_idm_is_extruded&#39;</span><span class="p">]:</span>
+                <span class="n">no_ext_rooms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">room</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ext_rooms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">room</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ext_rooms</span><span class="p">:</span>
+            <span class="n">section</span> <span class="o">=</span> <span class="n">_section_to_idm_extruded</span><span class="p">(</span>
+                <span class="n">ext_rooms</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Level_</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                <span class="n">max_int_wall_thickness</span><span class="o">=</span><span class="n">max_int_wall_thickness</span>
+            <span class="p">)</span>
+            <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>
+
+    <span class="n">sections_protected</span> <span class="o">=</span> <span class="n">_section_to_idm_protected</span><span class="p">(</span><span class="n">no_ext_rooms</span><span class="p">)</span>
+    <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sections_protected</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sections</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2023, Ladybug Tools.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

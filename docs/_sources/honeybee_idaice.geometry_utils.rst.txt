@@ -1,0 +1,7 @@
+honeybee\_idaice.geometry\_utils module
+=======================================
+
+.. automodule:: honeybee_idaice.geometry_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
