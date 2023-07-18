@@ -1,32 +1,76 @@
 """Write an idm file from a HBJSON file."""
+import math
 import pathlib
 import shutil
 from typing import List, Tuple
 
-from honeybee.model import Model, Room, Face
+from ladybug_geometry.bounding import bounding_box
+from ladybug_geometry.geometry2d import Point2D, Polygon2D
+from ladybug_geometry.geometry3d import Point3D, Face3D
+from honeybee.model import Model, Room
 from honeybee.facetype import RoofCeiling, Wall, Floor
-from ladybug_geometry.geometry3d import Point3D
 
 from .archive import zip_folder_to_idm
-from .geometry_utils import get_floor_boundary, get_ceiling_boundary, prepare_apertures
-from .bldgbody import section_to_idm
+from .bldgbody import section_to_idm, MAX_FLOOR_ELEVATION_DIFFERENCE
 from .shade import shades_to_idm
-from .face import face_to_idm, opening_to_idm
+from .face import face_to_idm, opening_to_idm, face_reference_plane
 
 
-def ceilings_to_idm(faces: List[Face], origin: Point3D):
-    """Translate a collection of ceilings face to an IDM ENCLOSING-ELEMENT."""
+def ceilings_to_idm(room: Room, origin: Point3D, tolerance: float,
+                    angle_tolerance: float = 1.0):
+    """Translate the ceilings of a Room to an IDM ENCLOSING-ELEMENT.
+
+    Args:
+        room: A honeybee Room.
+        origin: A Point3D for the origin of the parent Room.
+        tolerance: The minimum difference between x, y, and z coordinate
+            values at which points are considered distinct.
+        angle_tolerance: The max angle in degrees that Face normal can differ
+            from the World Z before the Face is treated as being in the
+            World XY plane. (Default: 1).
+    """
     index = -1000
 
+    # if there's only one ceiling, just translate it
+    faces = room.roof_ceilings
     if len(faces) == 1:
-        return face_to_idm(faces[0], origin, index)
+        return face_to_idm(faces[0], origin, index, angle_tolerance)
 
-    vertices, z_range = get_ceiling_boundary(faces)
-    if z_range[1] - z_range[0] <= 0.01:
+    # check to see the vertical range across the ceilings
+    min_pt, max_pt = bounding_box([face.geometry for face in faces])
+    if max_pt.z - min_pt.z <= tolerance:
         # all the ceilings are the same height
-        return '\n'.join(face_to_idm(face, origin, index) for face in faces)
+        return '\n'.join(
+            face_to_idm(face, origin, index, angle_tolerance) for face in faces
+        )
 
+    # get the boundary around all of the ceiling parts
     # TODO: add support for ceiling parts with holes
+    horiz_boundary = room.horizontal_boundary(tolerance=tolerance)
+    if horiz_boundary.normal.z <= 0:  # ensure upward-facing Face3D
+        horiz_boundary = horiz_boundary.flip()
+    # insert the vertices of the ceiling elements into the horizontal boundary
+    ceil_pts = [pt for f in faces for pt in f.geometry.boundary]
+    ceil_pts_2d = [Point2D(v[0], v[1]) for v in ceil_pts]
+    st_poly = Polygon2D([Point2D(v.x, v.y) for v in horiz_boundary.boundary])
+    st_poly = st_poly.remove_colinear_vertices(tolerance)
+    polygon_update = []
+    for pt in ceil_pts_2d:
+        for v in st_poly.vertices:  # check if pt is already included
+            if pt.distance_to_point(v) <= tolerance:
+                break
+        else:
+            values = [seg.distance_to_point(pt) for seg in st_poly.segments]
+            if min(values) < tolerance:
+                index_min = min(range(len(values)), key=values.__getitem__)
+                polygon_update.append((index_min, pt))
+    if polygon_update:
+        st_poly = Polygon2D._insert_updates_in_order(st_poly, polygon_update)
+    vertices = [Point3D(pt.x, pt.y, max_pt.z) for pt in st_poly]
+    full_bound = Face3D(vertices, plane=horiz_boundary.plane)
+    vertices = full_bound.lower_left_counter_clockwise_vertices
+
+    # translate the boundary vertices into an enclosing element
     vertices_idm = ' '.join((
         f'({v.x - origin.x} {v.y - origin.y} {v.z - origin.z})' for v in vertices
     ))
@@ -35,9 +79,9 @@ def ceilings_to_idm(faces: List[Face], origin: Point3D):
         f'((ENCLOSING-ELEMENT :N CEILING_{faces[0].identifier} :T CEILING :INDEX -1000)\n' \
         ' ((AGGREGATE :N GEOMETRY)\n' \
         f'  (:PAR :N CORNERS :DIM ({count} 3) :SP ({count} 3) :V #2A({vertices_idm})))'
-
     ceiling_idm = [ceiling]
 
+    # write each of the ceiling faces to IDM
     for fc, face in enumerate(faces):
         name = f'{face.identifier}_{fc}'
         holes = face.geometry.holes or []
@@ -50,9 +94,11 @@ def ceilings_to_idm(faces: List[Face], origin: Point3D):
         )
 
         # add apertures
+        ref_plane = face_reference_plane(face, angle_tolerance) \
+            if face.has_sub_faces else None
         windows = ['']
         for aperture in face.apertures:
-            windows.append(opening_to_idm(aperture))
+            windows.append(opening_to_idm(aperture, ref_plane))
 
         windows = ''.join(windows)
 
@@ -66,13 +112,33 @@ def ceilings_to_idm(faces: List[Face], origin: Point3D):
     return '\n'.join(ceiling_idm) + ')'
 
 
-def room_to_idm(room: Room):
-    """Translate a Honeybee Room to an IDM Zone."""
+def room_to_idm(room: Room, tolerance: float, angle_tolerance: float = 1.0):
+    """Translate a Honeybee Room to an IDM Zone.
+    
+    Args:
+        room: A honeybee Room.
+        tolerance: The minimum difference between x, y, and z coordinate
+            values at which points are considered distinct.
+        angle_tolerance: The max angle in degrees that Face normal can differ
+            from the World Z before the Face is treated as being in the
+            World XY plane. (Default: 1).
+    """
     room_idm = []
 
-    # find floor boundary and llc for origin
-    vertices, pole = get_floor_boundary(room)
+    # find horizontal boundary around the Room
+    horiz_boundary = room.horizontal_boundary(match_walls=True, tolerance=tolerance)
+    if horiz_boundary.normal.z <= 0:  # ensure upward-facing Face3D
+        horiz_boundary = horiz_boundary.flip()
+    if horiz_boundary.has_holes:  # remove any holes from the result
+        horiz_boundary = Face3D(horiz_boundary, plane=horiz_boundary.plane)
+
+    # get the lower-left corner and a point for the center
+    vertices = horiz_boundary.lower_left_counter_clockwise_vertices
     origin = vertices[0]
+    if horiz_boundary.is_convex:
+        pole = horiz_boundary.center
+    else:  # use a 1 cm tolerance for pole that will not be time consuming to compute
+        pole = horiz_boundary.pole_of_inaccessibility(0.01)
 
     # relative coordinates of the pole
     rp = pole - origin
@@ -133,14 +199,20 @@ def room_to_idm(room: Room):
             index = last_index
             last_index += 1
         used_index.append(index)
-        face_idm = face_to_idm(wall, origin=origin, index=index)
+        face_idm = face_to_idm(
+            wall, origin=origin, index=index, angle_tolerance=angle_tolerance
+        )
         room_idm.append(face_idm)
 
     for count, floor in enumerate(floors):
-        face_idm = face_to_idm(floor, origin=origin, index=-(2000 + count))
+        face_idm = face_to_idm(
+            floor, origin=origin, index=-(2000 + count), angle_tolerance=angle_tolerance
+        )
         room_idm.append(face_idm)
 
-    ceiling_idm = ceilings_to_idm(ceilings, origin=origin)
+    ceiling_idm = ceilings_to_idm(
+        room, origin=origin, tolerance=tolerance, angle_tolerance=angle_tolerance
+    )
     room_idm.append(ceiling_idm)
 
     return '\n'.join(room_idm)
@@ -164,53 +236,55 @@ def deconstruct_room(room: Room):
     return walls, ceilings, floors
 
 
-def _is_room_extruded(room: Room) -> Tuple:
-    """Check if the room geometry is an extrusion in Z direction."""
+def _is_room_extruded(room: Room, angle_tolerance: float) -> Tuple:
+    """Check if the room geometry is an extrusion in Z direction.
+
+    Args:
+        room: A honeybee Room.
+        angle_tolerance: The max angle difference in degrees that the normals of
+            Faces are allowed to differ from vertical/horizontal for the Room
+            to not be considered extruded.
+    """
     f_h = 0
     c_h = 0
     for face in room.faces:
         type_ = face.type
         if isinstance(type_, Wall):
-            if abs(face.altitude) > 5:
+            if abs(face.altitude) > angle_tolerance:
                 return False, -1
         elif isinstance(type_, RoofCeiling):
-            if abs(90 - face.altitude) > 5:
+            if abs(90 - face.altitude) > angle_tolerance:
                 return False, -1
             c_h = face.vertices[0].z
         elif isinstance(type_, Floor):
-            if abs(face.altitude + 90) > 5:
+            if abs(face.altitude + 90) > angle_tolerance:
                 return False, -1
             f_h = face.vertices[0].z
 
     return True, round(c_h - f_h, 2)
 
 
-def prepare_model(model: Model) -> Model:
-    """This function prepares the model for translation to IDM.
+def prepare_model(model: Model, max_int_wall_thickness: float = 0.45) -> Model:
+    """Perform a number of model edits to prepare it for translation to IDM.
 
-    * Ensures the model is meters
-    * Check room display names and ensures they are unique
+    * Check room display names and ensure they are unique
     * Mark rooms as extruded and non-extruded
     * Mark doors and apertures in the model to avoid writing duplicated doors and
       apertures
 
+    Args:
+        model: A honeybee model.
+        max_int_wall_thickness: Maximum thickness of the interior wall in meters.
+            This will be used to identify adjacent interior doors and apertures
+            in the model to ensure that only one version of the geometry
+            is written to IDA-ICE. (Default: 0.45).
     """
-    model.convert_to_units(units='Meters')
-
-    try:
-        model.remove_degenerate_geometry()
-    except ValueError as e:
-        # most likely an error with the units. It may or may not become a problem
-        # for IDA-ICE so let's continue the process.
-        print(str(e))
-
-    for face in model.faces:
-        if face.apertures:
-            face._apertures = prepare_apertures(face.apertures)
-
+    # difference in normal angles that make apertures/doors adjacent
+    min_ang = math.pi - math.radians(model.angle_tolerance)
+    # ensure unique room names for each story and make a note of adjacencies
     room_names = {}
-    grouped_rooms, _ = Room.group_by_floor_height(model.rooms, min_difference=0.2)
-    door_adj_tol = 0.75  # assuming the door centers are not closer than this distance
+    grouped_rooms, _ = Room.group_by_floor_height(
+        model.rooms, min_difference=MAX_FLOOR_ELEVATION_DIFFERENCE)
     door_tracker = []
     aperture_tracker = []
     for grouped_room in grouped_rooms:
@@ -225,29 +299,34 @@ def prepare_model(model: Model) -> Model:
                 room_names[original_name] += 1
             else:
                 room_names[room.display_name] = 1
-            is_extruded, floor_to_ceiling_height = _is_room_extruded(room)
+            # add markers for whether the Room is extruded or not
+            is_extruded, floor_to_ceiling_height = \
+                _is_room_extruded(room, model.angle_tolerance)
             room.user_data = {
                 '_idm_is_extruded': is_extruded,
                 '_idm_flr_ceil_height': floor_to_ceiling_height
             }
+            # add markers so adjacent interior Apertures and Doors are not duplicated
             for face in room.faces:
                 for door in face.doors:
                     center = door.geometry.center
-                    for pt in door_tracker:
-                        if pt.distance_to_point(center) <= door_adj_tol:
+                    normal = door.geometry.normal
+                    for data in door_tracker:
+                        c, n = data
+                        if c.distance_to_point(center) <= max_int_wall_thickness \
+                                and n.angle(normal) > min_ang:
                             door.user_data = {'_idm_ignore': True}
                             break
-                    door_tracker.append(center)
+                    door_tracker.append((center, normal))
                 for aperture in face.apertures:
                     center = aperture.geometry.center
                     normal = aperture.geometry.normal
                     for data in aperture_tracker:
                         c, n = data
-                        if c.distance_to_point(center) <= door_adj_tol \
-                                and abs(n.angle(normal) - 3.14159) < 0.1:
+                        if c.distance_to_point(center) <= max_int_wall_thickness \
+                                and n.angle(normal) > min_ang:
                             aperture.user_data = {'_idm_ignore': True}
                     aperture_tracker.append((center, normal))
-    return model
 
 
 def prepare_folder(bldg_name: str, out_folder: str) -> List[pathlib.Path]:
@@ -265,8 +344,10 @@ def prepare_folder(bldg_name: str, out_folder: str) -> List[pathlib.Path]:
     return base_folder, model_folder, bldg_folder, bldg_file
 
 
-def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
-                 max_int_wall_thickness: int = 0.45, debug: bool = False):
+def model_to_idm(
+        model: Model, out_folder: pathlib.Path, name: str = None,
+        max_int_wall_thickness: float = 0.40, max_frame_thickness: float = 0.1,
+        debug: bool = False):
     """Translate a Honeybee model to an IDM file.
 
     Args:
@@ -275,15 +356,40 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
         name: Output IDM file name.
         max_int_wall_thickness: Maximum thickness of the interior wall in meters. IDA-ICE
             expects the input model to have a gap between the rooms that represents
-            the wall thickness. For models where the walls are touching each other use
-            the values of 0.
+            the wall thickness. This value must be smaller than the smallest Room
+            that is expected in resulting IDA-ICE model and it should never be greater
+            than 0.5 in order to avoid creating invalid building bodies for IDA-ICE.
+            For models where the walls are touching each other, use a value
+            of 0. (Default: 0.45).
+        max_frame_thickness: Maximum thickness of the window frame in meters.
+            This will be used to join any non-rectangular Apertures together in
+            an attempt to better rectangularize them for IDM. (Default: 0.1).
         debug: Set to True to not to delete the IDM folder before zipping it into a
             single file.
     """
+    # check for the presence of rooms
     if not model.rooms:
-        raise ValueError('The input model should at least have one room.')
+        raise ValueError(
+            'The model must have at least have one room to translate to IDM.')
 
-    model = prepare_model(model)
+    # duplicate model to avoid mutating it as we edit it for export
+    # otherwise, we'll loose the original model if we want to do anything after export
+    model = model.duplicate()
+
+    # scale the model if the units are not meters
+    if model.units != 'Meters':
+        model.convert_to_units('Meters')
+    # remove degenerate geometry within the model tolerance
+    model.remove_degenerate_geometry()
+    # convert all apertures to be rectangular, using the model tolerances
+    ap_dist = max_frame_thickness if max_frame_thickness > model.tolerance \
+        else model.tolerance
+    model.rectangularize_apertures(max_separation=ap_dist, resolve_adjacency=False)
+
+    # edit the model display_names and add user_data to help with the translation
+    adj_dist = max_int_wall_thickness if max_int_wall_thickness > model.tolerance \
+        else model.tolerance
+    prepare_model(model, adj_dist)
 
     # make sure names don't have subfolder or extension
     original_name = name or model.display_name
@@ -308,7 +414,7 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
 
         # create a building sections/bodies for the building
         sections = section_to_idm(
-            model.rooms, max_int_wall_thickness=max_int_wall_thickness
+            model, max_int_wall_thickness=max_int_wall_thickness
         )
         bldg.write(sections)
 
@@ -339,7 +445,7 @@ def model_to_idm(model: Model, out_folder: pathlib.Path, name: str = None,
         with template_room.open('r') as inf, room_file.open('w') as rm:
             for line in inf:
                 rm.write(f'{line.rstrip()}\n')
-            geometry = room_to_idm(room)
+            geometry = room_to_idm(room, model.tolerance, model.angle_tolerance)
             rm.write(geometry)
             footer = f'\n;[end of {bldg_name}\\{room_name}.idm]\n'
             rm.write(footer)

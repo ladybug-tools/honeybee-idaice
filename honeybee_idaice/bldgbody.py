@@ -3,38 +3,49 @@ from typing import List
 from ladybug_geometry.bounding import bounding_box
 from ladybug_geometry.geometry3d import Plane, LineSegment3D, Face3D, Point3D
 
+from honeybee.model import Model
 from honeybee.room import Room
 from honeybee.facetype import Floor, RoofCeiling
 
-from .geometry_utils import get_floor_boundary, grouped_horizontal_boundary
+# constant used by IDA-ICE to determine if a geometry element is exterior
+# geometries within this distance of the building body are considered exterior
+IDA_ICE_BUILDING_BODY_TOL = 0.5  # units are meters
+
+# constant used to group rooms into stories by their floor elevations
+# the value is meant to be lower than the height of any room in the model
+# but not so low that a single step down yields a new Story
+MAX_FLOOR_ELEVATION_DIFFERENCE = 0.2  # units are meters of vertical distance
 
 
-def _section_to_idm_protected(rooms: List[Room]):
+def _section_to_idm_protected(rooms: List[Room], tolerance: float):
+    """Create an IDM building section for a group of non-extruded Rooms.
+    
+    Args:
+        rooms: A list of Honeybee Rooms.
+        tolerance: The maximum difference between X, Y, and Z values at which point
+            vertices are considered distinct from one another.
+    """
     if not rooms:
         return ''
     XY_PLANE = Plane()
     sections = []
     for room in rooms:
-        room_section = []
-        try:
-            boundary = grouped_horizontal_boundary([room], min_separation=0)
-            bv = list(boundary.boundary)
-            holes = boundary.holes
-        except Exception:
-            bv, _ = get_floor_boundary(room)
-            holes = None
+        room_section = []  # list of IDM strings to be collected
 
-        if not holes:
-            contours = [bv]
-        else:
-            contours = [bv] + [list(h) for h in holes]
+        # get the horizontal boundary around the Room geometry
+        h_bound = room.horizontal_boundary(match_walls=False, tolerance=tolerance)
+        h_bound = h_bound.remove_colinear_vertices(tolerance)
+        contours = [list(h_bound.vertices)]
+        if h_bound.has_holes:
+            contours = contours + [list(h) for h in h_bound.holes]
 
+        # convert the vertices of the boundary into an IDM string
         vc = sum(len(c) for c in contours)
         contours_formatted = ' '.join(str(len(c)) for c in contours)
 
         idm_vertices = ' '.join(f'({v.x} {v.y})' for vv in contours for v in vv)
 
-        min_pt, max_pt = bounding_box(room.geometry)
+        min_pt, max_pt = room.geometry.min, room.geometry.max
 
         header = f'((CE-SECTION :N "{room.display_name}_SEC" :T BUILDING-SECTION)\n' \
             ' (:PAR :N PROTECTED_SHAPE :V :TRUE)\n' \
@@ -44,6 +55,8 @@ def _section_to_idm_protected(rooms: List[Room]):
             f' (:PAR :N HEIGHT :V {max_pt.z - min_pt.z})\n' \
             f' (:PAR :N BOTTOM :V {min_pt.z})'
         room_section.append(header)
+
+        # loop through the room faces and add the geometries
         wall_count = 0
         floor_count = 0
         for face in room.faces:
@@ -91,7 +104,7 @@ def _section_to_idm_protected(rooms: List[Room]):
                     '   (:PAR :N NCORN :V 0)\n' \
                     '   (:PAR :N CORNERS :DIM (0 3))))'
 
-            if type_ == 'WALL-FACE' and min_pt.z < -0.1:
+            if type_ == 'WALL-FACE' and min_pt.z < -tolerance:  # below ground geometry
                 # intersect the edges with the XY plane to create two separate segments
                 geometry = face.geometry
                 lines = geometry.intersect_plane(XY_PLANE)
@@ -106,12 +119,12 @@ def _section_to_idm_protected(rooms: List[Room]):
                 top_part = [vertices[0]]
                 for vc, v in enumerate(vertices[1:]):
                     line = LineSegment3D.from_end_points(top_part[-1], v)
-                    if line.distance_to_point(pt_1) < 0.001:
+                    if line.distance_to_point(pt_1) < tolerance:
                         top_part.extend([pt_1, pt_2])
                         bottom_part = [pt_2, pt_1]
                         other_point = pt_2
                         break
-                    elif line.distance_to_point(pt_2) < 0.001:
+                    elif line.distance_to_point(pt_2) < tolerance:
                         top_part.extend([pt_2, pt_1])
                         bottom_part = [pt_1, pt_2]
                         other_point = pt_1
@@ -122,7 +135,7 @@ def _section_to_idm_protected(rooms: List[Room]):
                 top_part_2 = [vertices[0]]
                 for c, v in enumerate(vertices_rev):
                     line = LineSegment3D.from_end_points(top_part_2[-1], v)
-                    if line.distance_to_point(other_point) < 0.001:
+                    if line.distance_to_point(other_point) < tolerance:
                         indx = -(c + 1)
                         if indx == -1:
                             top_part = top_part + vertices[indx:-1]
@@ -153,57 +166,76 @@ def _section_to_idm_protected(rooms: List[Room]):
 
 
 def _section_to_idm_extruded(
-    extruded_rooms: List[Room], name: str, max_int_wall_thickness: float = 0.45,
-    height_tolerance: float = 0.5,
-        ):
-    """Create an IDM building section for a group of extruded rooms."""
+    extruded_rooms: List[Room], name: str, max_int_wall_thickness: float,
+    tolerance: float
+):
+    """Create an IDM building section for a group of extruded rooms.
+
+    The input rooms should all be at the same floor height and a part of the
+    same story.
+
+    Args:
+        extruded_rooms: A list of Honeybee Rooms that are all extruded.
+        name: text string to be used as a base name for the section.
+        max_int_wall_thickness: Maximum thickness of the interior wall in meters.
+            Gaps between Rooms that are less than this distance will be grouped
+            into the same building section.
+        tolerance: The maximum difference between X, Y, and Z values at which point
+            vertices are considered distinct from one another.
+    """
     if not extruded_rooms:
         return ''
+
+    # group the rooms according to their floor-to-ceiling heights
     groups = {}
     for room in extruded_rooms:
-        _, max_pt = bounding_box(room.geometry)
+        max_pt = room.geometry.max
         for z in groups:
-            if abs(max_pt.z - z) <= height_tolerance:
+            if abs(max_pt.z - z) <= IDA_ICE_BUILDING_BODY_TOL:
                 groups[z].append(room)
                 break
         else:
             groups[max_pt.z] = [room]
 
+    # convert each group of rooms to a separate building section
     sections = []
     for group_count, rooms in enumerate(groups.values()):
+        # get the bounding box around the rooms
         geometry = [room.geometry for room in rooms]
         min_pt, max_pt = bounding_box(geometry)
         height = max_pt.z
         bottom = min_pt.z
+
+        # compute the grouped horizontal boundary around the rooms
+        fail_msg = 'Failed to calculate the horizontal boundary for level containing ' \
+            f'{rooms[0].display_name}. Will use a bounding box for this floor.\n'
         try:
-            boundaries = grouped_horizontal_boundary(
-                rooms, min_separation=max_int_wall_thickness
+            boundaries = Room.grouped_horizontal_boundary(
+                rooms, min_separation=max_int_wall_thickness, tolerance=tolerance
             )
         except Exception as e:
-            print(
-                'Failed to calculate the horizontal boundary for level containing '
-                f'{rooms[0].display_name}. Will use a bounding box for this floor.\n'
-                f'{str(e)}'
-            )
+            print(fail_msg + str(e))
             boundaries = []
 
-        # use bounding box instead as a fallback
+        # if the grouped horizontal boundary failed, use the bounding box as a fallback
         bb_boundaries = [
             Face3D([
                 Point3D(min_pt.x, min_pt.y, bottom), Point3D(max_pt.x, min_pt.y, bottom),
                 Point3D(max_pt.x, max_pt.y, bottom), Point3D(min_pt.x, max_pt.y, bottom)
             ])
         ]
-
-        if not boundaries:
+        if not boundaries:  # the max_int_wall_thickness is likely too large
             boundaries = bb_boundaries
-        else:
-            rooms_area = sum(room.floor_area for room in rooms)
-            boundary_area = sum(b.area for b in boundaries)
-            if abs(1 - (rooms_area / boundary_area)) > 0.2:
-                # the boundary is incorrect
-                boundaries = bb_boundaries
+            print(fail_msg)
+        else:  # make sure that grouped_horizontal_boundary is not self-intersecting
+            for bnd in boundaries:
+                if bnd.is_self_intersecting:
+                    # there were likely overlapping Room boundaries causing failure
+                    boundaries = bb_boundaries
+                    print(fail_msg)
+                    break
 
+        # convert the boundaries into building section strings
         for count, boundary in enumerate(boundaries):
             sec_name = f'{name}_{group_count}_{count}_SEC'
             bv = list(boundary.boundary)
@@ -286,10 +318,20 @@ def _section_to_idm_extruded(
     return '\n'.join(sections)
 
 
-def section_to_idm(rooms: List[Room], max_int_wall_thickness: float):
-    """Create an IDA-ICE building body for rooms."""
+def section_to_idm(model: Model, max_int_wall_thickness: float):
+    """Create an IDA-ICE building body for a Honeybee Model.
+
+    Args:
+        model: A honeybee model.
+        max_int_wall_thickness: Maximum thickness of the interior wall in meters.
+            Gaps between Rooms that are less than this distance will be grouped
+            into the same building section.
+    """
+    # separate the rooms by floor heights and extruded properties
+    rooms = model.rooms
     sections = []
-    grouped_rooms, floor_heights = Room.group_by_floor_height(rooms, min_difference=0.2)
+    grouped_rooms, floor_heights = \
+        Room.group_by_floor_height(rooms, min_difference=MAX_FLOOR_ELEVATION_DIFFERENCE)
     no_ext_rooms = []
     for grouped_room, height in zip(grouped_rooms, floor_heights):
         ext_rooms = []
@@ -298,13 +340,15 @@ def section_to_idm(rooms: List[Room], max_int_wall_thickness: float):
                 no_ext_rooms.append(room)
             else:
                 ext_rooms.append(room)
+        # generate the bodies for the extruded rooms
         if ext_rooms:
             section = _section_to_idm_extruded(
                 ext_rooms, f'Level_{round(height, 2)}',
-                max_int_wall_thickness=max_int_wall_thickness
+                max_int_wall_thickness=max_int_wall_thickness, tolerance=model.tolerance
             )
             sections.append(section)
 
-    sections_protected = _section_to_idm_protected(no_ext_rooms)
+    # add any non-extruded rooms to the result
+    sections_protected = _section_to_idm_protected(no_ext_rooms, model.tolerance)
     sections.append(sections_protected)
     return '\n'.join(sections) + '\n'
