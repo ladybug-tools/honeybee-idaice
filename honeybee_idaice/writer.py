@@ -345,8 +345,8 @@ def prepare_folder(bldg_name: str, out_folder: str) -> List[pathlib.Path]:
 
 def model_to_idm(
         model: Model, out_folder: pathlib.Path, name: str = None,
-        max_int_wall_thickness: float = 0.40, max_frame_thickness: float = 0.1,
-        debug: bool = False):
+        max_int_wall_thickness: float = 0.40, max_adjacent_sub_face_dist: float = 0.40,
+        max_frame_thickness: float = 0.1, debug: bool = False):
     """Translate a Honeybee model to an IDM file.
 
     Args:
@@ -359,7 +359,15 @@ def model_to_idm(
             that is expected in resulting IDA-ICE model and it should never be greater
             than 0.5 in order to avoid creating invalid building bodies for IDA-ICE.
             For models where the walls are touching each other, use a value
-            of 0. (Default: 0.45).
+            of 0. (Default: 0.40).
+        max_adjacent_sub_face_dist: The maximum distance between interior Apertures
+            and Doors at which they are considered adjacent. This is used ot ensure
+            that only one interior Aperture of an adjacent pair is written into the
+            IDM. This value should typically be around the max_int_wall_thickness
+            and should ideally not be thicker than 0.5. But you may not want to
+            set this to zero (like some cases of max_int_wall_thickness),
+            particularly when the adjacent interior geometries are not matching
+            one another. (Default: 0.40).
         max_frame_thickness: Maximum thickness of the window frame in meters.
             This will be used to join any non-rectangular Apertures together in
             an attempt to better rectangularize them for IDM. (Default: 0.1).
@@ -386,8 +394,8 @@ def model_to_idm(
     model.rectangularize_apertures(max_separation=ap_dist, resolve_adjacency=False)
 
     # edit the model display_names and add user_data to help with the translation
-    adj_dist = max_int_wall_thickness if max_int_wall_thickness > model.tolerance \
-        else model.tolerance
+    adj_dist = max_adjacent_sub_face_dist \
+        if max_adjacent_sub_face_dist > model.tolerance else model.tolerance
     prepare_model(model, adj_dist)
 
     # make sure names don't have subfolder or extension
