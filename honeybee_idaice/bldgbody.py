@@ -35,9 +35,9 @@ def _section_to_idm_protected(rooms: List[Room], tolerance: float):
         # get the horizontal boundary around the Room geometry
         h_bound = room.horizontal_boundary(match_walls=False, tolerance=tolerance)
         h_bound = h_bound.remove_colinear_vertices(tolerance)
-        contours = [list(h_bound.vertices)]
+        contours = [list(h_bound.boundary)]
         if h_bound.has_holes:
-            contours = contours + [list(h) for h in h_bound.holes]
+            contours.extend([list(h) for h in h_bound.holes])
 
         # convert the vertices of the boundary into an IDM string
         vc = sum(len(c) for c in contours)
