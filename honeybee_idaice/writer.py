@@ -45,7 +45,6 @@ def ceilings_to_idm(room: Room, origin: Point3D, tolerance: float,
         )
 
     # get the boundary around all of the ceiling parts
-    # TODO: add support for ceiling parts with holes
     horiz_boundary = room.horizontal_boundary(tolerance=tolerance)
     if horiz_boundary.normal.z <= 0:  # ensure upward-facing Face3D
         horiz_boundary = horiz_boundary.flip()
@@ -130,7 +129,7 @@ def room_to_idm(room: Room, tolerance: float, angle_tolerance: float = 1.0):
     if horiz_boundary.normal.z <= 0:  # ensure upward-facing Face3D
         horiz_boundary = horiz_boundary.flip()
     if horiz_boundary.has_holes:  # remove any holes from the result
-        horiz_boundary = Face3D(horiz_boundary, plane=horiz_boundary.plane)
+        horiz_boundary = Face3D(horiz_boundary.boundary, plane=horiz_boundary.plane)
 
     # get the lower-left corner and a point for the center
     vertices = horiz_boundary.lower_left_counter_clockwise_vertices
