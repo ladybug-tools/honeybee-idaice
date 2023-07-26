@@ -113,7 +113,7 @@ def ceilings_to_idm(room: Room, origin: Point3D, tolerance: float,
 
 def room_to_idm(room: Room, tolerance: float, angle_tolerance: float = 1.0):
     """Translate a Honeybee Room to an IDM Zone.
-    
+
     Args:
         room: A honeybee Room.
         tolerance: The minimum difference between x, y, and z coordinate
@@ -125,15 +125,26 @@ def room_to_idm(room: Room, tolerance: float, angle_tolerance: float = 1.0):
     room_idm = []
 
     # find horizontal boundary around the Room
-    horiz_boundary = room.horizontal_boundary(match_walls=True, tolerance=tolerance)
+    horiz_boundary: Face3D = \
+        room.horizontal_boundary(match_walls=True, tolerance=tolerance)
+    holes = horiz_boundary.holes or []
+    contours = [list(horiz_boundary.boundary)] + [list(h) for h in holes]
+    if holes:
+        contours_formatted = ' '.join(str(len(c)) for c in contours)
+    else:
+        contours_formatted = ''
+
+    # create a flatten list for vertices
+    vertices = [v for vl in contours for v in vl]
+
     if horiz_boundary.normal.z <= 0:  # ensure upward-facing Face3D
         horiz_boundary = horiz_boundary.flip()
     if horiz_boundary.has_holes:  # remove any holes from the result
         horiz_boundary = Face3D(horiz_boundary.boundary, plane=horiz_boundary.plane)
 
     # get the lower-left corner and a point for the center
-    vertices = horiz_boundary.lower_left_counter_clockwise_vertices
-    origin = vertices[0]
+    ordered_vertices = horiz_boundary.lower_left_counter_clockwise_vertices
+    origin = ordered_vertices[0]
     if horiz_boundary.is_convex:
         pole = horiz_boundary.center
     else:  # use a 1 cm tolerance for pole that will not be time consuming to compute
@@ -173,12 +184,14 @@ def room_to_idm(room: Room, tolerance: float, angle_tolerance: float = 1.0):
             f' (:PAR :N ORIGIN :V #({origin.x} {origin.y}))\n' \
             f' (:PAR :N NCORN :V {count})\n' \
             f' (:PAR :N CORNERS :DIM ({count} 2) :V #2A({vertices_idm}))\n' \
+            f' (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
             f' (:PAR :N FLOOR_HEIGHT_FROM_GROUND :V {elevation}))'
     else:
         geometry = '((AGGREGATE :N GEOMETRY :X NIL)\n' \
             f' (:PAR :N ORIGIN :V #({origin.x} {origin.y}))\n' \
             f' (:PAR :N NCORN :V {count})\n' \
             f' (:PAR :N CORNERS :DIM ({count} 2) :V #2A({vertices_idm}))\n' \
+            f' (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
             f' (:PAR :N CEILING-HEIGHT :V {room.user_data["_idm_flr_ceil_height"]})\n' \
             f' (:PAR :N FLOOR_HEIGHT_FROM_GROUND :V {elevation}))'
 
