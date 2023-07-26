@@ -5,6 +5,7 @@ import pathlib
 import logging
 
 from honeybee.model import Model
+from honeybee.units import parse_distance_string
 
 _logger = logging.getLogger(__name__)
 
@@ -21,28 +22,37 @@ def translate():
     '--name', '-n', help='Name of the output file.', default="model", show_default=True
 )
 @click.option(
-    '--wall-thickness', '-t', help='Maximum thickness of the interior walls in meters. '
-    'IDA-ICE expects the input model to have a gap between the rooms that represents '
-    'the wall thickness. This value must be smaller than the smallest Room '
+    '--wall-thickness', '-t', help='Maximum thickness of the interior walls. This '
+    'can include the units of the distance (eg. 1.5ft) or, if no units are provided, '
+    'the value will be assumed to be in meters (the native units of IDA-ICE). '
+    'This value will be used to generate the IDA-ICE building body, which dictates '
+    'which Room Faces are exterior vs. interior. This is necessary because IDA-ICE '
+    'expects the input model to have gaps between the rooms that represent '
+    'the wall thickness. This value input here must be smaller than the smallest Room '
     'that is expected in resulting IDA-ICE model and it should never be greater '
-    'than 0.5 in order to avoid creating invalid building bodies for IDA-ICE. '
-    'For models where the walls are touching each other, use a value '
-    'of 0.', default=0.4, show_default=True
+    'than 0.5m in order to avoid creating invalid building bodies for IDA-ICE. '
+    'For models where the walls are touching each other, use a value of 0.',
+    type=str, default='0.4m', show_default=True
 )
 @click.option(
     '--adjacency-distance', '-a', help='Maximum distance between interior Apertures '
-    'and Doors at which they are considered adjacent. This is used ot ensure '
+    'and Doors at which they are considered adjacent. This can include the units '
+    'of the distance (eg. 1.5ft) or, if no units are provided, the value will be '
+    'assumed to be in meters (the native units of IDA-ICE). This is used to ensure '
     'that only one interior Aperture of an adjacent pair is written into the '
-    'IDM. This value should typically be around the max_int_wall_thickness '
-    'and should ideally not be thicker than 0.5. But you may not want to '
-    'set this to zero (like some cases of max_int_wall_thickness), '
-    'particularly when the adjacent interior geometries are not matching '
-    'one another.', default=0.4, show_default=True
+    'IDM. This value should typically be around the --wall-thickness and should '
+    'ideally not be thicker than 0.5m. But it may be undesirable to set this to '
+    'zero (like some cases of --wall-thickness), particularly when the adjacent '
+    'interior geometries are not perfectly matching one another.',
+    type=str, default='0.4m', show_default=True
 )
 @click.option(
-    '--frame-thickness', '-f', help='Maximum thickness of the window frame in meters. '
+    '--frame-thickness', '-f', help='Maximum thickness of the window frame. This '
+    'can include the units of the distance (eg. 4in) or, if no units are provided, '
+    'the value will be assumed to be in meters (the native units of IDA-ICE). '
     'This will be used to join any non-rectangular Apertures together in'
-    'an attempt to better rectangularize them for IDM.', default=0.1, show_default=True
+    'an attempt to better rectangularize them for IDM.',
+    type=str, default='0.1m', show_default=True
 )
 @click.option(
     '--folder', '-f', help='Path to target folder.',
@@ -59,6 +69,12 @@ def model_to_idm(
 
     """
     try:
+        # convert distance strings to floats
+        wall_thickness = parse_distance_string(wall_thickness, 'Meters')
+        adjacency_distance = parse_distance_string(adjacency_distance, 'Meters')
+        frame_thickness = parse_distance_string(frame_thickness, 'Meters')
+
+        # translate the Model to IDM
         model = Model.from_file(model_json)
         folder = pathlib.Path(folder)
         folder.mkdir(parents=True, exist_ok=True)

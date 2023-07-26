@@ -373,11 +373,11 @@ def model_to_idm(
             than 0.5 in order to avoid creating invalid building bodies for IDA-ICE.
             For models where the walls are touching each other, use a value
             of 0. (Default: 0.40).
-        max_adjacent_sub_face_dist: The maximum distance between interior Apertures
-            and Doors at which they are considered adjacent. This is used ot ensure
-            that only one interior Aperture of an adjacent pair is written into the
-            IDM. This value should typically be around the max_int_wall_thickness
-            and should ideally not be thicker than 0.5. But you may not want to
+        max_adjacent_sub_face_dist: The maximum distance in meters between interior
+            Apertures and Doors at which they are considered adjacent. This is used to
+            ensure that only one interior Aperture of an adjacent pair is written into
+            the IDM. This value should typically be around the max_int_wall_thickness
+            and should ideally not be thicker than 0.5. But it may be undesirable to
             set this to zero (like some cases of max_int_wall_thickness),
             particularly when the adjacent interior geometries are not matching
             one another. (Default: 0.40).
