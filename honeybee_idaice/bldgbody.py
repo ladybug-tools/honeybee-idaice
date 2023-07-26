@@ -19,7 +19,7 @@ MAX_FLOOR_ELEVATION_DIFFERENCE = 0.2  # units are meters of vertical distance
 
 def _section_to_idm_protected(rooms: List[Room], tolerance: float):
     """Create an IDM building section for a group of non-extruded Rooms.
-    
+
     Args:
         rooms: A list of Honeybee Rooms.
         tolerance: The maximum difference between X, Y, and Z values at which point

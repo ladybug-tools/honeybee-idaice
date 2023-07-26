@@ -2,13 +2,13 @@ import math
 from typing import Union
 
 from honeybee.model import Face, Aperture, Door
-from ladybug_geometry.geometry3d import Point3D, Vector3D, Plane, Face3D
+from ladybug_geometry.geometry3d import Point3D, Vector3D, Plane
 
 
 def opening_to_idm(
         opening: Union[Aperture, Door], ref_plane: Plane, is_aperture=True) -> str:
     """Translate a HBJSON aperture or Door to an IDM Window.
-    
+
     Args:
         opening: A Honeybee Aperture or Door to be translated to IDM.
         ref_plane: A ladybug-geometry Plane object for the reference Plane
@@ -54,8 +54,8 @@ def face_to_idm(face: Face, origin: Point3D, index: int, angle_tolerance: float 
     Args:
         face: A Honeybee Face to be translated to IDM.
         origin: A Point3D for the origin of the parent Room.
-        index: An integer for the index of the Face in the parent Room. There's
-            some limitation about them that has to do with thousands of places.
+        index: An integer for the index of the Face in the parent Room. The index
+            starts from 1 for Walls, -1000 for ceilings and -2000 from floors.
         angle_tolerance: The max angle in degrees that Face normal can differ
             from the World Z before the Face is treated as being in the
             World XY plane. (Default: 1).
@@ -119,7 +119,7 @@ def face_to_idm(face: Face, origin: Point3D, index: int, angle_tolerance: float 
 
 def face_reference_plane(face: Face, angle_tolerance: float = 1.0):
     """Get a reference plane that is used to translate openings for a Face.
-    
+
     This plane will point inwards to the Room geometry and start in the lower
     left corner of the Face.
 
