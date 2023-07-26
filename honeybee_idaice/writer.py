@@ -56,7 +56,7 @@ def ceilings_to_idm(room: Room, origin: Point3D, tolerance: float,
     polygon_update = []
     for pt in ceil_pts_2d:
         for v in st_poly.vertices:  # check if pt is already included
-            if pt.distance_to_point(v) <= tolerance:
+            if pt.is_equivalent(v, tolerance):
                 break
         else:
             values = [seg.distance_to_point(pt) for seg in st_poly.segments]
