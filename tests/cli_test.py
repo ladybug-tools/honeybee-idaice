@@ -12,7 +12,10 @@ def test_model_to_idm():
     out_folder.mkdir(parents=True, exist_ok=True)
     out_file = 'cli_test.idm'
 
-    in_args = [input_hb_model, '--name', out_file, '--folder', out_folder.as_posix()]
+    in_args = [
+        input_hb_model, '--name', out_file, '--wall-thickness', 0.35,
+        '--folder', out_folder.as_posix()
+    ]
     result = runner.invoke(model_to_idm, in_args)
     assert result.exit_code == 0
 
