@@ -70,9 +70,9 @@ def model_to_idm(
     """
     try:
         # convert distance strings to floats
-        wall_thickness = parse_distance_string(wall_thickness, 'Meters')
-        adjacency_distance = parse_distance_string(adjacency_distance, 'Meters')
-        frame_thickness = parse_distance_string(frame_thickness, 'Meters')
+        wall_thickness = parse_distance_string(str(wall_thickness), 'Meters')
+        adjacency_distance = parse_distance_string(str(adjacency_distance), 'Meters')
+        frame_thickness = parse_distance_string(str(frame_thickness), 'Meters')
 
         # translate the Model to IDM
         model = Model.from_file(model_json)
