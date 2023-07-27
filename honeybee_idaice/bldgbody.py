@@ -208,7 +208,12 @@ def _section_to_idm_extruded(
 
         # compute the grouped horizontal boundary around the rooms
         fail_msg = 'Failed to calculate the horizontal boundary for level containing ' \
-            f'{rooms[0].display_name}. Will use a bounding box for this floor.\n'
+            f'{rooms[0].display_name}. Will use a bounding box for this floor. In ' \
+            'most cases this is because the input value for maximum wall thickness ' \
+            'is not appropriate for the input model. The current input is ' \
+            f'{max_int_wall_thickness}. For models where the walls between the rooms ' \
+            'are touching this value should be set to 0.\n'
+
         try:
             boundaries = Room.grouped_horizontal_boundary(
                 rooms, min_separation=max_int_wall_thickness, tolerance=tolerance
