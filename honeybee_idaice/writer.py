@@ -401,6 +401,10 @@ def model_to_idm(
         model.convert_to_units('Meters')
     # remove degenerate geometry within the model tolerance
     model.remove_degenerate_geometry()
+    # merge coplanar faces across the model's rooms
+    for room in model.rooms:
+        room.merge_coplanar_faces(
+            model.tolerance, model.angle_tolerance, vertical_only=True)
     # convert all apertures to be rectangular, using the model tolerances
     ap_dist = max_frame_thickness if max_frame_thickness > model.tolerance \
         else model.tolerance
