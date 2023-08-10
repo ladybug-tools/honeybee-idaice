@@ -17,17 +17,21 @@ IDA_ICE_BUILDING_BODY_TOL = 0.5  # units are meters
 MAX_FLOOR_ELEVATION_DIFFERENCE = 0.2  # units are meters of vertical distance
 
 
-def _section_to_idm_protected(rooms: List[Room], tolerance: float):
+def _section_to_idm_protected(
+        rooms: List[Room], tolerance: float, decimal_places: int = 3):
     """Create an IDM building section for a group of non-extruded Rooms.
 
     Args:
         rooms: A list of Honeybee Rooms.
         tolerance: The maximum difference between X, Y, and Z values at which point
             vertices are considered distinct from one another.
+        decimal_places: An integer for the number of decimal places to which
+            coordinate values will be rounded. (Default: 3).
     """
     if not rooms:
         return ''
     XY_PLANE = Plane()
+    dpl = decimal_places
     sections = []
     for room in rooms:
         room_section = []  # list of IDM strings to be collected
@@ -43,7 +47,9 @@ def _section_to_idm_protected(rooms: List[Room], tolerance: float):
         vc = sum(len(c) for c in contours)
         contours_formatted = ' '.join(str(len(c)) for c in contours)
 
-        idm_vertices = ' '.join(f'({v.x} {v.y})' for vv in contours for v in vv)
+        idm_vertices = ' '.join(
+            f'({round(v.x, dpl)} {round(v.y, dpl)})' for vv in contours for v in vv
+        )
 
         min_pt, max_pt = room.geometry.min, room.geometry.max
 
@@ -52,8 +58,8 @@ def _section_to_idm_protected(rooms: List[Room], tolerance: float):
             f' (:PAR :N NCORN :V {vc})\n' \
             f' (:PAR :N CORNERS :DIM ({vc} 2) :V #2A({idm_vertices}))\n' \
             f' (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
-            f' (:PAR :N HEIGHT :V {max_pt.z - min_pt.z})\n' \
-            f' (:PAR :N BOTTOM :V {min_pt.z})'
+            f' (:PAR :N HEIGHT :V {round(max_pt.z - min_pt.z, dpl)})\n' \
+            f' (:PAR :N BOTTOM :V {round(min_pt.z, dpl)})'
         room_section.append(header)
 
         # loop through the room faces and add the geometries
@@ -83,7 +89,8 @@ def _section_to_idm_protected(rooms: List[Room], tolerance: float):
             contours_formatted = ' '.join(str(len(c)) for c in contours)
 
             vertices_idm = ' '.join(
-                f'({v.x} {v.y} {v.z})' for vv in contours for v in vv
+                f'({round(v.x, dpl)} {round(v.y, dpl)} {round(v.z, dpl)})'
+                for vv in contours for v in vv
             )
             identifier = wall_count + floor_count
             if type_ == 'CRAWL-FACE':
@@ -147,8 +154,14 @@ def _section_to_idm_protected(rooms: List[Room], tolerance: float):
 
                 up_count = len(top_part)
                 btm_count = len(bottom_part)
-                up_vertices = ' '.join(f'({v[0]} {v[1]} {v[2]})' for v in top_part)
-                btm_vertices = ' '.join(f'({v[0]} {v[1]} {v[2]})' for v in bottom_part)
+                up_vertices = ' '.join(
+                    f'({round(v[0], dpl)} {round(v[1], dpl)} {round(v[2], dpl)})'
+                    for v in top_part
+                )
+                btm_vertices = ' '.join(
+                    f'({round(v[0], dpl)} {round(v[1], dpl)} {round(v[2], dpl)})'
+                    for v in bottom_part
+                )
 
                 body = \
                     f' ((FACE :N "f{index}" :T WALL-FACE :INDEX {index})\n' \
@@ -167,7 +180,7 @@ def _section_to_idm_protected(rooms: List[Room], tolerance: float):
 
 def _section_to_idm_extruded(
     extruded_rooms: List[Room], name: str, max_int_wall_thickness: float,
-    tolerance: float
+    tolerance: float, decimal_places: int = 3
 ):
     """Create an IDM building section for a group of extruded rooms.
 
@@ -182,6 +195,8 @@ def _section_to_idm_extruded(
             into the same building section.
         tolerance: The maximum difference between X, Y, and Z values at which point
             vertices are considered distinct from one another.
+        decimal_places: An integer for the number of decimal places to which
+            coordinate values will be rounded. (Default: 3).
     """
     if not extruded_rooms:
         return ''
@@ -198,13 +213,14 @@ def _section_to_idm_extruded(
             groups[max_pt.z] = [room]
 
     # convert each group of rooms to a separate building section
+    dpl = decimal_places
     sections = []
     for group_count, rooms in enumerate(groups.values()):
         # get the bounding box around the rooms
         geometry = [room.geometry for room in rooms]
         min_pt, max_pt = bounding_box(geometry)
-        height = max_pt.z
-        bottom = min_pt.z
+        height = round(max_pt.z, dpl)
+        bottom = round(min_pt.z, dpl)
 
         # compute the grouped horizontal boundary around the rooms
         fail_msg = 'Failed to calculate the horizontal boundary for level containing ' \
@@ -254,7 +270,9 @@ def _section_to_idm_extruded(
                 vc = sum(len(c) for c in contours)
                 contours_formatted = ' '.join(str(len(c)) for c in contours)
 
-            corners = ' '.join(f'({v.x} {v.y})' for vv in contours for v in vv)
+            corners = ' '.join(
+                f'({round(v.x, dpl)} {round(v.y, dpl)})' for vv in contours for v in vv
+            )
             header = f'((CE-SECTION :N "{sec_name}" :T BUILDING-SECTION)\n' \
                 f'  (:PAR :N NCORN :V {vc})\n' \
                 f'  (:PAR :N CORNERS :DIM ({vc} 2) :V #2A({corners}))\n' \
@@ -272,17 +290,23 @@ def _section_to_idm_extruded(
                     end = bv[f_count + 1]
                     if bottom < 0:
                         up_vertices = [
-                            [st.x, st.y, height], [end.x, end.y, height],
-                            [st.x, st.y, 0], [end.x, end.y, 0]
+                            [round(st.x, dpl), round(st.y, dpl), height],
+                            [round(end.x, dpl), round(end.y, dpl), height],
+                            [round(st.x, dpl), round(st.y, dpl), 0],
+                            [round(end.x, dpl), round(end.y, dpl), 0]
                         ]
                         btm_vertices = [
-                            [st.x, st.y, 0], [end.x, end.y, 0], [end.x, end.y, bottom],
-                            [st.x, st.y, bottom]
+                            [round(st.x, dpl), round(st.y, dpl), 0],
+                            [round(end.x, dpl), round(end.y, dpl), 0],
+                            [round(end.x, dpl), round(end.y, dpl), bottom],
+                            [round(st.x, dpl), round(st.y, dpl), bottom]
                         ]
                     else:
                         up_vertices = [
-                            [st.x, st.y, height], [end.x, end.y, height],
-                            [st.x, st.y, bottom], [end.x, end.y, bottom]
+                            [round(st.x, dpl), round(st.y, dpl), height],
+                            [round(end.x, dpl), round(end.y, dpl), height],
+                            [round(st.x, dpl), round(st.y, dpl), bottom],
+                            [round(end.x, dpl), round(end.y, dpl), bottom]
                         ]
                         btm_vertices = []
                     up_count = len(up_vertices)
@@ -300,9 +324,11 @@ def _section_to_idm_extruded(
                     sections.append(section)
 
             crawl_corners = \
-                ' '.join(f'({v.x} {v.y} {bottom})' for vv in contours for v in vv)
+                ' '.join(f'({round(v.x, dpl)} {round(v.y, dpl)} {bottom})'
+                         for vv in contours for v in vv)
             roof_corners = \
-                ' '.join(f'({v.x} {v.y} {height})' for vv in contours for v in vv)
+                ' '.join(f'({round(v.x, dpl)} {round(v.y, dpl)} {height})'
+                         for vv in contours for v in vv)
             footer = \
                 f' ((FACE :N "Crawl space_{sec_name}" :T CRAWL-FACE :INDEX -2000)\n' \
                 '  (:PAR :N NCORN :V 0)\n' \
@@ -323,7 +349,7 @@ def _section_to_idm_extruded(
     return '\n'.join(sections)
 
 
-def section_to_idm(model: Model, max_int_wall_thickness: float):
+def section_to_idm(model: Model, max_int_wall_thickness: float, decimal_places: int = 3):
     """Create an IDA-ICE building body for a Honeybee Model.
 
     Args:
@@ -331,6 +357,8 @@ def section_to_idm(model: Model, max_int_wall_thickness: float):
         max_int_wall_thickness: Maximum thickness of the interior wall in meters.
             Gaps between Rooms that are less than this distance will be grouped
             into the same building section.
+        decimal_places: An integer for the number of decimal places to which
+            coordinate values will be rounded. (Default: 3).
     """
     # separate the rooms by floor heights and extruded properties
     rooms = model.rooms
@@ -349,11 +377,14 @@ def section_to_idm(model: Model, max_int_wall_thickness: float):
         if ext_rooms:
             section = _section_to_idm_extruded(
                 ext_rooms, f'Level_{round(height, 2)}',
-                max_int_wall_thickness=max_int_wall_thickness, tolerance=model.tolerance
+                max_int_wall_thickness=max_int_wall_thickness,
+                tolerance=model.tolerance, decimal_places=decimal_places
             )
             sections.append(section)
 
     # add any non-extruded rooms to the result
-    sections_protected = _section_to_idm_protected(no_ext_rooms, model.tolerance)
+    sections_protected = _section_to_idm_protected(
+        no_ext_rooms, model.tolerance, decimal_places=decimal_places
+    )
     sections.append(sections_protected)
     return '\n'.join(sections) + '\n'

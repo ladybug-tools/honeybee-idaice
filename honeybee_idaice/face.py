@@ -6,7 +6,8 @@ from ladybug_geometry.geometry3d import Point3D, Vector3D, Plane
 
 
 def opening_to_idm(
-        opening: Union[Aperture, Door], ref_plane: Plane, is_aperture=True) -> str:
+        opening: Union[Aperture, Door], ref_plane: Plane,
+        is_aperture=True, decimal_places: int = 3) -> str:
     """Translate a HBJSON aperture or Door to an IDM Window.
 
     Args:
@@ -16,6 +17,8 @@ def opening_to_idm(
             towards the Room volume.
         is_aperture: A boolean to note whether the opening is an Aperture or a
             Door. (Default: True).
+        decimal_places: An integer for the number of decimal places to which
+            coordinate values will be rounded. (Default: 3).
     """
     # get the name
     name = opening.identifier
@@ -28,19 +31,19 @@ def opening_to_idm(
     apt_urc = opening.upper_right_corner
     min_2d = ref_plane.xyz_to_xy(apt_llc)
     max_2d = ref_plane.xyz_to_xy(apt_urc)
-    height = max_2d.y - min_2d.y
-    width = max_2d.x - min_2d.x
+    height = round(max_2d.y - min_2d.y, decimal_places)
+    width = round(max_2d.x - min_2d.x, decimal_places)
 
     if is_aperture:
         opening_idm = f'\n ((CE-WINDOW :N "{name}" :T WINDOW)\n' \
-            f'  (:PAR :N X :V {min_2d.x})\n' \
-            f'  (:PAR :N Y :V {min_2d.y})\n' \
+            f'  (:PAR :N X :V {round(min_2d.x, decimal_places)})\n' \
+            f'  (:PAR :N Y :V {round(min_2d.y, decimal_places)})\n' \
             f'  (:PAR :N DX :V {width})\n' \
             f'  (:PAR :N DY :V {height}))'
     else:
         opening_idm = f'\n ((OPENING :N "{name}" :T OPENING)\n' \
-            f'  (:PAR :N X :V {min_2d.x})\n' \
-            f'  (:PAR :N Y :V {min_2d.y})\n' \
+            f'  (:PAR :N X :V {round(min_2d.x, decimal_places)})\n' \
+            f'  (:PAR :N Y :V {round(min_2d.y, decimal_places)})\n' \
             f'  (:PAR :N DX :V {width})\n' \
             f'  (:PAR :N DY :V {height})\n' \
             f'  (:RES :N OPENING-SCHEDULE :V ALWAYS_OFF))'
@@ -48,7 +51,10 @@ def opening_to_idm(
     return opening_idm
 
 
-def face_to_idm(face: Face, origin: Point3D, index: int, angle_tolerance: float = 1.0):
+def face_to_idm(
+        face: Face, origin: Point3D, index: int,
+        angle_tolerance: float = 1.0, decimal_places: int = 3
+    ):
     """Translate a HBJSON face to an IDM ENCLOSING-ELEMENT.
 
     Args:
@@ -59,6 +65,8 @@ def face_to_idm(face: Face, origin: Point3D, index: int, angle_tolerance: float 
         angle_tolerance: The max angle in degrees that Face normal can differ
             from the World Z before the Face is treated as being in the
             World XY plane. (Default: 1).
+        decimal_places: An integer for the number of decimal places to which
+            coordinate values will be rounded. (Default: 3).
     """
     # translate the vertices of the the Face into IDM format
     _face_mapper = {
@@ -80,8 +88,9 @@ def face_to_idm(face: Face, origin: Point3D, index: int, angle_tolerance: float 
         count = sum(len(c) for c in contours)
         contours_formatted = ' '.join(str(len(c)) for c in contours)
 
+    dpl = decimal_places
     vertices_idm = ' '.join((
-        f'({v.x - origin.x} {v.y - origin.y} {v.z - origin.z})'
+        f'({round(v.x - origin.x, dpl)} {round(v.y - origin.y, dpl)} {round(v.z - origin.z, dpl)})'
         for vertices in contours for v in vertices
     ))
 
@@ -94,7 +103,7 @@ def face_to_idm(face: Face, origin: Point3D, index: int, angle_tolerance: float 
     for aperture in face.apertures:
         if aperture.user_data and aperture.user_data.get('_idm_ignore', False):
             continue
-        windows.append(opening_to_idm(aperture, ref_plane))
+        windows.append(opening_to_idm(aperture, ref_plane, decimal_places=dpl))
 
     windows = ''.join(windows)
 
@@ -104,7 +113,7 @@ def face_to_idm(face: Face, origin: Point3D, index: int, angle_tolerance: float 
         if door.user_data and door.user_data.get('_idm_ignore', False):
             continue
         is_aperture = True if door.is_glass else False
-        doors.append(opening_to_idm(door, ref_plane, is_aperture=is_aperture))
+        doors.append(opening_to_idm(door, ref_plane, is_aperture, decimal_places=dpl))
 
     doors = ''.join(doors)
 

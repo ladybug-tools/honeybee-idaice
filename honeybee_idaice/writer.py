@@ -16,8 +16,10 @@ from .shade import shades_to_idm
 from .face import face_to_idm, opening_to_idm, face_reference_plane
 
 
-def ceilings_to_idm(room: Room, origin: Point3D, tolerance: float,
-                    angle_tolerance: float = 1.0):
+def ceilings_to_idm(
+        room: Room, origin: Point3D, tolerance: float, angle_tolerance: float = 1.0,
+        decimal_places: int = 3
+    ):
     """Translate the ceilings of a Room to an IDM ENCLOSING-ELEMENT.
 
     Args:
@@ -28,20 +30,23 @@ def ceilings_to_idm(room: Room, origin: Point3D, tolerance: float,
         angle_tolerance: The max angle in degrees that Face normal can differ
             from the World Z before the Face is treated as being in the
             World XY plane. (Default: 1).
+        decimal_places: An integer for the number of decimal places to which
+            coordinate values will be rounded. (Default: 3).
     """
     index = -1000
 
     # if there's only one ceiling, just translate it
     faces = room.roof_ceilings
     if len(faces) == 1:
-        return face_to_idm(faces[0], origin, index, angle_tolerance)
+        return face_to_idm(faces[0], origin, index, angle_tolerance, decimal_places)
 
     # check to see the vertical range across the ceilings
     min_pt, max_pt = bounding_box([face.geometry for face in faces])
     if max_pt.z - min_pt.z <= tolerance:
         # all the ceilings are the same height
         return '\n'.join(
-            face_to_idm(face, origin, index, angle_tolerance) for face in faces
+            face_to_idm(face, origin, index, angle_tolerance, decimal_places)
+            for face in faces
         )
 
     # get the boundary around all of the ceiling parts
@@ -70,8 +75,10 @@ def ceilings_to_idm(room: Room, origin: Point3D, tolerance: float,
     vertices = full_bound.lower_left_counter_clockwise_vertices
 
     # translate the boundary vertices into an enclosing element
+    dpl = decimal_places
     vertices_idm = ' '.join((
-        f'({v.x - origin.x} {v.y - origin.y} {v.z - origin.z})' for v in vertices
+        f'({round(v.x - origin.x, dpl)} {round(v.y - origin.y, dpl)} {round(v.z - origin.z, dpl)})'
+        for v in vertices
     ))
     count = len(vertices)
     ceiling = \
@@ -88,7 +95,7 @@ def ceilings_to_idm(room: Room, origin: Point3D, tolerance: float,
         vc = sum(len(c) for c in contours)
         contours_formatted = ' '.join(str(len(c)) for c in contours)
         vertices_idm = ' '.join(
-            f'({v.x - origin.x} {v.y - origin.y} {v.z - origin.z})'
+            f'({round(v.x - origin.x, dpl)} {round(v.y - origin.y, dpl)} {round(v.z - origin.z, dpl)})'
             for vv in contours for v in vv
         )
 
@@ -97,7 +104,7 @@ def ceilings_to_idm(room: Room, origin: Point3D, tolerance: float,
             if face.has_sub_faces else None
         windows = ['']
         for aperture in face.apertures:
-            windows.append(opening_to_idm(aperture, ref_plane))
+            windows.append(opening_to_idm(aperture, ref_plane, decimal_places=dpl))
 
         windows = ''.join(windows)
 
@@ -111,7 +118,10 @@ def ceilings_to_idm(room: Room, origin: Point3D, tolerance: float,
     return '\n'.join(ceiling_idm) + ')'
 
 
-def room_to_idm(room: Room, tolerance: float, angle_tolerance: float = 1.0):
+def room_to_idm(
+        room: Room, tolerance: float, angle_tolerance: float = 1.0,
+        decimal_places: int = 3
+    ):
     """Translate a Honeybee Room to an IDM Zone.
 
     Args:
@@ -121,8 +131,11 @@ def room_to_idm(room: Room, tolerance: float, angle_tolerance: float = 1.0):
         angle_tolerance: The max angle in degrees that Face normal can differ
             from the World Z before the Face is treated as being in the
             World XY plane. (Default: 1).
+        decimal_places: An integer for the number of decimal places to which
+            coordinate values will be rounded. (Default: 3).
     """
     room_idm = []
+    dpl = decimal_places
 
     # find horizontal boundary around the Room
     horiz_boundary: Face3D = \
@@ -155,8 +168,8 @@ def room_to_idm(room: Room, tolerance: float, angle_tolerance: float = 1.0):
     # arbitrary x and y size for lighting fixtures
     lighting_x = 0.5
     lighting_y = 0.5
-    min_x = rp.x - lighting_x / 2
-    min_y = rp.y - lighting_y / 2
+    min_x = round(rp.x - lighting_x / 2, dpl)
+    min_y = round(rp.y - lighting_y / 2, dpl)
     # set the location of light and occupant
     light_occ = '((LIGHT :N "Light" :T LIGHT)\n' \
         f' (:PAR :N X :V {min_x})\n' \
@@ -173,9 +186,9 @@ def room_to_idm(room: Room, tolerance: float, angle_tolerance: float = 1.0):
     room_idm.append(light_occ)
 
     count = len(vertices)
-    elevation = origin.z
+    elevation = round(origin.z, dpl)
     vertices_idm = ' '.join(
-        f'({v.x - origin.x} {v.y - origin.y})' for v in vertices
+        f'({round(v.x - origin.x, dpl)} {round(v.y - origin.y, dpl)})' for v in vertices
     )
 
     if not room.user_data['_idm_is_extruded']:
@@ -212,18 +225,21 @@ def room_to_idm(room: Room, tolerance: float, angle_tolerance: float = 1.0):
             last_index += 1
         used_index.append(index)
         face_idm = face_to_idm(
-            wall, origin=origin, index=index, angle_tolerance=angle_tolerance
+            wall, origin=origin, index=index, angle_tolerance=angle_tolerance,
+            decimal_places=dpl
         )
         room_idm.append(face_idm)
 
     for count, floor in enumerate(floors):
         face_idm = face_to_idm(
-            floor, origin=origin, index=-(2000 + count), angle_tolerance=angle_tolerance
+            floor, origin=origin, index=-(2000 + count),
+            angle_tolerance=angle_tolerance, decimal_places=dpl
         )
         room_idm.append(face_idm)
 
     ceiling_idm = ceilings_to_idm(
-        room, origin=origin, tolerance=tolerance, angle_tolerance=angle_tolerance
+        room, origin=origin, tolerance=tolerance,
+        angle_tolerance=angle_tolerance, decimal_places=dpl
     )
     room_idm.append(ceiling_idm)
 
@@ -415,6 +431,18 @@ def model_to_idm(
         if max_adjacent_sub_face_dist > model.tolerance else model.tolerance
     prepare_model(model, adj_dist)
 
+    # determine the number of places to which all of the vertices will be rounded
+    dec_count = 0
+    str_tol = str(model.tolerance).split('.')
+    if len(str_tol) == 2 and str_tol[0] == '0':
+        str_tol = str_tol[-1]
+        for dig in str_tol:
+            if dig == '0':
+                dec_count += 1
+            else:
+                dec_count += 1
+                break
+
     # make sure names don't have subfolder or extension
     original_name = name or model.display_name
     name = pathlib.Path(original_name).stem
@@ -438,7 +466,8 @@ def model_to_idm(
 
         # create a building sections/bodies for the building
         sections = section_to_idm(
-            model, max_int_wall_thickness=max_int_wall_thickness
+            model, max_int_wall_thickness=max_int_wall_thickness,
+            decimal_places=dec_count
         )
         bldg.write(sections)
 
@@ -447,7 +476,7 @@ def model_to_idm(
             bldg.write(f'((CE-ZONE :N "{room.display_name}" :T ZONE))\n')
 
         # add shades to building
-        shades_idm = shades_to_idm(model.shades)
+        shades_idm = shades_to_idm(model.shades, model.tolerance, dec_count)
         bldg.write(shades_idm)
         bldg.write(f'\n;[end of {bldg_name}.idm]\n')
 
@@ -469,7 +498,9 @@ def model_to_idm(
         with template_room.open('r') as inf, room_file.open('w') as rm:
             for line in inf:
                 rm.write(f'{line.rstrip()}\n')
-            geometry = room_to_idm(room, model.tolerance, model.angle_tolerance)
+            geometry = room_to_idm(
+                room, model.tolerance, model.angle_tolerance, dec_count
+            )
             rm.write(geometry)
             footer = f'\n;[end of {bldg_name}\\{room_name}.idm]\n'
             rm.write(footer)
