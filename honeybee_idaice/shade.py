@@ -4,16 +4,21 @@ from honeybee.model import Shade
 from ladybug_geometry.geometry3d import Point3D, Face3D, Polyface3D, Mesh3D
 
 
-def _vertices_to_idm(vertices: List[Point3D]) -> str:
+def _vertices_to_idm(vertices: List[Point3D], dec_places: int = 3) -> str:
     """Get a string for vertices in IDM format."""
-    vertices = ' '.join(f'({v.x} {v.y} {v.z})' for v in vertices)
+    vertices = ' '.join(
+        f'({round(v.x, dec_places)} {round(v.y, dec_places)} {round(v.z, dec_places)})'
+        for v in vertices
+    )
     return vertices
 
 
-def _shade_geometry_to_idm(geometry: Union[Face3D, Polyface3D], name: str):
+def _shade_geometry_to_idm(
+        geometry: Union[Face3D, Polyface3D], name: str, decimal_places: int = 3
+    ):
     """Create an IDM shade block from a Ladybug geometry.
 
-    Here is an exampel:
+    Here is an example:
 
         ((AGGREGATE :N "shade1" :T PICT3D)
             (:PAR :N FILE :V "")
@@ -51,7 +56,7 @@ def _shade_geometry_to_idm(geometry: Union[Face3D, Polyface3D], name: str):
         '  (:PAR :N SHADOWING :V :TRUE)\n' \
         '  ((AGGREGATE :N "geom1" :T GEOM3D)\n' \
         f'   (:PAR :N NPOINTS :V {vertices_count})\n' \
-        f'   (:PAR :N POINTS :DIM ({vertices_count} 3) :V #2A({_vertices_to_idm(vertices)}))\n' \
+        f'   (:PAR :N POINTS :DIM ({vertices_count} 3) :V #2A({_vertices_to_idm(vertices, decimal_places)}))\n' \
         '   (:PAR :N CELLTYPE :V 1)\n' \
         f'   (:PAR :N NCELLS :V {face_count})\n' \
         f'   (:PAR :N NVERTICES :DIM ({face_count}) :V #({faces_count}))\n' \
@@ -62,36 +67,42 @@ def _shade_geometry_to_idm(geometry: Union[Face3D, Polyface3D], name: str):
     return shade
 
 
-def _shade_group_to_idm(shades: List[Shade]) -> str:
+def _shade_group_to_idm(
+        shades: List[Shade], tolerance: float, decimal_places: int = 3
+    ) -> str:
     """Convert a group of shades into a IDM string.
 
     The files in the shade group should create a closed volume. The translator uses
     the name of the first shade as the name of the group.
     """
     group_geometry = Polyface3D.from_faces(
-        [shade.geometry for shade in shades], tolerance=0.001
+        [shade.geometry for shade in shades], tolerance=tolerance
     )
     shade = shades[0]
     # remove new lines from the name
     name = '_'.join(
         (' '.join(shade.display_name.split()), shade.identifier.replace('Shade_', ''))
     )
-    return _shade_geometry_to_idm(group_geometry, name)
+    return _shade_geometry_to_idm(group_geometry, name, decimal_places)
 
 
-def _shade_to_idm(shade: Shade):
+def _shade_to_idm(shade: Shade, decimal_places: int = 3):
     shade_geo = shade.geometry
     name = '_'.join(
         (' '.join(shade.display_name.split()), shade.identifier.replace('Shade_', ''))
     )
-    return _shade_geometry_to_idm(shade_geo, name)
+    return _shade_geometry_to_idm(shade_geo, name, decimal_places)
 
 
-def shades_to_idm(shades: List[Shade]):
+def shades_to_idm(shades: List[Shade], tolerance: float, decimal_places: int = 3):
     """Convert a list of Shades to a IDM string.
 
     Args:
-        shades: A list of Shade faces.
+        shades: A list of Honeybee Shade objects.
+        tolerance: The maximum difference between X, Y, and Z values at which point
+            vertices are considered distinct from one another.
+        decimal_places: An integer for the number of decimal places to which
+            coordinate values will be rounded. (Default: 3).
 
     Returns:
         A formatted string that represents this shade in IDM format.
@@ -121,9 +132,12 @@ def shades_to_idm(shades: List[Shade]):
         else:
             filtered_groups[k] = v
 
-    single_shades = '\n'.join([_shade_to_idm(shade) for shade in no_groups])
+    single_shades = '\n'.join(
+        [_shade_to_idm(shade, decimal_places) for shade in no_groups]
+    )
     group_shades = '\n'.join(
-        [_shade_group_to_idm(shades) for shades in filtered_groups.values()]
+        [_shade_group_to_idm(shades, tolerance, decimal_places)
+         for shades in filtered_groups.values()]
         )
 
     return f'((AGGREGATE :N ARCDATA)\n{single_shades}\n{group_shades})'
