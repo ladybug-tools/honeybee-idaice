@@ -39,6 +39,13 @@ def _section_to_idm_protected(
         # get the horizontal boundary around the Room geometry
         h_bound = room.horizontal_boundary(match_walls=False, tolerance=tolerance)
         h_bound = h_bound.remove_colinear_vertices(tolerance)
+        if h_bound.has_holes:  # remove any tiny holes
+            h_areas = [hp.area for hp in h_bound.hole_polygon2d]
+            if not all(ha > IDA_ICE_BUILDING_BODY_TOL for ha in h_areas):
+                clean_holes = [hole for hole, ha in zip(h_bound.holes, h_areas)
+                               if ha > IDA_ICE_BUILDING_BODY_TOL]
+                h_bound = Face3D(h_bound.boundary, h_bound.plane, clean_holes)
+        # translate the horizontal boundary to the contours format of IDA-ICE
         contours = [list(h_bound.boundary)]
         if h_bound.has_holes:
             contours.extend([list(h) for h in h_bound.holes])
@@ -106,7 +113,7 @@ def _section_to_idm_protected(
                     f'  (:PAR :N NCORN :V {vc})\n' \
                     f'  (:PAR :N CORNERS :DIM ({vc} 3) :V #2A({vertices_idm}))\n' \
                     f'  (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
-                    f'  (:PAR :N SLOPE :V {face.altitude + 90})\n' \
+                    f'  (:PAR :N SLOPE :V {round(face.altitude + 90, 2)})\n' \
                     '  ((FACE :N GROUND-FACE)\n' \
                     '   (:PAR :N NCORN :V 0)\n' \
                     '   (:PAR :N CORNERS :DIM (0 3))))'

@@ -11,7 +11,8 @@ from honeybee.model import Model, Room
 from honeybee.facetype import RoofCeiling, Wall, Floor
 
 from .archive import zip_folder_to_idm
-from .bldgbody import section_to_idm, MAX_FLOOR_ELEVATION_DIFFERENCE
+from .bldgbody import section_to_idm, MAX_FLOOR_ELEVATION_DIFFERENCE, \
+    IDA_ICE_BUILDING_BODY_TOL
 from .shade import shades_to_idm
 from .face import face_to_idm, opening_to_idm, face_reference_plane
 
@@ -53,6 +54,13 @@ def ceilings_to_idm(
     horiz_boundary = room.horizontal_boundary(tolerance=tolerance)
     if horiz_boundary.normal.z <= 0:  # ensure upward-facing Face3D
         horiz_boundary = horiz_boundary.flip()
+    if horiz_boundary.has_holes:  # remove any tiny holes
+        h_areas = [hp.area for hp in horiz_boundary.hole_polygon2d]
+        if not all(ha > IDA_ICE_BUILDING_BODY_TOL for ha in h_areas):
+            clean_holes = [hole for hole, ha in zip(horiz_boundary.holes, h_areas)
+                           if ha > IDA_ICE_BUILDING_BODY_TOL]
+            horiz_boundary = Face3D(
+                horiz_boundary.boundary, horiz_boundary.plane, clean_holes)
     # insert the vertices of the ceiling elements into the horizontal boundary
     ceil_pts = [pt for f in faces for pt in f.geometry.boundary]
     ceil_pts_2d = [Point2D(v[0], v[1]) for v in ceil_pts]
@@ -112,7 +120,7 @@ def ceilings_to_idm(
             '  ((AGGREGATE :N GEOMETRY)\n' \
             f'   (:PAR :N CORNERS :DIM ({vc} 3) :SP ({vc} 3) :V #2A({vertices_idm}))\n' \
             f'   (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
-            f'   (:PAR :N SLOPE :V {face.altitude + 90})){windows})'
+            f'   (:PAR :N SLOPE :V {round(face.altitude + 90, 2)})){windows})'
         ceiling_idm.append(cp)
 
     return '\n'.join(ceiling_idm) + ')'
@@ -138,8 +146,15 @@ def room_to_idm(
     dpl = decimal_places
 
     # find horizontal boundary around the Room
-    horiz_boundary: Face3D = \
-        room.horizontal_boundary(match_walls=True, tolerance=tolerance)
+    horiz_boundary = room.horizontal_boundary(match_walls=True, tolerance=tolerance)
+    if horiz_boundary.has_holes:  # remove any tiny holes
+        h_areas = [hp.area for hp in horiz_boundary.hole_polygon2d]
+        if not all(ha > IDA_ICE_BUILDING_BODY_TOL for ha in h_areas):
+            clean_holes = [hole for hole, ha in zip(horiz_boundary.holes, h_areas)
+                           if ha > IDA_ICE_BUILDING_BODY_TOL]
+            horiz_boundary = Face3D(
+                horiz_boundary.boundary, horiz_boundary.plane, clean_holes)
+    # translate the horizontal boundary to the contours format of IDA-ICE
     holes = horiz_boundary.holes or []
     contours = [list(horiz_boundary.boundary)] + [list(h) for h in holes]
     if holes:
@@ -181,7 +196,7 @@ def room_to_idm(
         '((OCCUPANT :N "Occupant" :T OCCUPANT)\n' \
         ' (:PAR :N NUMBER_OF :V 1)\n' \
         ' (:RES :N SCHEDULE_0-1 :V ALWAYS_ON)\n' \
-        f' (:PAR :N POSITION :V #({rp.x} {rp.y} {0.6})))'
+        f' (:PAR :N POSITION :V #({round(rp.x, dpl)} {round(rp.y, dpl)} {0.6})))'
 
     room_idm.append(light_occ)
 
@@ -205,7 +220,7 @@ def room_to_idm(
             f' (:PAR :N NCORN :V {count})\n' \
             f' (:PAR :N CORNERS :DIM ({count} 2) :V #2A({vertices_idm}))\n' \
             f' (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
-            f' (:PAR :N CEILING-HEIGHT :V {room.user_data["_idm_flr_ceil_height"]})\n' \
+            f' (:PAR :N CEILING-HEIGHT :V {round(room.user_data["_idm_flr_ceil_height"], dpl)})\n' \
             f' (:PAR :N FLOOR_HEIGHT_FROM_GROUND :V {elevation}))'
 
     room_idm.append(geometry)

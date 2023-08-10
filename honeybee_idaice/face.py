@@ -121,7 +121,7 @@ def face_to_idm(
         f' ((AGGREGATE :N GEOMETRY)\n' \
         f'  (:PAR :N CORNERS :DIM ({count} 3) :SP ({count} 3) :V #2A({vertices_idm}))\n' \
         f'  (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
-        f'  (:PAR :N SLOPE :V {face.altitude + 90})){windows}\n{doors})'
+        f'  (:PAR :N SLOPE :V {round(face.altitude + 90, 2)})){windows}\n{doors})'
 
     return face
 
