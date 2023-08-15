@@ -37,18 +37,25 @@ def _section_to_idm_protected(
         room_section = []  # list of IDM strings to be collected
 
         # get the horizontal boundary around the Room geometry
-        h_bound = room.horizontal_boundary(match_walls=False, tolerance=tolerance)
-        h_bound = h_bound.remove_colinear_vertices(tolerance)
-        if h_bound.has_holes:  # remove any tiny holes
-            h_areas = [hp.area for hp in h_bound.hole_polygon2d]
-            if not all(ha > IDA_ICE_BUILDING_BODY_TOL for ha in h_areas):
-                clean_holes = [hole for hole, ha in zip(h_bound.holes, h_areas)
-                               if ha > IDA_ICE_BUILDING_BODY_TOL]
-                h_bound = Face3D(h_bound.boundary, h_bound.plane, clean_holes)
+        h_bounds = room.horizontal_floor_boundaries(
+            match_walls=False, tolerance=tolerance)
+        clean_h_bounds =  []
+        for h_bound in h_bounds:
+            h_bound = h_bound.remove_colinear_vertices(tolerance)
+            if h_bound.has_holes:  # remove any tiny holes
+                h_areas = [hp.area for hp in h_bound.hole_polygon2d]
+                if not all(ha > IDA_ICE_BUILDING_BODY_TOL for ha in h_areas):
+                    clean_holes = [hole for hole, ha in zip(h_bound.holes, h_areas)
+                                if ha > IDA_ICE_BUILDING_BODY_TOL]
+                    h_bound = Face3D(h_bound.boundary, h_bound.plane, clean_holes)
+            clean_h_bounds.append(h_bound)
+
         # translate the horizontal boundary to the contours format of IDA-ICE
-        contours = [list(h_bound.boundary)]
-        if h_bound.has_holes:
-            contours.extend([list(h) for h in h_bound.holes])
+        contours = []
+        for hb in clean_h_bounds:
+            contours.append(hb.boundary)
+            if hb.has_holes:
+                contours.extend(list(h) for h in hb.holes)
 
         # convert the vertices of the boundary into an IDM string
         vc = sum(len(c) for c in contours)

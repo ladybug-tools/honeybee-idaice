@@ -61,24 +61,9 @@ def ceilings_to_idm(
                            if ha > IDA_ICE_BUILDING_BODY_TOL]
             horiz_boundary = Face3D(
                 horiz_boundary.boundary, horiz_boundary.plane, clean_holes)
-    # insert the vertices of the ceiling elements into the horizontal boundary
-    ceil_pts = [pt for f in faces for pt in f.geometry.boundary]
-    ceil_pts_2d = [Point2D(v[0], v[1]) for v in ceil_pts]
-    st_poly = Polygon2D([Point2D(v.x, v.y) for v in horiz_boundary.boundary])
-    st_poly = st_poly.remove_colinear_vertices(tolerance)
-    polygon_update = []
-    for pt in ceil_pts_2d:
-        for v in st_poly.vertices:  # check if pt is already included
-            if pt.is_equivalent(v, tolerance):
-                break
-        else:
-            values = [seg.distance_to_point(pt) for seg in st_poly.segments]
-            if min(values) < tolerance:
-                index_min = min(range(len(values)), key=values.__getitem__)
-                polygon_update.append((index_min, pt))
-    if polygon_update:
-        st_poly = Polygon2D._insert_updates_in_order(st_poly, polygon_update)
-    vertices = [Point3D(pt.x, pt.y, max_pt.z) for pt in st_poly]
+
+    # get the correctly ordered vertices at the Z height
+    vertices = [Point3D(pt.x, pt.y, max_pt.z) for pt in horiz_boundary.boundary]
     full_bound = Face3D(vertices, plane=horiz_boundary.plane)
     vertices = full_bound.lower_left_counter_clockwise_vertices
 
@@ -145,32 +130,23 @@ def room_to_idm(
     room_idm = []
     dpl = decimal_places
 
-    # find horizontal boundary around the Room
-    horiz_boundary = room.horizontal_boundary(match_walls=True, tolerance=tolerance)
-    if horiz_boundary.has_holes:  # remove any tiny holes
-        h_areas = [hp.area for hp in horiz_boundary.hole_polygon2d]
-        if not all(ha > IDA_ICE_BUILDING_BODY_TOL for ha in h_areas):
-            clean_holes = [hole for hole, ha in zip(horiz_boundary.holes, h_areas)
-                           if ha > IDA_ICE_BUILDING_BODY_TOL]
-            horiz_boundary = Face3D(
-                horiz_boundary.boundary, horiz_boundary.plane, clean_holes)
-    # translate the horizontal boundary to the contours format of IDA-ICE
-    holes = horiz_boundary.holes or []
-    contours = [list(horiz_boundary.boundary)] + [list(h) for h in holes]
-    if holes:
-        contours_formatted = ' '.join(str(len(c)) for c in contours)
-    else:
-        contours_formatted = ''
+    # get the contours and vertices from the horizontal boundary around the Room's floors
+    hz_bounds = room.horizontal_floor_boundaries(match_walls=True, tolerance=tolerance)
+    contours = []
+    for hb in hz_bounds:
+        contours.append(hb.boundary)
+        if hb.has_holes:
+            contours.extend(list(h) for h in hb.holes)
+    contours_formatted = ' '.join(str(len(c)) for c in contours) \
+        if len(contours) > 1 else ''
+    vertices = [v for vl in contours for v in vl]  # flattened list for vertices
 
-    # create a flatten list for vertices
-    vertices = [v for vl in contours for v in vl]
-
+    # derive the origin and the lighting point from the largest floor Face3D
+    if len(hz_bounds) != 1:
+        hz_bounds.sort(key=lambda x: x.area, reverse=True)
+    horiz_boundary = hz_bounds[0]
     if horiz_boundary.normal.z <= 0:  # ensure upward-facing Face3D
         horiz_boundary = horiz_boundary.flip()
-    if horiz_boundary.has_holes:  # remove any holes from the result
-        horiz_boundary = Face3D(horiz_boundary.boundary, plane=horiz_boundary.plane)
-
-    # get the lower-left corner and a point for the center
     ordered_vertices = horiz_boundary.lower_left_counter_clockwise_vertices
     origin = ordered_vertices[0]
     if horiz_boundary.is_convex:
@@ -426,7 +402,6 @@ def model_to_idm(
     # duplicate model to avoid mutating it as we edit it for export
     # otherwise, we'll loose the original model if we want to do anything after export
     model = model.duplicate()
-
     # scale the model if the units are not meters
     if model.units != 'Meters':
         model.convert_to_units('Meters')
@@ -435,7 +410,7 @@ def model_to_idm(
     # merge coplanar faces across the model's rooms
     for room in model.rooms:
         room.merge_coplanar_faces(
-            model.tolerance, model.angle_tolerance, vertical_only=True)
+            model.tolerance, model.angle_tolerance, orthogonal_only=True)
     # convert all apertures to be rectangular, using the model tolerances
     ap_dist = max_frame_thickness if max_frame_thickness > model.tolerance \
         else model.tolerance
