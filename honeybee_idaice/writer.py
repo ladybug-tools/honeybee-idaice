@@ -5,10 +5,9 @@ import shutil
 from typing import List, Tuple
 
 from ladybug_geometry.bounding import bounding_box
-from ladybug_geometry.geometry2d import Point2D, Polygon2D
 from ladybug_geometry.geometry3d import Point3D, Face3D
 from honeybee.model import Model, Room
-from honeybee.facetype import RoofCeiling, Wall, Floor
+from honeybee.facetype import RoofCeiling, Wall, Floor, AirBoundary, get_type_from_normal
 
 from .archive import zip_folder_to_idm
 from .bldgbody import section_to_idm, MAX_FLOOR_ELEVATION_DIFFERENCE, \
@@ -327,6 +326,9 @@ def prepare_model(model: Model, max_int_wall_thickness: float = 0.45) -> Model:
             }
             # add markers so adjacent interior Apertures and Doors are not duplicated
             for face in room.faces:
+                # remove AirBoundaries until we learn how to support them
+                if isinstance(face.type, AirBoundary):
+                    face.type = get_type_from_normal(face.normal)
                 for door in face.doors:
                     center = door.geometry.center
                     normal = door.geometry.normal
