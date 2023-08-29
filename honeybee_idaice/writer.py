@@ -309,7 +309,8 @@ def prepare_model(model: Model, max_int_wall_thickness: float = 0.45) -> Model:
         for room in grouped_room:
             # check the display name and change it if it is not unique
             room.display_name = \
-                room.display_name.replace('/', '-').replace('\\', '-').replace('\n', ' ')
+                room.display_name.replace('/', '-').replace('\\', '-') \
+                    .replace('\n', ' ').replace(':', '.')
             if room.display_name in room_names:
                 original_name = room.display_name
                 room.display_name = \
