@@ -436,6 +436,11 @@ def model_to_idm(
                 dec_count += 1
                 break
 
+    # rge logic above can fail for smaller tolerance numbers like 3.0480000000000003e-05
+    # make sure the value is set to a mm in those cases instead of a 0 that rounds
+    # all the dimensions to a meter
+    dec_count = 3 if dec_count < 3 else dec_count
+
     # make sure names don't have subfolder or extension
     original_name = name or model.display_name
     name = pathlib.Path(original_name).stem
