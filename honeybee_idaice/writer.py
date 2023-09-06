@@ -453,7 +453,7 @@ def model_to_idm(
     templates_folder = __here__.joinpath('templates')
 
     # create building file that includes building bodies and a reference to the rooms
-    with bldg_file.open('w') as bldg:
+    with bldg_file.open('w', encoding='UTF-8') as bldg:
         header = ';IDA 4.80002 Data UTF-8\n' \
             f'(DOCUMENT-HEADER :TYPE BUILDING :N "{bldg_name}" :MS 4 :CK ((RECENT (WINDEF . "Double Clear Air (WIN7)"))) :PARENT ICE :APP (ICE :VER 4.802))\n'
         bldg.write(header)
