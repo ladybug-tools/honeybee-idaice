@@ -37,6 +37,8 @@ def ceilings_to_idm(
 
     # if there's only one ceiling, just translate it
     faces = room.roof_ceilings
+    if len(faces) == 0:
+        return ''
     if len(faces) == 1:
         return face_to_idm(faces[0], origin, index, angle_tolerance, decimal_places)
 
@@ -111,9 +113,8 @@ def ceilings_to_idm(
 
 
 def room_to_idm(
-        room: Room, tolerance: float, angle_tolerance: float = 1.0,
-        decimal_places: int = 3
-    ):
+    room: Room, tolerance: float, angle_tolerance: float = 1.0, decimal_places: int = 3
+        ) -> str:
     """Translate a Honeybee Room to an IDM Zone.
 
     Args:
@@ -131,6 +132,13 @@ def room_to_idm(
 
     # get the contours and vertices from the horizontal boundary around the Room's floors
     hz_bounds = room.horizontal_floor_boundaries(match_walls=True, tolerance=tolerance)
+    if not hz_bounds:
+        # skip this room
+        print(
+            'Failed to create a horizontal boundary for '
+            f'{room.display_name}[{room.identifier}]. This room will be skipped.'
+        )
+        return ''
     contours = []
     for hb in hz_bounds:
         contours.append(hb.boundary)
