@@ -208,13 +208,13 @@ def room_to_idm(
 
     room_idm.append(geometry)
 
-    walls, ceilings, floors = deconstruct_room(room)
+    walls, _, floors = deconstruct_room(room)
     # write faces
     used_index = []
     last_index = len(walls) + 1
     for wall in walls:
-        llc = wall.geometry.lower_left_corner
-        sorted_vertices = sorted(vertices, key=lambda x: x.distance_to_point(llc))
+        urc = wall.geometry.upper_right_corner
+        sorted_vertices = sorted(vertices, key=lambda x: x.distance_to_point(urc))
         index = vertices.index(sorted_vertices[0]) + 1
         if index in used_index:
             # this is a vertical segment of a wall with the same starting point.
