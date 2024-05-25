@@ -5,7 +5,7 @@ import shutil
 from typing import List, Tuple
 
 from ladybug_geometry.bounding import bounding_box
-from ladybug_geometry.geometry3d import Point3D, Face3D
+from ladybug_geometry.geometry3d import Vector3D, Point3D, Plane, Face3D
 from honeybee.model import Model, Room
 from honeybee.facetype import RoofCeiling, Wall, Floor, AirBoundary, get_type_from_normal
 
@@ -93,13 +93,17 @@ def ceilings_to_idm(
             for vv in contours for v in vv
         )
 
-        # add apertures
-        ref_plane = face_reference_plane(face, angle_tolerance) \
-            if face.has_sub_faces else None
+        # add apertures and doors
         windows = ['']
-        for aperture in face.apertures:
-            windows.append(opening_to_idm(aperture, ref_plane, decimal_places=dpl))
-
+        if face.has_sub_faces:
+            if angle_tolerance < face.tilt < 180 - angle_tolerance:
+                ref_plane = face_reference_plane(face, angle_tolerance)
+            else:
+                ref_plane = Plane(n=Vector3D(0, 0, 1), o=origin, x=Vector3D(1, 0, 0))
+            for aperture in face.apertures:
+                op_str = opening_to_idm(aperture, ref_plane, decimal_places=dpl,
+                                        angle_tolerance=angle_tolerance)
+                windows.append(op_str)
         windows = ''.join(windows)
 
         cp = f' ((ENCLOSING-ELEMENT :N "{name}" :T CEILING-PART :INDEX {-1001 - fc})\n' \
@@ -154,8 +158,7 @@ def room_to_idm(
     horiz_boundary = hz_bounds[0]
     if horiz_boundary.normal.z <= 0:  # ensure upward-facing Face3D
         horiz_boundary = horiz_boundary.flip()
-    ordered_vertices = horiz_boundary.lower_left_counter_clockwise_vertices
-    origin = ordered_vertices[0]
+    origin = horiz_boundary.min
     if horiz_boundary.is_convex:
         pole = horiz_boundary.center
     else:  # use a 1 cm tolerance for pole that will not be time consuming to compute

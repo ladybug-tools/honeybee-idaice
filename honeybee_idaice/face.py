@@ -8,7 +8,7 @@ from honeybee.model import Face, Aperture, Door
 
 def opening_to_idm(
         opening: Union[Aperture, Door], ref_plane: Plane,
-        is_aperture=True, decimal_places: int = 3) -> str:
+        is_aperture=True, decimal_places: int = 3, angle_tolerance: float = 1.0) -> str:
     """Translate a HBJSON aperture or Door to an IDM Window.
 
     Args:
@@ -20,12 +20,15 @@ def opening_to_idm(
             Door. (Default: True).
         decimal_places: An integer for the number of decimal places to which
             coordinate values will be rounded. (Default: 3).
+        angle_tolerance: The max angle in degrees that opening normal can differ
+            from the World Z before the opening is treated as being in the
+            World XY plane. (Default: 1).
     """
     # get the name
     name = opening.identifier
 
     # if the aperture is horizontal, use the world XY
-    ang_tol = math.radians(1)
+    ang_tol = math.radians(angle_tolerance)
     vertical = Vector3D(0, 0, 1)
     vert_ang = ref_plane.n.angle(vertical)
     if vert_ang <= ang_tol or vert_ang >= math.pi - ang_tol:
