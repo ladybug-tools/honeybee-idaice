@@ -1,8 +1,9 @@
 import math
 from typing import Union
 
-from honeybee.model import Face, Aperture, Door
+from ladybug_geometry.geometry2d import Point2D
 from ladybug_geometry.geometry3d import Point3D, Vector3D, Plane
+from honeybee.model import Face, Aperture, Door
 
 
 def opening_to_idm(
@@ -23,16 +24,25 @@ def opening_to_idm(
     # get the name
     name = opening.identifier
 
-    # IDA-ICE looks to apertures from inside the room
-    opening = opening.geometry.flip()
-
-    # get the rectangle in the reference plane
-    apt_llc = opening.lower_left_corner
-    apt_urc = opening.upper_right_corner
-    min_2d = ref_plane.xyz_to_xy(apt_llc)
-    max_2d = ref_plane.xyz_to_xy(apt_urc)
-    height = round(max_2d.y - min_2d.y, decimal_places)
-    width = round(max_2d.x - min_2d.x, decimal_places)
+    # if the aperture is horizontal, use the world XY
+    ang_tol = math.radians(1)
+    vertical = Vector3D(0, 0, 1)
+    vert_ang = ref_plane.n.angle(vertical)
+    if vert_ang <= ang_tol or vert_ang >= math.pi - ang_tol:
+        min_2d = Point2D(opening.min.x - ref_plane.o.x, opening.min.y - ref_plane.o.y)
+        max_2d = Point2D(opening.max.x - ref_plane.o.x, opening.max.y - ref_plane.o.y)
+        height = round(max_2d.y - min_2d.y, decimal_places)
+        width = round(max_2d.x - min_2d.x, decimal_places)
+    else:
+        # IDA-ICE looks to apertures from inside the room
+        opening = opening.geometry.flip()
+        # get the rectangle in the reference plane
+        apt_llc = opening.lower_left_corner
+        apt_urc = opening.upper_right_corner
+        min_2d = ref_plane.xyz_to_xy(apt_llc)
+        max_2d = ref_plane.xyz_to_xy(apt_urc)
+        height = round(max_2d.y - min_2d.y, decimal_places)
+        width = round(max_2d.x - min_2d.x, decimal_places)
 
     if is_aperture:
         opening_idm = f'\n ((CE-WINDOW :N "{name}" :T WINDOW)\n' \
@@ -148,6 +158,7 @@ def face_reference_plane(face: Face, angle_tolerance: float = 1.0):
     vertical = Vector3D(0, 0, 1)
     vert_ang = rel_plane.n.angle(vertical)
     if vert_ang <= ang_tol or vert_ang >= math.pi - ang_tol:
+        parent_llc = parent.min
         proj_x = Vector3D(1, 0, 0)
     else:
         proj_y = Vector3D(0, 0, 1).project(rel_plane.n)
