@@ -262,17 +262,19 @@ def deconstruct_room(room: Room):
     return walls, ceilings, floors
 
 
-def _is_room_extruded(room: Room, angle_tolerance: float) -> Tuple:
+def _is_room_extruded(room: Room, tolerance: float, angle_tolerance: float) -> Tuple:
     """Check if the room geometry is an extrusion in Z direction.
 
     Args:
         room: A honeybee Room.
+        tolerance: The minimum difference between coordinate values at which point
+            vertices are considered distinct.
         angle_tolerance: The max angle difference in degrees that the normals of
             Faces are allowed to differ from vertical/horizontal for the Room
             to not be considered extruded.
     """
-    f_h = 0
-    c_h = 0
+    f_hs = []
+    c_hs = []
     for face in room.faces:
         type_ = face.type
         if isinstance(type_, Wall):
@@ -281,13 +283,16 @@ def _is_room_extruded(room: Room, angle_tolerance: float) -> Tuple:
         elif isinstance(type_, RoofCeiling):
             if abs(90 - face.altitude) > angle_tolerance:
                 return False, -1
-            c_h = face.vertices[0].z
+            c_hs.append(face.vertices[0].z)
         elif isinstance(type_, Floor):
             if abs(face.altitude + 90) > angle_tolerance:
                 return False, -1
-            f_h = face.vertices[0].z
+            f_hs.append(face.vertices[0].z)
 
-    return True, round(c_h - f_h, 2)
+    if len(f_hs) != 0 and len(c_hs) != 0 and max(c_hs) - min(c_hs) < tolerance and \
+            max(f_hs) - min(f_hs) < tolerance:
+        return True, round(room.max.z - room.min.z, 2)
+    return False, -1
 
 
 def prepare_model(model: Model, max_int_wall_thickness: float = 0.45) -> Model:
@@ -328,7 +333,7 @@ def prepare_model(model: Model, max_int_wall_thickness: float = 0.45) -> Model:
                 room_names[room.display_name] = 1
             # add markers for whether the Room is extruded or not
             is_extruded, floor_to_ceiling_height = \
-                _is_room_extruded(room, model.angle_tolerance)
+                _is_room_extruded(room, model.tolerance, model.angle_tolerance)
             room.user_data = {
                 '_idm_is_extruded': is_extruded,
                 '_idm_flr_ceil_height': floor_to_ceiling_height
@@ -463,7 +468,9 @@ def model_to_idm(
     # create building file that includes building bodies and a reference to the rooms
     with bldg_file.open('w', encoding='UTF-8') as bldg:
         header = ';IDA 4.80002 Data UTF-8\n' \
-            f'(DOCUMENT-HEADER :TYPE BUILDING :N "{bldg_name}" :MS 4 :CK ((RECENT (WINDEF . "Double Clear Air (WIN7)"))) :PARENT ICE :APP (ICE :VER 4.802))\n'
+            '(DOCUMENT-HEADER :TYPE BUILDING :N "{}" :MS 4 :CK ' \
+            '((RECENT (WINDEF . "Double Clear Air (WIN7)"))) ' \
+            ':PARENT ICE :APP (ICE :VER 4.802))\n'.format(bldg_name)
         bldg.write(header)
         # add template values
         bldg_template = templates_folder.joinpath('building.idm')
