@@ -39,14 +39,14 @@ def _section_to_idm_protected(
         # get the horizontal boundary around the Room geometry
         h_bounds = room.horizontal_floor_boundaries(
             match_walls=False, tolerance=tolerance)
-        clean_h_bounds =  []
+        clean_h_bounds = []
         for h_bound in h_bounds:
             h_bound = h_bound.remove_colinear_vertices(tolerance)
             if h_bound.has_holes:  # remove any tiny holes
                 h_areas = [hp.area for hp in h_bound.hole_polygon2d]
                 if not all(ha > IDA_ICE_BUILDING_BODY_TOL for ha in h_areas):
                     clean_holes = [hole for hole, ha in zip(h_bound.holes, h_areas)
-                                if ha > IDA_ICE_BUILDING_BODY_TOL]
+                                   if ha > IDA_ICE_BUILDING_BODY_TOL]
                     h_bound = Face3D(h_bound.boundary, h_bound.plane, clean_holes)
             clean_h_bounds.append(h_bound)
 
@@ -325,11 +325,13 @@ def _section_to_idm_extruded(
                         btm_vertices = []
                     up_count = len(up_vertices)
                     btm_count = len(btm_vertices)
-                    up_vertices = ' '.join(f'({v[0]} {v[1]} {v[2]})' for v in up_vertices)
-                    btm_vertices = ' '.join(f'({v[0]} {v[1]} {v[2]})' for v in btm_vertices)
+                    up_vertices = \
+                        ' '.join(f'({v[0]} {v[1]} {v[2]})' for v in up_vertices)
+                    btm_vertices = \
+                        ' '.join(f'({v[0]} {v[1]} {v[2]})' for v in btm_vertices)
 
-                    section = \
-                        f' ((FACE :N "f{identifier}" :T WALL-FACE :INDEX {identifier})\n' \
+                    section = f' (' \
+                        f'(FACE :N "f{identifier}" :T WALL-FACE :INDEX {identifier})\n' \
                         f'  (:PAR :N NCORN :V {up_count})\n' \
                         f'  (:PAR :N CORNERS :V #2A({up_vertices}))\n' \
                         f'  ((FACE :N GROUND-FACE)\n' \
