@@ -17,9 +17,9 @@ from .face import face_to_idm, opening_to_idm, face_reference_plane
 
 
 def ceilings_to_idm(
-        room: Room, origin: Point3D, tolerance: float, angle_tolerance: float = 1.0,
-        decimal_places: int = 3
-    ):
+    room: Room, origin: Point3D, tolerance: float, angle_tolerance: float = 1.0,
+    decimal_places: int = 3
+):
     """Translate the ceilings of a Room to an IDM ENCLOSING-ELEMENT.
 
     Args:
@@ -71,13 +71,15 @@ def ceilings_to_idm(
     # translate the boundary vertices into an enclosing element
     dpl = decimal_places
     vertices_idm = ' '.join((
-        f'({round(v.x - origin.x, dpl)} {round(v.y - origin.y, dpl)} {round(v.z - origin.z, dpl)})'
+        f'({round(v.x - origin.x, dpl)} '
+        f'{round(v.y - origin.y, dpl)} '
+        f'{round(v.z - origin.z, dpl)})'
         for v in vertices
     ))
     count = len(vertices)
     ceiling = \
-        f'((ENCLOSING-ELEMENT :N CEILING_{faces[0].identifier} :T CEILING :INDEX -1000)\n' \
-        ' ((AGGREGATE :N GEOMETRY)\n' \
+        f'((ENCLOSING-ELEMENT :N CEILING_{faces[0].identifier} :T CEILING :INDEX -1000' \
+        ')\n ((AGGREGATE :N GEOMETRY)\n' \
         f'  (:PAR :N CORNERS :DIM ({count} 3) :SP ({count} 3) :V #2A({vertices_idm})))'
     ceiling_idm = [ceiling]
 
@@ -89,7 +91,9 @@ def ceilings_to_idm(
         vc = sum(len(c) for c in contours)
         contours_formatted = ' '.join(str(len(c)) for c in contours)
         vertices_idm = ' '.join(
-            f'({round(v.x - origin.x, dpl)} {round(v.y - origin.y, dpl)} {round(v.z - origin.z, dpl)})'
+            f'({round(v.x - origin.x, dpl)} '
+            f'{round(v.y - origin.y, dpl)} '
+            f'{round(v.z - origin.z, dpl)})'
             for vv in contours for v in vv
         )
 
@@ -201,12 +205,13 @@ def room_to_idm(
             f' (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
             f' (:PAR :N FLOOR_HEIGHT_FROM_GROUND :V {elevation}))'
     else:
+        f_ceil_height = round(room.user_data["_idm_flr_ceil_height"], dpl)
         geometry = '((AGGREGATE :N GEOMETRY :X NIL)\n' \
             f' (:PAR :N ORIGIN :V #({origin.x} {origin.y}))\n' \
             f' (:PAR :N NCORN :V {count})\n' \
             f' (:PAR :N CORNERS :DIM ({count} 2) :V #2A({vertices_idm}))\n' \
             f' (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
-            f' (:PAR :N CEILING-HEIGHT :V {round(room.user_data["_idm_flr_ceil_height"], dpl)})\n' \
+            f' (:PAR :N CEILING-HEIGHT :V {f_ceil_height})\n' \
             f' (:PAR :N FLOOR_HEIGHT_FROM_GROUND :V {elevation}))'
 
     room_idm.append(geometry)
@@ -441,21 +446,7 @@ def model_to_idm(
     prepare_model(model, adj_dist)
 
     # determine the number of places to which all of the vertices will be rounded
-    dec_count = 0
-    str_tol = str(model.tolerance).split('.')
-    if len(str_tol) == 2 and str_tol[0] == '0':
-        str_tol = str_tol[-1]
-        for dig in str_tol:
-            if dig == '0':
-                dec_count += 1
-            else:
-                dec_count += 1
-                break
-
-    # rge logic above can fail for smaller tolerance numbers like 3.0480000000000003e-05
-    # make sure the value is set to a mm in those cases instead of a 0 that rounds
-    # all the dimensions to a meter
-    dec_count = 3 if dec_count < 3 else dec_count
+    dec_count = (int(math.log10(model.tolerance)) * -1) + 1
 
     # make sure names don't have subfolder or extension
     original_name = name or model.display_name

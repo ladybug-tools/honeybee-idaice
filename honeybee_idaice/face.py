@@ -65,9 +65,9 @@ def opening_to_idm(
 
 
 def face_to_idm(
-        face: Face, origin: Point3D, index: int,
-        angle_tolerance: float = 1.0, decimal_places: int = 3
-    ):
+    face: Face, origin: Point3D, index: int,
+    angle_tolerance: float = 1.0, decimal_places: int = 3
+):
     """Translate a HBJSON face to an IDM ENCLOSING-ELEMENT.
 
     Args:
@@ -102,8 +102,10 @@ def face_to_idm(
         contours_formatted = ' '.join(str(len(c)) for c in contours)
 
     dpl = decimal_places
-    vertices_idm = ' '.join((
-        f'({round(v.x - origin.x, dpl)} {round(v.y - origin.y, dpl)} {round(v.z - origin.z, dpl)})'
+    verts_idm = ' '.join((
+        f'({round(v.x - origin.x, dpl)} '
+        f'{round(v.y - origin.y, dpl)} '
+        f'{round(v.z - origin.z, dpl)})'
         for vertices in contours for v in vertices
     ))
 
@@ -132,7 +134,7 @@ def face_to_idm(
 
     face = f'((ENCLOSING-ELEMENT :N "{name}" :T {type_} :INDEX {index})\n' \
         f' ((AGGREGATE :N GEOMETRY)\n' \
-        f'  (:PAR :N CORNERS :DIM ({count} 3) :SP ({count} 3) :V #2A({vertices_idm}))\n' \
+        f'  (:PAR :N CORNERS :DIM ({count} 3) :SP ({count} 3) :V #2A({verts_idm}))\n' \
         f'  (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
         f'  (:PAR :N SLOPE :V {round(face.altitude + 90, 2)})){windows}\n{doors})'
 

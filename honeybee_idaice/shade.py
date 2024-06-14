@@ -14,8 +14,8 @@ def _vertices_to_idm(vertices: List[Point3D], dec_places: int = 3) -> str:
 
 
 def _shade_geometry_to_idm(
-        geometry: Union[Face3D, Polyface3D], name: str, decimal_places: int = 3
-    ):
+    geometry: Union[Face3D, Polyface3D], name: str, decimal_places: int = 3
+):
     """Create an IDM shade block from a Ladybug geometry.
 
     Here is an example:
@@ -26,13 +26,13 @@ def _shade_geometry_to_idm(
             (:PAR :N SHADOWING :V :TRUE)
             ((AGGREGATE :N "geom1" :T GEOM3D)
             (:PAR :N NPOINTS :V 4)
-            (:PAR :N POINTS :DIM (4 3) :V #2A((-0.874454021453857 -0.59070497751236 -0.941487014293671) (1.0536140203476 -0.0591499991714954 -0.941487014293671) (-1.0536140203476 0.0591499991714954 0.941487014293671) (0.874454021453857 0.59070497751236 0.941487014293671)))
+            (:PAR :N POINTS :DIM (4 3) :V #2A((-0.874 -0.59 -0.941) (1.054 -0.059 -0.941) (-1.054 0.06 0.941) (0.874 0.59 0.941)))
             (:PAR :N CELLTYPE :V 1)
             (:PAR :N NCELLS :V 2)
             (:PAR :N NVERTICES :DIM (2) :V #(3 3))
             (:PAR :N TOTNVERTS :V 6)
             (:PAR :N VERTICES :DIM (6) :V #(0 1 2 2 1 3))
-        (:PAR :N PROPERTY :V #(1.0 1.0 1.0 0.699999988079071 1.0 1.0 1.0 0.5 1.0 1.0 1.0 0.0 1.0 1.0 1.0 0.0 0.0))))
+        (:PAR :N PROPERTY :V #(1.0 1.0 1.0 0.7 1.0 1.0 1.0 0.5 1.0 1.0 1.0 0.0 1.0 1.0 1.0 0.0 0.0))))
     """
 
     if isinstance(geometry, Face3D):
@@ -51,12 +51,13 @@ def _shade_geometry_to_idm(
     faces_count = ' '.join(str(f) for f in face_length)
     joined_faces = ' '.join(' '.join(str(f) for f in ff) for ff in faces)
 
+    shd_verts = _vertices_to_idm(vertices, decimal_places)
     shade = f' ((AGGREGATE :N "{name}" :T PICT3D)\n' \
         '  (:PAR :N FILE :V "")\n' \
         '  (:PAR :N SHADOWING :V :TRUE)\n' \
         '  ((AGGREGATE :N "geom1" :T GEOM3D)\n' \
         f'   (:PAR :N NPOINTS :V {vertices_count})\n' \
-        f'   (:PAR :N POINTS :DIM ({vertices_count} 3) :V #2A({_vertices_to_idm(vertices, decimal_places)}))\n' \
+        f'   (:PAR :N POINTS :DIM ({vertices_count} 3) :V #2A({shd_verts}))\n' \
         '   (:PAR :N CELLTYPE :V 1)\n' \
         f'   (:PAR :N NCELLS :V {face_count})\n' \
         f'   (:PAR :N NVERTICES :DIM ({face_count}) :V #({faces_count}))\n' \
@@ -68,8 +69,8 @@ def _shade_geometry_to_idm(
 
 
 def _shade_group_to_idm(
-        shades: List[Shade], tolerance: float, decimal_places: int = 3
-    ) -> str:
+    shades: List[Shade], tolerance: float, decimal_places: int = 3
+) -> str:
     """Convert a group of shades into a IDM string.
 
     The files in the shade group should create a closed volume. The translator uses
