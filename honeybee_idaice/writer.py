@@ -446,7 +446,10 @@ def model_to_idm(
     prepare_model(model, adj_dist)
 
     # determine the number of places to which all of the vertices will be rounded
-    dec_count = (int(math.log10(model.tolerance)) * -1) + 1
+    try:
+        dec_count = (int(math.log10(model.tolerance)) * -1) + 1
+    except ValueError:  # someone used a tolerance of zero
+        dec_count = 0
 
     # make sure names don't have subfolder or extension
     original_name = name or model.display_name
