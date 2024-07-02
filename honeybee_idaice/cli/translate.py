@@ -1,8 +1,11 @@
 """honeybee ida translation commands."""
 import click
 import sys
+import os
 import pathlib
 import logging
+import tempfile
+import uuid
 
 from honeybee.model import Model
 from honeybee.units import parse_distance_string
@@ -18,9 +21,6 @@ def translate():
 @translate.command('model-to-idm')
 @click.argument('model-json', type=click.Path(
     exists=True, file_okay=True, dir_okay=False, resolve_path=True))
-@click.option(
-    '--name', '-n', help='Name of the output file.', default="model", show_default=True
-)
 @click.option(
     '--wall-thickness', '-t', help='Maximum thickness of the interior walls. This '
     'can include the units of the distance (eg. 1.5ft) or, if no units are provided, '
@@ -55,18 +55,26 @@ def translate():
     type=str, default='0.1m', show_default=True
 )
 @click.option(
-    '--folder', '-f', help='Path to target folder.',
-    type=click.Path(exists=False, file_okay=False, resolve_path=True,
-                    dir_okay=True), default='.', show_default=True
+    '--name', '-n', help='Deprecated option to set the name of the output file.',
+    default=None, show_default=True
 )
+@click.option(
+    '--folder', '-f', help='Deprecated option to set the path to target folder.',
+    type=click.Path(file_okay=False, resolve_path=True, dir_okay=True), default=None
+)
+@click.option(
+    '--output-file', '-o', help='Optional IDM file path to output the IDM bytes '
+    'of the translation. By default this will be printed out to stdout.',
+    type=click.File('w'), default='-', show_default=True)
 def model_to_idm(
-        model_json, name, wall_thickness, adjacency_distance, frame_thickness, folder):
+    model_json, wall_thickness, adjacency_distance, frame_thickness,
+    name, folder, output_file
+):
     """Translate a Model JSON file to an IDA-ICE IDM file.
     \b
 
     Args:
         model_json: Full path to a Model JSON file (HBJSON) or a Model pkl (HBpkl) file.
-
     """
     try:
         # convert distance strings to floats
@@ -76,14 +84,27 @@ def model_to_idm(
 
         # translate the Model to IDM
         model = Model.from_file(model_json)
-        folder = pathlib.Path(folder)
-        folder.mkdir(parents=True, exist_ok=True)
-        model.to_idm(
-            folder.as_posix(), name=name, debug=False,
-            max_int_wall_thickness=wall_thickness,
-            max_adjacent_sub_face_dist=adjacency_distance,
-            max_frame_thickness=frame_thickness
-        )
+        if folder is not None and name is not None:
+            folder = pathlib.Path(folder)
+            folder.mkdir(parents=True, exist_ok=True)
+            model.to_idm(folder.as_posix(), name=name, debug=False,
+                         max_int_wall_thickness=wall_thickness,
+                         max_adjacent_sub_face_dist=adjacency_distance,
+                         max_frame_thickness=frame_thickness)
+        else:
+            if output_file.name == '<stdout>':  # get a temporary file
+                out_file = str(uuid.uuid4())[:6]
+                out_folder = tempfile.gettempdir()
+            else:
+                out_folder, out_file = os.path.split(output_file.name)
+            idm_file = model.to_idm(out_folder, name=out_file, debug=False,
+                                    max_int_wall_thickness=wall_thickness,
+                                    max_adjacent_sub_face_dist=adjacency_distance,
+                                    max_frame_thickness=frame_thickness)
+            if output_file.name == '<stdout>':  # load file contents to stdout
+                with open(idm_file, 'rb') as of:  # IDM can only be read as binary
+                    f_contents = of.read()
+                output_file.write(f_contents)
     except Exception as e:
         _logger.exception('Model translation failed.\n{}'.format(e))
         sys.exit(1)
