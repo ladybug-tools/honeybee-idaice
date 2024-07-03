@@ -1,0 +1,7 @@
+main
+====
+
+.. click:: honeybee_idaice.cli.__init__:ida
+   :prog: honeybee-idaice
+   :show-nested:
+   :commands: 
