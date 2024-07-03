@@ -463,7 +463,7 @@ def model_to_idm(
     templates_folder = __here__.joinpath('templates')
 
     # create building file that includes building bodies and a reference to the rooms
-    with bldg_file.open('w', encoding='UTF-8') as bldg:
+    with bldg_file.open('w', encoding='utf-8') as bldg:
         header = ';IDA 4.80002 Data UTF-8\n' \
             '(DOCUMENT-HEADER :TYPE BUILDING :N "{}" :MS 4 :CK ' \
             '((RECENT (WINDEF . "Double Clear Air (WIN7)"))) ' \
@@ -471,7 +471,7 @@ def model_to_idm(
         bldg.write(header)
         # add template values
         bldg_template = templates_folder.joinpath('building.idm')
-        for line in bldg_template.open('r'):
+        for line in bldg_template.open('r', encoding='utf-8'):
             bldg.write(line)
 
         # create a building sections/bodies for the building
@@ -495,7 +495,8 @@ def model_to_idm(
     for template in templates:
         template_file = templates_folder.joinpath(template)
         target_file = bldg_folder.joinpath(template)
-        with target_file.open('w') as outf, template_file.open('r') as inf:
+        with target_file.open('w', encoding='utf-8') as outf, \
+                template_file.open('r', encoding='utf-8') as inf:
             for line in inf:
                 outf.write(f'{line.rstrip()}\n')
             outf.write(f';[end of {bldg_name}\\{template_file}]\n')
@@ -505,7 +506,8 @@ def model_to_idm(
     for room in model.rooms:
         room_name = room.display_name
         room_file = bldg_folder.joinpath(f'{room_name}.idm')
-        with template_room.open('r') as inf, room_file.open('w') as rm:
+        with template_room.open('r', encoding='utf-8') as inf, \
+                room_file.open('w', encoding='utf-8') as rm:
             for line in inf:
                 rm.write(f'{line.rstrip()}\n')
             geometry = room_to_idm(
