@@ -4,6 +4,7 @@ import sys
 import os
 import pathlib
 import logging
+import base64
 import tempfile
 import uuid
 
@@ -104,7 +105,9 @@ def model_to_idm(
             if output_file.name == '<stdout>':  # load file contents to stdout
                 with open(idm_file, 'rb') as of:  # IDM can only be read as binary
                     f_contents = of.read()
-                output_file.write(f_contents)
+                b = base64.b64encode(f_contents)
+                base64_string = b.decode('utf-8')
+                output_file.write(base64_string)
     except Exception as e:
         _logger.exception('Model translation failed.\n{}'.format(e))
         sys.exit(1)
