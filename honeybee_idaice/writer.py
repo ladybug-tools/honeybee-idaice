@@ -419,6 +419,7 @@ def model_to_idm(
             single file.
     """
     # check for the presence of rooms
+    VERSION = '5.00001'
     if not model.rooms:
         raise ValueError(
             'The model must have at least have one room to translate to IDM.')
@@ -464,14 +465,18 @@ def model_to_idm(
 
     # create building file that includes building bodies and a reference to the rooms
     with bldg_file.open('w', encoding='utf-8') as bldg:
-        header = ';IDA 4.80002 Data UTF-8\n' \
-            '(DOCUMENT-HEADER :TYPE BUILDING :N "{}" :MS 4 :CK ' \
+        header = f';IDA {VERSION} Data UTF-8\n' \
+            f'(DOCUMENT-HEADER :TYPE BUILDING :N "{bldg_name}" :MS 6 :CK ' \
             '((RECENT (WINDEF . "Double Clear Air (WIN7)"))) ' \
-            ':PARENT ICE :APP (ICE :VER 4.802))\n'.format(bldg_name)
+            f':PARENT ICE :APP (ICE :VER {VERSION}))\n'
         bldg.write(header)
         # add template values
         bldg_template = templates_folder.joinpath('building.idm')
-        for line in bldg_template.open('r', encoding='utf-8'):
+        for count, line in enumerate(bldg_template.open('r', encoding='utf-8')):
+            # this is to remove the random bug that adds new character ﻿ at
+            # the start of the line
+            if count == 0 and line[0] != '(':
+                line = line[1:]
             bldg.write(line)
 
         # create a building sections/bodies for the building
@@ -491,7 +496,9 @@ def model_to_idm(
         bldg.write(f'\n;[end of {bldg_name}.idm]\n')
 
     # copy all the template files
-    templates = ['plant.idm', 'ahu.idc', 'ahu.idm', 'plant.idc']
+    templates = [
+        'plant.idm', 'ahu.idc', 'ahu.idm', 'electrical system.idm'
+    ]
     for template in templates:
         template_file = templates_folder.joinpath(template)
         target_file = bldg_folder.joinpath(template)
