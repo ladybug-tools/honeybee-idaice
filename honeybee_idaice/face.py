@@ -1,9 +1,29 @@
 import math
 from typing import Union
 
-from ladybug_geometry.geometry2d import Point2D
-from ladybug_geometry.geometry3d import Point3D, Vector3D, Plane
+from ladybug_geometry.geometry2d import Point2D, Polygon2D, Vector2D
+from ladybug_geometry.geometry3d import Point3D, Vector3D, Plane, Face3D
 from honeybee.model import Face, Aperture, Door
+
+
+def _is_straight_rectangle(opening_poly: Polygon2D, ang_tol):
+    """Check if the window is rectangular and in parallel to XY axis."""
+    if len(opening_poly.vertices) != 4:
+        return False
+    if not opening_poly.is_rectangle(ang_tol):
+        return False
+    x_axis_2d = Vector2D(1, 0)
+    first_edge = opening_poly[1] - opening_poly[0]
+    first_edge_ang = x_axis_2d.angle(first_edge)
+    # technically we should not need to check for both angles but
+    # from the tests that I (mostapha) have seen the sorted coordinates
+    # are not always sorted from lower-left and counter clockwise.
+    if not (
+        first_edge_ang <= ang_tol
+        or abs(first_edge_ang - math.pi) <= ang_tol
+    ):
+        return False
+    return True
 
 
 def opening_to_idm(
@@ -24,42 +44,85 @@ def opening_to_idm(
             from the World Z before the opening is treated as being in the
             World XY plane. (Default: 1).
     """
-    # get the name
-    name = opening.identifier
+    ang_tol = math.radians(angle_tolerance)
+    # IDA-ICE looks to apertures from inside the room
+    opening_geo = opening.geometry.flip()
+    corners_idm = ''
+    ver_count = len(opening_geo.vertices)
+    # rectangle based on opening reference plane
+    apt_llc = opening_geo.lower_left_corner
+    apt_urc = opening_geo.upper_right_corner
+
+    def opening_corners_to_idm(
+            opening_geo: Face3D, ref_plane: Plane, min_2d: Point2D,
+            ang_tol: float, is_horizontal):
+        # calculate 2D polygon
+        opening_poly = Polygon2D(
+            [
+                ref_plane.xyz_to_xy(v)
+                for v in opening_geo.lower_left_counter_clockwise_vertices
+            ]
+        )
+
+        if _is_straight_rectangle(opening_poly, ang_tol):
+            # no need to use corners method
+            return ''
+
+        min_2d_apt = ref_plane.xyz_to_xy(opening_geo.flip().lower_left_corner)
+        if is_horizontal and min_2d.y + min_2d_apt.y < 0.001:
+            corners = ' '.join(
+                f'({round(v.x - min_2d.x, decimal_places)} '
+                f'{round(-v.y - min_2d.y, decimal_places)})'
+                for v in opening_poly.vertices
+            )
+        else:
+            corners = ' '.join(
+                f'({round(v.x - min_2d.x, decimal_places)} '
+                f'{round(v.y - min_2d.y, decimal_places)})'
+                for v in opening_poly.vertices
+            )
+
+        corners_idm = '\n  ((AGGREGATE :N SHAPE :T SHAPE2D)\n' \
+            f'  (:PAR :N NCORN :V {ver_count} :S (:DEFAULT NIL 2))\n' \
+            f'  (:PAR :N CORNERS :DIM ({ver_count} 2) :V #2A({corners}))\n' \
+            f'  (:PAR :N CONTOURS :V NIL))'
+
+        return corners_idm
 
     # if the aperture is horizontal, use the world XY
-    ang_tol = math.radians(angle_tolerance)
     vertical = Vector3D(0, 0, 1)
     vert_ang = ref_plane.n.angle(vertical)
-    if vert_ang <= ang_tol or vert_ang >= math.pi - ang_tol:
+    is_horizontal = vert_ang <= ang_tol or vert_ang >= math.pi - ang_tol
+
+    if is_horizontal:
+        # horizontal aperture
         min_2d = Point2D(opening.min.x - ref_plane.o.x, opening.min.y - ref_plane.o.y)
         max_2d = Point2D(opening.max.x - ref_plane.o.x, opening.max.y - ref_plane.o.y)
-        height = round(max_2d.y - min_2d.y, decimal_places)
-        width = round(max_2d.x - min_2d.x, decimal_places)
     else:
-        # IDA-ICE looks to apertures from inside the room
-        opening = opening.geometry.flip()
-        # get the rectangle in the reference plane
-        apt_llc = opening.lower_left_corner
-        apt_urc = opening.upper_right_corner
         min_2d = ref_plane.xyz_to_xy(apt_llc)
         max_2d = ref_plane.xyz_to_xy(apt_urc)
-        height = round(max_2d.y - min_2d.y, decimal_places)
-        width = round(max_2d.x - min_2d.x, decimal_places)
+
+    height = round(max_2d.y - min_2d.y, decimal_places)
+    width = round(max_2d.x - min_2d.x, decimal_places)
+
+    name = opening.identifier
+    corners_idm = opening_corners_to_idm(
+        opening_geo, ref_plane, min_2d, ang_tol, is_horizontal
+    )
 
     if is_aperture:
         opening_idm = f'\n ((CE-WINDOW :N "{name}" :T WINDOW)\n' \
             f'  (:PAR :N X :V {round(min_2d.x, decimal_places)})\n' \
             f'  (:PAR :N Y :V {round(min_2d.y, decimal_places)})\n' \
             f'  (:PAR :N DX :V {width})\n' \
-            f'  (:PAR :N DY :V {height}))'
+            f'  (:PAR :N DY :V {height}){corners_idm})'
     else:
         opening_idm = f'\n ((OPENING :N "{name}" :T OPENING)\n' \
             f'  (:PAR :N X :V {round(min_2d.x, decimal_places)})\n' \
             f'  (:PAR :N Y :V {round(min_2d.y, decimal_places)})\n' \
             f'  (:PAR :N DX :V {width})\n' \
             f'  (:PAR :N DY :V {height})\n' \
-            f'  (:RES :N OPENING-SCHEDULE :V ALWAYS_OFF))'
+            f'  (:RES :N OPENING-SCHEDULE :V ALWAYS_OFF){corners_idm})'
 
     return opening_idm
 
