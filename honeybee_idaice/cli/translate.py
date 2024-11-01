@@ -48,14 +48,6 @@ def translate():
     type=str, default='0.4m', show_default=True
 )
 @click.option(
-    '--frame-thickness', '-f', help='Maximum thickness of the window frame. This '
-    'can include the units of the distance (eg. 4in) or, if no units are provided, '
-    'the value will be assumed to be in meters (the native units of IDA-ICE). '
-    'This will be used to join any non-rectangular Apertures together in'
-    'an attempt to better rectangularize them for IDM.',
-    type=str, default='0.1m', show_default=True
-)
-@click.option(
     '--name', '-n', help='Deprecated option to set the name of the output file.',
     default=None, show_default=True
 )
@@ -68,8 +60,7 @@ def translate():
     'of the translation. By default this will be printed out to stdout.',
     type=click.File('w'), default='-', show_default=True)
 def model_to_idm(
-    model_json, wall_thickness, adjacency_distance, frame_thickness,
-    name, folder, output_file
+    model_json, wall_thickness, adjacency_distance, name, folder, output_file
 ):
     """Translate a Model JSON file to an IDA-ICE IDM file.
     \b
@@ -81,7 +72,6 @@ def model_to_idm(
         # convert distance strings to floats
         wall_thickness = parse_distance_string(str(wall_thickness), 'Meters')
         adjacency_distance = parse_distance_string(str(adjacency_distance), 'Meters')
-        frame_thickness = parse_distance_string(str(frame_thickness), 'Meters')
 
         # translate the Model to IDM
         model = Model.from_file(model_json)
@@ -90,8 +80,7 @@ def model_to_idm(
             folder.mkdir(parents=True, exist_ok=True)
             model.to_idm(folder.as_posix(), name=name, debug=False,
                          max_int_wall_thickness=wall_thickness,
-                         max_adjacent_sub_face_dist=adjacency_distance,
-                         max_frame_thickness=frame_thickness)
+                         max_adjacent_sub_face_dist=adjacency_distance)
         else:
             if output_file.name == '<stdout>':  # get a temporary file
                 out_file = str(uuid.uuid4())[:6]
@@ -100,8 +89,7 @@ def model_to_idm(
                 out_folder, out_file = os.path.split(output_file.name)
             idm_file = model.to_idm(out_folder, name=out_file, debug=False,
                                     max_int_wall_thickness=wall_thickness,
-                                    max_adjacent_sub_face_dist=adjacency_distance,
-                                    max_frame_thickness=frame_thickness)
+                                    max_adjacent_sub_face_dist=adjacency_distance)
             if output_file.name == '<stdout>':  # load file contents to stdout
                 with open(idm_file, 'rb') as of:  # IDM can only be read as binary
                     f_contents = of.read()

@@ -390,7 +390,7 @@ def prepare_folder(bldg_name: str, out_folder: str) -> List[pathlib.Path]:
 def model_to_idm(
         model: Model, out_folder: pathlib.Path, name: str = None,
         max_int_wall_thickness: float = 0.40, max_adjacent_sub_face_dist: float = 0.40,
-        max_frame_thickness: float = 0.1, debug: bool = False):
+        debug: bool = False):
     """Translate a Honeybee model to an IDM file.
 
     Args:
@@ -412,9 +412,6 @@ def model_to_idm(
             set this to zero (like some cases of max_int_wall_thickness),
             particularly when the adjacent interior geometries are not matching
             one another. (Default: 0.40).
-        max_frame_thickness: Maximum thickness of the window frame in meters.
-            This will be used to join any non-rectangular Apertures together in
-            an attempt to better rectangularize them for IDM. (Default: 0.1).
         debug: Set to True to not to delete the IDM folder before zipping it into a
             single file.
     """
@@ -436,10 +433,6 @@ def model_to_idm(
     for room in model.rooms:
         room.merge_coplanar_faces(
             model.tolerance, model.angle_tolerance, orthogonal_only=True)
-    # convert all apertures to be rectangular, using the model tolerances
-    ap_dist = max_frame_thickness if max_frame_thickness > model.tolerance \
-        else model.tolerance
-    model.rectangularize_apertures(max_separation=ap_dist, resolve_adjacency=False)
 
     # edit the model display_names and add user_data to help with the translation
     adj_dist = max_adjacent_sub_face_dist \
