@@ -1,6 +1,6 @@
 from typing import List, Union
 
-from honeybee.model import Shade
+from honeybee.model import Shade, ShadeMesh
 from ladybug_geometry.geometry3d import Point3D, Face3D, Polyface3D, Mesh3D
 
 
@@ -14,13 +14,14 @@ def _vertices_to_idm(vertices: List[Point3D], dec_places: int = 3) -> str:
 
 
 def _shade_geometry_to_idm(
-    geometry: Union[Face3D, Polyface3D], name: str, decimal_places: int = 3
+    geometry: Union[Face3D, Polyface3D, Mesh3D],
+    name: str, decimal_places: int = 3
 ):
     """Create an IDM shade block from a Ladybug geometry.
 
     Here is an example:
 
-        ((AGGREGATE :N "shade1" :T PICT3D)
+        ((AGGREGATE-VTK :N "shade1" :T PICT3D)
             (:PAR :N FILE :V "")
             (:PAR :N POS :V #(0 0 0.0))
             (:PAR :N SHADOWING :V :TRUE)
@@ -37,6 +38,8 @@ def _shade_geometry_to_idm(
 
     if isinstance(geometry, Face3D):
         mesh_3d = geometry.triangulated_mesh3d
+    elif isinstance(geometry, Mesh3D):
+        mesh_3d = geometry
     else:
         # it is a Polyface3D
         meshes = [face.triangulated_mesh3d for face in geometry.faces]
@@ -52,18 +55,19 @@ def _shade_geometry_to_idm(
     joined_faces = ' '.join(' '.join(str(f) for f in ff) for ff in faces)
 
     shd_verts = _vertices_to_idm(vertices, decimal_places)
-    shade = f' ((AGGREGATE :N "{name}" :T PICT3D)\n' \
-        '  (:PAR :N FILE :V "")\n' \
-        '  (:PAR :N SHADOWING :V :TRUE)\n' \
-        '  ((AGGREGATE :N "geom1" :T GEOM3D)\n' \
-        f'   (:PAR :N NPOINTS :V {vertices_count})\n' \
-        f'   (:PAR :N POINTS :DIM ({vertices_count} 3) :V #2A({shd_verts}))\n' \
-        '   (:PAR :N CELLTYPE :V 1)\n' \
-        f'   (:PAR :N NCELLS :V {face_count})\n' \
-        f'   (:PAR :N NVERTICES :DIM ({face_count}) :V #({faces_count}))\n' \
-        f'   (:PAR :N TOTNVERTS :V {total_vertices})\n' \
-        f'   (:PAR :N VERTICES :DIM ({total_vertices}) :V #({joined_faces}))\n' \
-        '   (:PAR :N PROPERTY :V #(1.0 1.0 1.0 0.699999988079071 1.0 1.0 1.0 0.5 1.0 1.0 1.0 0.0 1.0 1.0 1.0 0.0 0.0))))'
+    shade = f'  ((AGGREGATE-VTK :N "{name}" :T PICT3D)\n' \
+        '   (:PAR :N FILE :V "")\n' \
+        '   (:PAR :N SHADOWING :V :TRUE)\n' \
+        '   ((AGGREGATE :N "geom1" :T GEOM3D)\n' \
+        f'    (:PAR :N NPOINTS :V {vertices_count})\n' \
+        f'    (:PAR :N POINTS :DIM ({vertices_count} 3) :V #2A({shd_verts}))\n' \
+        '    (:PAR :N CELLTYPE :V 1)\n' \
+        f'    (:PAR :N NCELLS :V {face_count})\n' \
+        f'    (:PAR :N NVERTICES :DIM ({face_count}) :V #({faces_count}))\n' \
+        f'    (:PAR :N TOTNVERTS :V {total_vertices})\n' \
+        f'    (:PAR :N VERTICES :DIM ({total_vertices}) :V #({joined_faces}))\n' \
+        '    (:PAR :N PROPERTY :V #(1.0 1.0 1.0 0.699999988079071 1.0 1.0 1.0 0.5 1.0 1.0 1.0 0.0 1.0 1.0 1.0 0.0 0.0)))\n' \
+        f'  )'
 
     return shade
 
@@ -141,4 +145,38 @@ def shades_to_idm(shades: List[Shade], tolerance: float, decimal_places: int = 3
          for shades in filtered_groups.values()]
         )
 
-    return f'((AGGREGATE :N ARCDATA)\n{single_shades}\n{group_shades})'
+    return f'{single_shades}\n{group_shades}\n'
+
+
+def shade_meshes_to_idm(shades: List[ShadeMesh], tolerance: float, decimal_places: int = 3):
+    """Convert a list of Shades to a IDM string.
+
+    Args:
+        shades: A list of Honeybee ShadeMeshes.
+        tolerance: The maximum difference between X, Y, and Z values at which point
+            vertices are considered distinct from one another.
+        decimal_places: An integer for the number of decimal places to which
+            coordinate values will be rounded. (Default: 3).
+
+    Returns:
+        A formatted string that represents this shade in IDM format.
+
+    """
+    if not shades:
+        return ''
+
+    shade_idms = []
+    for shade in shades:
+        shade.triangulate_and_remove_degenerate_faces(tolerance)
+        name = '_'.join(
+            (
+                ' '.join(shade.display_name.split()),
+                shade.identifier.replace('Shade_', '')
+            )
+        )
+
+        shade_idms.append(
+            _shade_geometry_to_idm(shade.geometry, name, decimal_places)
+        )
+
+    return '\n'.join(shade_idms)

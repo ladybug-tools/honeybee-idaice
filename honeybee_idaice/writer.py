@@ -12,7 +12,7 @@ from honeybee.facetype import RoofCeiling, Wall, Floor, AirBoundary, get_type_fr
 from .archive import zip_folder_to_idm
 from .bldgbody import section_to_idm, MAX_FLOOR_ELEVATION_DIFFERENCE, \
     IDA_ICE_BUILDING_BODY_TOL
-from .shade import shades_to_idm
+from .shade import shades_to_idm, shade_meshes_to_idm
 from .face import face_to_idm, opening_to_idm, face_reference_plane
 
 
@@ -472,6 +472,23 @@ def model_to_idm(
                 line = line[1:]
             bldg.write(line)
 
+        # site object
+        site_idm = '((SITE-OBJECT :N SITE)\n' \
+            ' (:PAR :N SITE-AREA :V #(-100.0 -80.0 150.0 100.0))\n'
+        bldg.write(site_idm)
+        has_shade = model.shade_meshes or model.shades
+        if has_shade:
+            bldg.write(' ((AGGREGATE :N ARCDATA)\n')
+        # add shades to building if any
+        shades_idm = shades_to_idm(model.shades, model.tolerance, dec_count)
+        bldg.write(shades_idm)
+        shades_idm = shade_meshes_to_idm(model.shade_meshes, model.tolerance, dec_count)
+        bldg.write(shades_idm)
+        # end of site object
+        if has_shade:
+            bldg.write('))\n')
+        else:
+            bldg.write(')\n')
         # create a building sections/bodies for the building
         sections = section_to_idm(
             model, max_int_wall_thickness=max_int_wall_thickness,
@@ -483,9 +500,6 @@ def model_to_idm(
         for room in model.rooms:
             bldg.write(f'((CE-ZONE :N "{room.display_name}" :T ZONE))\n')
 
-        # add shades to building
-        shades_idm = shades_to_idm(model.shades, model.tolerance, dec_count)
-        bldg.write(shades_idm)
         bldg.write(f'\n;[end of {bldg_name}.idm]\n')
 
     # copy all the template files
