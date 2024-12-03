@@ -2,7 +2,7 @@ from click.testing import CliRunner
 import os
 import pathlib
 
-from honeybee_idaice.cli.translate import model_to_idm
+from honeybee_idaice.cli.translate import model_to_idm_cli
 
 
 def test_model_to_idm():
@@ -16,7 +16,7 @@ def test_model_to_idm():
         input_hb_model, '--name', out_file, '--wall-thickness', 0.35,
         '--folder', out_folder.as_posix()
     ]
-    result = runner.invoke(model_to_idm, in_args)
+    result = runner.invoke(model_to_idm_cli, in_args)
     assert result.exit_code == 0
 
     out_path = os.path.join(out_folder.as_posix(), out_file)
