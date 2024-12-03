@@ -1,0 +1,7 @@
+honeybee\_idaice.cli.translate module
+=====================================
+
+.. automodule:: honeybee_idaice.cli.translate
+   :members:
+   :undoc-members:
+   :show-inheritance:
