@@ -1,3 +1,8 @@
+[![Build Status](https://github.com/ladybug-tools/honeybee-idaice/workflows/CI/badge.svg)](https://github.com/ladybug-tools/honeybee-idaice/actions)
+
+[![Python 3.10](https://img.shields.io/badge/python-3.10-orange.svg)](https://www.python.org/downloads/release/python-3100/)
+[![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)
+
 # Honeybee -> IDA-ICE
 
 A honeybee extension to convert HBJSON files to [IDA ICE](https://www.equa.se/en/ida-ice) `idm` files.
