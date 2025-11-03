@@ -1,0 +1,7 @@
+honeybee\_idaice.writer\_obj module
+===================================
+
+.. automodule:: honeybee_idaice.writer_obj
+   :members:
+   :undoc-members:
+   :show-inheritance:

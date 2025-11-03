@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>honeybee_idaice.shade &#8212; honeybee-idaice  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=0bf093e7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e6365d57" />
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<link rel="icon" type="image/x-icon" href="https://github.com/ladybug-tools/artwork/raw/refs/heads/master/icons_bugs/ico/honeybee.ico">
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          honeybee-idaice</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cli/index.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli/index.html#commands">Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cli/translate.html">translate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../cli/translate.html#honeybee-idaice-translate">honeybee-idaice translate</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../cli/translate.html#honeybee-idaice-translate-model-to-idm">model-to-idm</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.cli.html">honeybee_idaice.cli package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.cli.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../honeybee_idaice.cli.translate.html">honeybee_idaice.cli.translate module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="../../honeybee_idaice.cli.translate.html#honeybee_idaice.cli.translate.model_to_idm"><code class="docutils literal notranslate"><span class="pre">model_to_idm()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.cli.html#module-honeybee_idaice.cli">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.properties.html">honeybee_idaice.properties package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.properties.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../honeybee_idaice.properties.model.html">honeybee_idaice.properties.model module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties"><code class="docutils literal notranslate"><span class="pre">ModelIDAICEProperties</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.ToString"><code class="docutils literal notranslate"><span class="pre">ToString()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.apply_properties_from_dict"><code class="docutils literal notranslate"><span class="pre">apply_properties_from_dict()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.check_for_extension"><code class="docutils literal notranslate"><span class="pre">check_for_extension()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.to_dict"><code class="docutils literal notranslate"><span class="pre">to_dict()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.host"><code class="docutils literal notranslate"><span class="pre">host</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.properties.html#module-honeybee_idaice.properties">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.archive.html">honeybee_idaice.archive module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.archive.html#honeybee_idaice.archive.zip_folder_to_idm"><code class="docutils literal notranslate"><span class="pre">zip_folder_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.bldgbody.html">honeybee_idaice.bldgbody module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.bldgbody.html#honeybee_idaice.bldgbody.section_to_idm"><code class="docutils literal notranslate"><span class="pre">section_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.face.html">honeybee_idaice.face module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.face.html#honeybee_idaice.face.face_reference_plane"><code class="docutils literal notranslate"><span class="pre">face_reference_plane()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.face.html#honeybee_idaice.face.face_to_idm"><code class="docutils literal notranslate"><span class="pre">face_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.face.html#honeybee_idaice.face.opening_to_idm"><code class="docutils literal notranslate"><span class="pre">opening_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.shade.html">honeybee_idaice.shade module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.shade.html#honeybee_idaice.shade.shade_meshes_to_idm"><code class="docutils literal notranslate"><span class="pre">shade_meshes_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.shade.html#honeybee_idaice.shade.shades_to_idm"><code class="docutils literal notranslate"><span class="pre">shades_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.writer.html">honeybee_idaice.writer module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.ceilings_to_idm"><code class="docutils literal notranslate"><span class="pre">ceilings_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.deconstruct_room"><code class="docutils literal notranslate"><span class="pre">deconstruct_room()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.model_to_idm"><code class="docutils literal notranslate"><span class="pre">model_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.prepare_folder"><code class="docutils literal notranslate"><span class="pre">prepare_folder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.prepare_model"><code class="docutils literal notranslate"><span class="pre">prepare_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.room_to_idm"><code class="docutils literal notranslate"><span class="pre">room_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.writer_obj.html">honeybee_idaice.writer_obj module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer_obj.html#honeybee_idaice.writer_obj.hbjson_to_idm_obj"><code class="docutils literal notranslate"><span class="pre">hbjson_to_idm_obj()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#module-honeybee_idaice">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-4">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="body col-md-8 content" role="main">
+      
+  <h1>Source code for honeybee_idaice.shade</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">honeybee.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Shade</span><span class="p">,</span> <span class="n">ShadeMesh</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ladybug_geometry.geometry3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point3D</span><span class="p">,</span> <span class="n">Face3D</span><span class="p">,</span> <span class="n">Polyface3D</span><span class="p">,</span> <span class="n">Mesh3D</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_vertices_to_idm</span><span class="p">(</span><span class="n">vertices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Point3D</span><span class="p">],</span> <span class="n">dec_places</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a string for vertices in IDM format.&quot;&quot;&quot;</span>
+    <span class="n">vertices</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">dec_places</span><span class="p">)</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">dec_places</span><span class="p">)</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">dec_places</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vertices</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">vertices</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_shade_geometry_to_idm</span><span class="p">(</span>
+    <span class="n">geometry</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Face3D</span><span class="p">,</span> <span class="n">Polyface3D</span><span class="p">,</span> <span class="n">Mesh3D</span><span class="p">],</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">decimal_places</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an IDM shade block from a Ladybug geometry.</span>
+
+<span class="sd">    Here is an example:</span>
+
+<span class="sd">        ((AGGREGATE-VTK :N &quot;shade1&quot; :T PICT3D)</span>
+<span class="sd">            (:PAR :N FILE :V &quot;&quot;)</span>
+<span class="sd">            (:PAR :N POS :V #(0 0 0.0))</span>
+<span class="sd">            (:PAR :N SHADOWING :V :TRUE)</span>
+<span class="sd">            ((AGGREGATE :N &quot;geom1&quot; :T GEOM3D)</span>
+<span class="sd">            (:PAR :N NPOINTS :V 4)</span>
+<span class="sd">            (:PAR :N POINTS :DIM (4 3) :V #2A((-0.874 -0.59 -0.941) (1.054 -0.059 -0.941) (-1.054 0.06 0.941) (0.874 0.59 0.941)))</span>
+<span class="sd">            (:PAR :N CELLTYPE :V 1)</span>
+<span class="sd">            (:PAR :N NCELLS :V 2)</span>
+<span class="sd">            (:PAR :N NVERTICES :DIM (2) :V #(3 3))</span>
+<span class="sd">            (:PAR :N TOTNVERTS :V 6)</span>
+<span class="sd">            (:PAR :N VERTICES :DIM (6) :V #(0 1 2 2 1 3))</span>
+<span class="sd">        (:PAR :N PROPERTY :V #(1.0 1.0 1.0 0.7 1.0 1.0 1.0 0.5 1.0 1.0 1.0 0.0 1.0 1.0 1.0 0.0 0.0))))</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">geometry</span><span class="p">,</span> <span class="n">Face3D</span><span class="p">):</span>
+        <span class="n">mesh_3d</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">triangulated_mesh3d</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">geometry</span><span class="p">,</span> <span class="n">Mesh3D</span><span class="p">):</span>
+        <span class="n">mesh_3d</span> <span class="o">=</span> <span class="n">geometry</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># it is a Polyface3D</span>
+        <span class="n">meshes</span> <span class="o">=</span> <span class="p">[</span><span class="n">face</span><span class="o">.</span><span class="n">triangulated_mesh3d</span> <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">geometry</span><span class="o">.</span><span class="n">faces</span><span class="p">]</span>
+        <span class="n">mesh_3d</span> <span class="o">=</span> <span class="n">Mesh3D</span><span class="o">.</span><span class="n">join_meshes</span><span class="p">(</span><span class="n">meshes</span><span class="o">=</span><span class="n">meshes</span><span class="p">)</span>
+
+    <span class="n">vertices</span> <span class="o">=</span> <span class="n">mesh_3d</span><span class="o">.</span><span class="n">vertices</span>
+    <span class="n">faces</span> <span class="o">=</span> <span class="n">mesh_3d</span><span class="o">.</span><span class="n">faces</span>
+    <span class="n">vertices_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
+    <span class="n">face_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">faces</span><span class="p">)</span>
+    <span class="n">face_length</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">face</span><span class="p">)</span> <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">faces</span><span class="p">]</span>
+    <span class="n">total_vertices</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">face_length</span><span class="p">)</span>
+    <span class="n">faces_count</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">face_length</span><span class="p">)</span>
+    <span class="n">joined_faces</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">ff</span><span class="p">)</span> <span class="k">for</span> <span class="n">ff</span> <span class="ow">in</span> <span class="n">faces</span><span class="p">)</span>
+
+    <span class="n">shd_verts</span> <span class="o">=</span> <span class="n">_vertices_to_idm</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">decimal_places</span><span class="p">)</span>
+    <span class="n">shade</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;  ((AGGREGATE-VTK :N &quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot; :T PICT3D)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+        <span class="s1">&#39;   (:PAR :N FILE :V &quot;&quot;)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+        <span class="s1">&#39;   (:PAR :N SHADOWING :V :TRUE)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+        <span class="s1">&#39;   ((AGGREGATE :N &quot;geom1&quot; :T GEOM3D)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+        <span class="sa">f</span><span class="s1">&#39;    (:PAR :N NPOINTS :V </span><span class="si">{</span><span class="n">vertices_count</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+        <span class="sa">f</span><span class="s1">&#39;    (:PAR :N POINTS :DIM (</span><span class="si">{</span><span class="n">vertices_count</span><span class="si">}</span><span class="s1"> 3) :V #2A(</span><span class="si">{</span><span class="n">shd_verts</span><span class="si">}</span><span class="s1">))</span><span class="se">\n</span><span class="s1">&#39;</span> \
+        <span class="s1">&#39;    (:PAR :N CELLTYPE :V 1)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+        <span class="sa">f</span><span class="s1">&#39;    (:PAR :N NCELLS :V </span><span class="si">{</span><span class="n">face_count</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+        <span class="sa">f</span><span class="s1">&#39;    (:PAR :N NVERTICES :DIM (</span><span class="si">{</span><span class="n">face_count</span><span class="si">}</span><span class="s1">) :V #(</span><span class="si">{</span><span class="n">faces_count</span><span class="si">}</span><span class="s1">))</span><span class="se">\n</span><span class="s1">&#39;</span> \
+        <span class="sa">f</span><span class="s1">&#39;    (:PAR :N TOTNVERTS :V </span><span class="si">{</span><span class="n">total_vertices</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> \
+        <span class="sa">f</span><span class="s1">&#39;    (:PAR :N VERTICES :DIM (</span><span class="si">{</span><span class="n">total_vertices</span><span class="si">}</span><span class="s1">) :V #(</span><span class="si">{</span><span class="n">joined_faces</span><span class="si">}</span><span class="s1">))</span><span class="se">\n</span><span class="s1">&#39;</span> \
+        <span class="s1">&#39;    (:PAR :N PROPERTY :V #(1.0 1.0 1.0 0.699999988079071 1.0 1.0 1.0 0.5 1.0 1.0 1.0 0.0 1.0 1.0 1.0 0.0 0.0)))</span><span class="se">\n</span><span class="s1">&#39;</span> \
+        <span class="sa">f</span><span class="s1">&#39;  )&#39;</span>
+
+    <span class="k">return</span> <span class="n">shade</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_shade_group_to_idm</span><span class="p">(</span>
+    <span class="n">shades</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Shade</span><span class="p">],</span> <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">decimal_places</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a group of shades into a IDM string.</span>
+
+<span class="sd">    The files in the shade group should create a closed volume. The translator uses</span>
+<span class="sd">    the name of the first shade as the name of the group.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">group_geometry</span> <span class="o">=</span> <span class="n">Polyface3D</span><span class="o">.</span><span class="n">from_faces</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">shade</span><span class="o">.</span><span class="n">geometry</span> <span class="k">for</span> <span class="n">shade</span> <span class="ow">in</span> <span class="n">shades</span><span class="p">],</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span>
+    <span class="p">)</span>
+    <span class="n">shade</span> <span class="o">=</span> <span class="n">shades</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># remove new lines from the name</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">shade</span><span class="o">.</span><span class="n">display_name</span><span class="o">.</span><span class="n">split</span><span class="p">()),</span> <span class="n">shade</span><span class="o">.</span><span class="n">identifier</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Shade_&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">_shade_geometry_to_idm</span><span class="p">(</span><span class="n">group_geometry</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">decimal_places</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_shade_to_idm</span><span class="p">(</span><span class="n">shade</span><span class="p">:</span> <span class="n">Shade</span><span class="p">,</span> <span class="n">decimal_places</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">):</span>
+    <span class="n">shade_geo</span> <span class="o">=</span> <span class="n">shade</span><span class="o">.</span><span class="n">geometry</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">shade</span><span class="o">.</span><span class="n">display_name</span><span class="o">.</span><span class="n">split</span><span class="p">()),</span> <span class="n">shade</span><span class="o">.</span><span class="n">identifier</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Shade_&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">_shade_geometry_to_idm</span><span class="p">(</span><span class="n">shade_geo</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">decimal_places</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="shades_to_idm">
+<a class="viewcode-back" href="../../honeybee_idaice.shade.html#honeybee_idaice.shade.shades_to_idm">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">shades_to_idm</span><span class="p">(</span><span class="n">shades</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Shade</span><span class="p">],</span> <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">decimal_places</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a list of Shades to a IDM string.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        shades: A list of Honeybee Shade objects.</span>
+<span class="sd">        tolerance: The maximum difference between X, Y, and Z values at which point</span>
+<span class="sd">            vertices are considered distinct from one another.</span>
+<span class="sd">        decimal_places: An integer for the number of decimal places to which</span>
+<span class="sd">            coordinate values will be rounded. (Default: 3).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A formatted string that represents this shade in IDM format.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">shades</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="n">shade_groups</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">no_groups</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">shade</span> <span class="ow">in</span> <span class="n">shades</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">group_id</span> <span class="o">=</span> <span class="n">shade</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;__group_id__&#39;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+            <span class="n">no_groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">shade</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">group_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">shade_groups</span><span class="p">:</span>
+                <span class="n">shade_groups</span><span class="p">[</span><span class="n">group_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">shade</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">shade_groups</span><span class="p">[</span><span class="n">group_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">shade</span><span class="p">)</span>
+
+    <span class="n">filtered_groups</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">shade_groups</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">no_groups</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">filtered_groups</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+    <span class="n">single_shades</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">_shade_to_idm</span><span class="p">(</span><span class="n">shade</span><span class="p">,</span> <span class="n">decimal_places</span><span class="p">)</span> <span class="k">for</span> <span class="n">shade</span> <span class="ow">in</span> <span class="n">no_groups</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">group_shades</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">_shade_group_to_idm</span><span class="p">(</span><span class="n">shades</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">decimal_places</span><span class="p">)</span>
+         <span class="k">for</span> <span class="n">shades</span> <span class="ow">in</span> <span class="n">filtered_groups</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">single_shades</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">group_shades</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="shade_meshes_to_idm">
+<a class="viewcode-back" href="../../honeybee_idaice.shade.html#honeybee_idaice.shade.shade_meshes_to_idm">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">shade_meshes_to_idm</span><span class="p">(</span><span class="n">shades</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ShadeMesh</span><span class="p">],</span> <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">decimal_places</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a list of Shades to a IDM string.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        shades: A list of Honeybee ShadeMeshes.</span>
+<span class="sd">        tolerance: The maximum difference between X, Y, and Z values at which point</span>
+<span class="sd">            vertices are considered distinct from one another.</span>
+<span class="sd">        decimal_places: An integer for the number of decimal places to which</span>
+<span class="sd">            coordinate values will be rounded. (Default: 3).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A formatted string that represents this shade in IDM format.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">shades</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="n">shade_idms</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">shade</span> <span class="ow">in</span> <span class="n">shades</span><span class="p">:</span>
+        <span class="n">shade</span><span class="o">.</span><span class="n">triangulate_and_remove_degenerate_faces</span><span class="p">(</span><span class="n">tolerance</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">shade</span><span class="o">.</span><span class="n">display_name</span><span class="o">.</span><span class="n">split</span><span class="p">()),</span>
+                <span class="n">shade</span><span class="o">.</span><span class="n">identifier</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Shade_&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">shade_idms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">_shade_geometry_to_idm</span><span class="p">(</span><span class="n">shade</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">decimal_places</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">shade_idms</span><span class="p">)</span></div>
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2025, Ladybug Tools.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.0.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

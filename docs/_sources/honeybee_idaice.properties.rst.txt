@@ -1,0 +1,18 @@
+honeybee\_idaice.properties package
+===================================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   honeybee_idaice.properties.model
+
+Module contents
+---------------
+
+.. automodule:: honeybee_idaice.properties
+   :members:
+   :undoc-members:
+   :show-inheritance:

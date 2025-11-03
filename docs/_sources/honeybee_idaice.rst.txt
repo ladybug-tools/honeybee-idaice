@@ -1,0 +1,32 @@
+honeybee\_idaice package
+========================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   honeybee_idaice.cli
+   honeybee_idaice.properties
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   honeybee_idaice.archive
+   honeybee_idaice.bldgbody
+   honeybee_idaice.face
+   honeybee_idaice.shade
+   honeybee_idaice.writer
+   honeybee_idaice.writer_obj
+
+Module contents
+---------------
+
+.. automodule:: honeybee_idaice
+   :members:
+   :undoc-members:
+   :show-inheritance:

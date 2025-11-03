@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>honeybee_idaice.cli.translate &#8212; honeybee-idaice  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css?v=0bf093e7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e6365d57" />
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="icon" type="image/x-icon" href="https://github.com/ladybug-tools/artwork/raw/refs/heads/master/icons_bugs/ico/honeybee.ico">
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          honeybee-idaice</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli/index.html">CLI Docs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cli/index.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cli/index.html#commands">Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cli/translate.html">translate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cli/translate.html#honeybee-idaice-translate">honeybee-idaice translate</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../../cli/translate.html#honeybee-idaice-translate-model-to-idm">model-to-idm</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../honeybee_idaice.html">honeybee_idaice package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../honeybee_idaice.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../honeybee_idaice.cli.html">honeybee_idaice.cli package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.cli.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../../honeybee_idaice.cli.translate.html">honeybee_idaice.cli.translate module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="../../../honeybee_idaice.cli.translate.html#honeybee_idaice.cli.translate.model_to_idm"><code class="docutils literal notranslate"><span class="pre">model_to_idm()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.cli.html#module-honeybee_idaice.cli">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../honeybee_idaice.properties.html">honeybee_idaice.properties package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.properties.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../../honeybee_idaice.properties.model.html">honeybee_idaice.properties.model module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="../../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties"><code class="docutils literal notranslate"><span class="pre">ModelIDAICEProperties</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="../../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.ToString"><code class="docutils literal notranslate"><span class="pre">ToString()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.apply_properties_from_dict"><code class="docutils literal notranslate"><span class="pre">apply_properties_from_dict()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.check_for_extension"><code class="docutils literal notranslate"><span class="pre">check_for_extension()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.to_dict"><code class="docutils literal notranslate"><span class="pre">to_dict()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.host"><code class="docutils literal notranslate"><span class="pre">host</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.properties.html#module-honeybee_idaice.properties">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../honeybee_idaice.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../honeybee_idaice.archive.html">honeybee_idaice.archive module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.archive.html#honeybee_idaice.archive.zip_folder_to_idm"><code class="docutils literal notranslate"><span class="pre">zip_folder_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../honeybee_idaice.bldgbody.html">honeybee_idaice.bldgbody module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.bldgbody.html#honeybee_idaice.bldgbody.section_to_idm"><code class="docutils literal notranslate"><span class="pre">section_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../honeybee_idaice.face.html">honeybee_idaice.face module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.face.html#honeybee_idaice.face.face_reference_plane"><code class="docutils literal notranslate"><span class="pre">face_reference_plane()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.face.html#honeybee_idaice.face.face_to_idm"><code class="docutils literal notranslate"><span class="pre">face_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.face.html#honeybee_idaice.face.opening_to_idm"><code class="docutils literal notranslate"><span class="pre">opening_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../honeybee_idaice.shade.html">honeybee_idaice.shade module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.shade.html#honeybee_idaice.shade.shade_meshes_to_idm"><code class="docutils literal notranslate"><span class="pre">shade_meshes_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.shade.html#honeybee_idaice.shade.shades_to_idm"><code class="docutils literal notranslate"><span class="pre">shades_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../honeybee_idaice.writer.html">honeybee_idaice.writer module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.writer.html#honeybee_idaice.writer.ceilings_to_idm"><code class="docutils literal notranslate"><span class="pre">ceilings_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.writer.html#honeybee_idaice.writer.deconstruct_room"><code class="docutils literal notranslate"><span class="pre">deconstruct_room()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.writer.html#honeybee_idaice.writer.model_to_idm"><code class="docutils literal notranslate"><span class="pre">model_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.writer.html#honeybee_idaice.writer.prepare_folder"><code class="docutils literal notranslate"><span class="pre">prepare_folder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.writer.html#honeybee_idaice.writer.prepare_model"><code class="docutils literal notranslate"><span class="pre">prepare_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.writer.html#honeybee_idaice.writer.room_to_idm"><code class="docutils literal notranslate"><span class="pre">room_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../honeybee_idaice.writer_obj.html">honeybee_idaice.writer_obj module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../honeybee_idaice.writer_obj.html#honeybee_idaice.writer_obj.hbjson_to_idm_obj"><code class="docutils literal notranslate"><span class="pre">hbjson_to_idm_obj()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../honeybee_idaice.html#module-honeybee_idaice">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli/index.html">CLI Docs</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../honeybee_idaice.html">honeybee_idaice package</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-4">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli/index.html">CLI Docs</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../honeybee_idaice.html">honeybee_idaice package</a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="body col-md-8 content" role="main">
+      
+  <h1>Source code for honeybee_idaice.cli.translate</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;honeybee ida translation commands.&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">click</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">honeybee.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">honeybee.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_distance_string</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">honeybee_idaice.writer</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_to_idm</span> <span class="k">as</span> <span class="n">model_to_idm_file</span>
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="nd">@click</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Commands for translating Honeybee JSON files to IDM files.&#39;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">translate</span><span class="p">():</span>
+    <span class="k">pass</span>
+
+
+<span class="nd">@translate</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s1">&#39;model-to-idm&#39;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s1">&#39;model-file&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span>
+    <span class="n">exists</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">file_okay</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dir_okay</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">resolve_path</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s1">&#39;--wall-thickness&#39;</span><span class="p">,</span> <span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Maximum thickness of the interior walls. This &#39;</span>
+    <span class="s1">&#39;can include the units of the distance (eg. 1.5ft) or, if no units are provided, &#39;</span>
+    <span class="s1">&#39;the value will be assumed to be in meters (the native units of IDA-ICE). &#39;</span>
+    <span class="s1">&#39;This value will be used to generate the IDA-ICE building body, which dictates &#39;</span>
+    <span class="s1">&#39;which Room Faces are exterior vs. interior. This is necessary because IDA-ICE &#39;</span>
+    <span class="s1">&#39;expects the input model to have gaps between the rooms that represent &#39;</span>
+    <span class="s1">&#39;the wall thickness. This value input here must be smaller than the smallest Room &#39;</span>
+    <span class="s1">&#39;that is expected in resulting IDA-ICE model and it should never be greater &#39;</span>
+    <span class="s1">&#39;than 0.5m in order to avoid creating invalid building bodies for IDA-ICE. &#39;</span>
+    <span class="s1">&#39;For models where the walls are touching each other, use a value of 0.&#39;</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;0.4m&#39;</span><span class="p">,</span> <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s1">&#39;--adjacency-distance&#39;</span><span class="p">,</span> <span class="s1">&#39;-a&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Maximum distance between interior Apertures &#39;</span>
+    <span class="s1">&#39;and Doors at which they are considered adjacent. This can include the units &#39;</span>
+    <span class="s1">&#39;of the distance (eg. 1.5ft) or, if no units are provided, the value will be &#39;</span>
+    <span class="s1">&#39;assumed to be in meters (the native units of IDA-ICE). This is used to ensure &#39;</span>
+    <span class="s1">&#39;that only one interior Aperture of an adjacent pair is written into the &#39;</span>
+    <span class="s1">&#39;IDM. This value should typically be around the --wall-thickness and should &#39;</span>
+    <span class="s1">&#39;ideally not be thicker than 0.5m. But it may be undesirable to set this to &#39;</span>
+    <span class="s1">&#39;zero (like some cases of --wall-thickness), particularly when the adjacent &#39;</span>
+    <span class="s1">&#39;interior geometries are not perfectly matching one another.&#39;</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;0.4m&#39;</span><span class="p">,</span> <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s1">&#39;--name&#39;</span><span class="p">,</span> <span class="s1">&#39;-n&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Deprecated option to set the name of the output file.&#39;</span><span class="p">,</span>
+    <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s1">&#39;--folder&#39;</span><span class="p">,</span> <span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Deprecated option to set the path to target folder.&#39;</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_okay</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">resolve_path</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dir_okay</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s1">&#39;--output-file&#39;</span><span class="p">,</span> <span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Optional IDM file path to output the IDM bytes &#39;</span>
+    <span class="s1">&#39;of the translation. By default this will be printed out to stdout.&#39;</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">model_to_idm_cli</span><span class="p">(</span>
+    <span class="n">model_file</span><span class="p">,</span> <span class="n">wall_thickness</span><span class="p">,</span> <span class="n">adjacency_distance</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">output_file</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Translate a Honeybee Model file to an IDA-ICE IDM file.</span>
+<span class="sd">    \b</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_file: Full path to a Honeybee Model file (HBJSON or HBpkl).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">folder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.idm&#39;</span><span class="p">):</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.idm&#39;</span>
+            <span class="n">output_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">model_to_idm</span><span class="p">(</span><span class="n">model_file</span><span class="p">,</span> <span class="n">wall_thickness</span><span class="p">,</span> <span class="n">adjacency_distance</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Model translation failed.</span><span class="se">\n</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="model_to_idm">
+<a class="viewcode-back" href="../../../honeybee_idaice.cli.translate.html#honeybee_idaice.cli.translate.model_to_idm">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">model_to_idm</span><span class="p">(</span><span class="n">model_file</span><span class="p">,</span> <span class="n">wall_thickness</span><span class="o">=</span><span class="s1">&#39;0.4m&#39;</span><span class="p">,</span> <span class="n">adjacency_distance</span><span class="o">=</span><span class="s1">&#39;0.4m&#39;</span><span class="p">,</span>
+                 <span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Translate a Honeybee Model file to an IDA-ICE IDM file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_file: Full path to a Honeybee Model file (HBJSON or HBpkl).</span>
+<span class="sd">        wall_thickness: Maximum thickness of the interior walls. This can include</span>
+<span class="sd">            the units of the distance (eg. 1.5ft) or, if no units are provided,</span>
+<span class="sd">            the value will be assumed to be in meters (the native units of IDA-ICE).</span>
+<span class="sd">            This value will be used to generate the IDA-ICE building body, which dictates</span>
+<span class="sd">            which Room Faces are exterior vs. interior. This is necessary because IDA-ICE</span>
+<span class="sd">            expects the input model to have gaps between the rooms that represent</span>
+<span class="sd">            the wall thickness. This value input here must be smaller than the smallest</span>
+<span class="sd">            Room that is expected in resulting IDA-ICE model and it should never be</span>
+<span class="sd">            greater than 0.5m in order to avoid creating invalid building bodies for</span>
+<span class="sd">            IDA-ICE. For models where the walls are touching each other, use a</span>
+<span class="sd">            value of 0.</span>
+<span class="sd">        adjacency_distance: Maximum distance between interior Apertures and Doors at</span>
+<span class="sd">            which they are considered adjacent. This can include the units of the</span>
+<span class="sd">            distance (eg. 1.5ft) or, if no units are provided, the value will be</span>
+<span class="sd">            assumed to be in meters (the native units of IDA-ICE). This is used to ensure</span>
+<span class="sd">            that only one interior Aperture of an adjacent pair is written into the</span>
+<span class="sd">            IDM. This value should typically be around the --wall-thickness and should</span>
+<span class="sd">            ideally not be thicker than 0.5m. But it may be undesirable to set this to</span>
+<span class="sd">            zero (like some cases of --wall-thickness), particularly when the adjacent</span>
+<span class="sd">            interior geometries are not perfectly matching one another.</span>
+<span class="sd">        output_file: Optional IDM file path to output the IDM string of the</span>
+<span class="sd">            translation. If None, the string will be returned from this function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># convert distance strings to floats</span>
+    <span class="n">wall_thickness</span> <span class="o">=</span> <span class="n">parse_distance_string</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">wall_thickness</span><span class="p">),</span> <span class="s1">&#39;Meters&#39;</span><span class="p">)</span>
+    <span class="n">adjacency_distance</span> <span class="o">=</span> <span class="n">parse_distance_string</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">adjacency_distance</span><span class="p">),</span> <span class="s1">&#39;Meters&#39;</span><span class="p">)</span>
+
+    <span class="c1"># translate the Model to IDM</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">model_file</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">folder</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_file</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">folder</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+        <span class="n">model_to_idm_file</span><span class="p">(</span>
+            <span class="n">model</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">max_int_wall_thickness</span><span class="o">=</span><span class="n">wall_thickness</span><span class="p">,</span>
+            <span class="n">max_adjacent_sub_face_dist</span><span class="o">=</span><span class="n">adjacency_distance</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">output_file</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">output_file</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;&lt;stdout&gt;&#39;</span><span class="p">:</span>  <span class="c1"># get a temporary file</span>
+            <span class="n">out_file</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())[:</span><span class="mi">6</span><span class="p">]</span>
+            <span class="n">out_folder</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">gettempdir</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out_folder</span><span class="p">,</span> <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">output_file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">idm_file</span> <span class="o">=</span> <span class="n">model_to_idm_file</span><span class="p">(</span>
+            <span class="n">model</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">out_file</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">max_int_wall_thickness</span><span class="o">=</span><span class="n">wall_thickness</span><span class="p">,</span>
+            <span class="n">max_adjacent_sub_face_dist</span><span class="o">=</span><span class="n">adjacency_distance</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">output_file</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">output_file</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;&lt;stdout&gt;&#39;</span><span class="p">:</span>  <span class="c1"># load file contents</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">idm_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">of</span><span class="p">:</span>  <span class="c1"># IDM can only be read as binary</span>
+                <span class="n">f_contents</span> <span class="o">=</span> <span class="n">of</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">f_contents</span><span class="p">)</span>
+            <span class="n">base64_string</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">output_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">base64_string</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">output_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">base64_string</span><span class="p">)</span></div>
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2025, Ladybug Tools.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.0.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

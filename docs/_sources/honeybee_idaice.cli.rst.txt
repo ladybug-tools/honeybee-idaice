@@ -1,0 +1,18 @@
+honeybee\_idaice.cli package
+============================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   honeybee_idaice.cli.translate
+
+Module contents
+---------------
+
+.. automodule:: honeybee_idaice.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:

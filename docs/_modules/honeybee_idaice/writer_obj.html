@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>honeybee_idaice.writer_obj &#8212; honeybee-idaice  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=0bf093e7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e6365d57" />
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<link rel="icon" type="image/x-icon" href="https://github.com/ladybug-tools/artwork/raw/refs/heads/master/icons_bugs/ico/honeybee.ico">
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          honeybee-idaice</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cli/index.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli/index.html#commands">Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cli/translate.html">translate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../cli/translate.html#honeybee-idaice-translate">honeybee-idaice translate</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../cli/translate.html#honeybee-idaice-translate-model-to-idm">model-to-idm</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.cli.html">honeybee_idaice.cli package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.cli.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../honeybee_idaice.cli.translate.html">honeybee_idaice.cli.translate module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="../../honeybee_idaice.cli.translate.html#honeybee_idaice.cli.translate.model_to_idm"><code class="docutils literal notranslate"><span class="pre">model_to_idm()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.cli.html#module-honeybee_idaice.cli">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.properties.html">honeybee_idaice.properties package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.properties.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../honeybee_idaice.properties.model.html">honeybee_idaice.properties.model module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties"><code class="docutils literal notranslate"><span class="pre">ModelIDAICEProperties</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.ToString"><code class="docutils literal notranslate"><span class="pre">ToString()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.apply_properties_from_dict"><code class="docutils literal notranslate"><span class="pre">apply_properties_from_dict()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.check_for_extension"><code class="docutils literal notranslate"><span class="pre">check_for_extension()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.to_dict"><code class="docutils literal notranslate"><span class="pre">to_dict()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.host"><code class="docutils literal notranslate"><span class="pre">host</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.properties.html#module-honeybee_idaice.properties">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.archive.html">honeybee_idaice.archive module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.archive.html#honeybee_idaice.archive.zip_folder_to_idm"><code class="docutils literal notranslate"><span class="pre">zip_folder_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.bldgbody.html">honeybee_idaice.bldgbody module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.bldgbody.html#honeybee_idaice.bldgbody.section_to_idm"><code class="docutils literal notranslate"><span class="pre">section_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.face.html">honeybee_idaice.face module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.face.html#honeybee_idaice.face.face_reference_plane"><code class="docutils literal notranslate"><span class="pre">face_reference_plane()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.face.html#honeybee_idaice.face.face_to_idm"><code class="docutils literal notranslate"><span class="pre">face_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.face.html#honeybee_idaice.face.opening_to_idm"><code class="docutils literal notranslate"><span class="pre">opening_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.shade.html">honeybee_idaice.shade module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.shade.html#honeybee_idaice.shade.shade_meshes_to_idm"><code class="docutils literal notranslate"><span class="pre">shade_meshes_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.shade.html#honeybee_idaice.shade.shades_to_idm"><code class="docutils literal notranslate"><span class="pre">shades_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.writer.html">honeybee_idaice.writer module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.ceilings_to_idm"><code class="docutils literal notranslate"><span class="pre">ceilings_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.deconstruct_room"><code class="docutils literal notranslate"><span class="pre">deconstruct_room()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.model_to_idm"><code class="docutils literal notranslate"><span class="pre">model_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.prepare_folder"><code class="docutils literal notranslate"><span class="pre">prepare_folder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.prepare_model"><code class="docutils literal notranslate"><span class="pre">prepare_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.room_to_idm"><code class="docutils literal notranslate"><span class="pre">room_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.writer_obj.html">honeybee_idaice.writer_obj module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer_obj.html#honeybee_idaice.writer_obj.hbjson_to_idm_obj"><code class="docutils literal notranslate"><span class="pre">hbjson_to_idm_obj()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#module-honeybee_idaice">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-4">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="body col-md-8 content" role="main">
+      
+  <h1>Source code for honeybee_idaice.writer_obj</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;An alternative for writing the HBJSON file to a series of obj files.</span>
+
+<span class="sd">This method will only work with IDA ICE 5.0.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">honeybee.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">Aperture</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ladybug_geometry.geometry3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point3D</span>
+
+
+<div class="viewcode-block" id="hbjson_to_idm_obj">
+<a class="viewcode-back" href="../../honeybee_idaice.writer_obj.html#honeybee_idaice.writer_obj.hbjson_to_idm_obj">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">hbjson_to_idm_obj</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span> <span class="n">target_folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">convert_to_units</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="s1">&#39;Meters&#39;</span><span class="p">)</span>
+    <span class="n">target_folder</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_index</span><span class="p">(</span><span class="n">vertex</span><span class="p">:</span> <span class="n">Point3D</span><span class="p">,</span> <span class="n">vertices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Point3D</span><span class="p">],</span> <span class="n">tol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vertices</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">distance_to_point</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">c</span>
+
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Failed to find the index for </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1"> with the tolerance of </span><span class="si">{</span><span class="n">tol</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># for each room</span>
+    <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">rooms</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">room</span><span class="o">.</span><span class="n">display_name</span>
+        <span class="n">id_</span> <span class="o">=</span> <span class="n">room</span><span class="o">.</span><span class="n">identifier</span>
+        <span class="n">obj_file</span> <span class="o">=</span> <span class="n">target_folder</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">.obj&#39;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">obj_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_file</span><span class="p">:</span>
+            <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# Honeybee OBJ Export</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;mtlib </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">.mtl</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;o Objects.Geometry.Mesh_--_</span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">unique_vertices</span> <span class="o">=</span> <span class="n">room</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">vertices</span>
+            <span class="k">for</span> <span class="n">ver</span> <span class="ow">in</span> <span class="n">unique_vertices</span><span class="p">:</span>
+                <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;v </span><span class="si">{</span><span class="n">ver</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">ver</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">ver</span><span class="o">.</span><span class="n">z</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">normals</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">normal</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">room</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">faces</span><span class="p">]</span>
+            <span class="n">unique_normals</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">normals</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">ver</span> <span class="ow">in</span> <span class="n">unique_normals</span><span class="p">:</span>
+                <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;vn </span><span class="si">{</span><span class="n">ver</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">ver</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">ver</span><span class="o">.</span><span class="n">z</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;usemtl None</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;s off</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">room</span><span class="o">.</span><span class="n">faces</span><span class="p">:</span>
+                <span class="n">face_3d</span> <span class="o">=</span> <span class="n">face</span><span class="o">.</span><span class="n">geometry</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">face_3d</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="p">[</span><span class="n">unique_vertices</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">ver</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">ver</span> <span class="ow">in</span> <span class="n">face_3d</span><span class="o">.</span><span class="n">vertices</span><span class="p">]</span>
+                    <span class="n">n</span> <span class="o">=</span> <span class="n">unique_normals</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">face_3d</span><span class="o">.</span><span class="n">normal</span><span class="p">)</span>
+                    <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;f </span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">//</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">//</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s1">//</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">tri_mesh</span> <span class="o">=</span> <span class="n">face_3d</span><span class="o">.</span><span class="n">triangulated_mesh3d</span>
+                    <span class="k">for</span> <span class="n">m_fac</span> <span class="ow">in</span> <span class="n">tri_mesh</span><span class="o">.</span><span class="n">face_vertices</span><span class="p">:</span>
+                        <span class="n">index</span> <span class="o">=</span> <span class="p">[]</span>
+                        <span class="n">n</span> <span class="o">=</span> <span class="n">unique_normals</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">face_3d</span><span class="o">.</span><span class="n">normal</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">ver</span> <span class="ow">in</span> <span class="n">m_fac</span><span class="p">:</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="n">ix</span> <span class="o">=</span> <span class="n">unique_vertices</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">ver</span><span class="p">)</span>
+                            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                                <span class="n">ix</span> <span class="o">=</span> <span class="n">get_index</span><span class="p">(</span><span class="n">ver</span><span class="p">,</span> <span class="n">unique_vertices</span><span class="p">)</span>
+                            <span class="n">index</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ix</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;f </span><span class="si">{</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">//</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">//</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">index</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s1">//</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="n">opening_template</span> <span class="o">=</span> <span class="s1">&#39;((</span><span class="si">{center}</span><span class="s1">) (</span><span class="si">{normal}</span><span class="s1">) (AGGREGATE :T IFCIM_</span><span class="si">{opening_type}</span><span class="s1"> :N &quot;</span><span class="si">{name}</span><span class="s1">&quot;) (:PAR :N DY :V </span><span class="si">{height}</span><span class="s1">) (:PAR :N DX :V </span><span class="si">{width}</span><span class="s1">) (:PAR :N STYLE :V &quot;</span><span class="si">{type}</span><span class="s1">&quot;))</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_opening</span><span class="p">(</span><span class="n">opening</span><span class="p">):</span>
+        <span class="n">opening_type</span> <span class="o">=</span> <span class="s1">&#39;aperture&#39;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">opening</span><span class="p">,</span> <span class="n">Aperture</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;door&#39;</span>
+        <span class="n">geo</span> <span class="o">=</span> <span class="n">opening</span><span class="o">.</span><span class="n">geometry</span>
+        <span class="n">normal</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">normal</span>
+        <span class="n">min_</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">min</span>
+        <span class="n">max_</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">max</span>
+        <span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="n">min_</span> <span class="o">+</span> <span class="n">max_</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">ref_plane</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">_upper_oriented_plane</span><span class="p">()</span>
+        <span class="n">min_2d</span> <span class="o">=</span> <span class="n">ref_plane</span><span class="o">.</span><span class="n">xyz_to_xy</span><span class="p">(</span><span class="n">min_</span><span class="p">)</span>
+        <span class="n">max_2d</span> <span class="o">=</span> <span class="n">ref_plane</span><span class="o">.</span><span class="n">xyz_to_xy</span><span class="p">(</span><span class="n">max_</span><span class="p">)</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">max_2d</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">min_2d</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">max_2d</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">min_2d</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">opening_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">center</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">center</span><span class="p">)),</span>
+            <span class="n">normal</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">normal</span><span class="p">)),</span>
+            <span class="n">opening_type</span><span class="o">=</span><span class="s1">&#39;WINDOW&#39;</span> <span class="k">if</span> <span class="n">opening_type</span> <span class="o">==</span> <span class="s1">&#39;aperture&#39;</span> <span class="k">else</span> <span class="s1">&#39;DOOR&#39;</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">apt</span><span class="o">.</span><span class="n">identifier</span><span class="p">,</span>
+            <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span>
+            <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;Glazed&#39;</span> <span class="k">if</span> <span class="n">opening_type</span> <span class="o">==</span> <span class="s1">&#39;aperture&#39;</span> <span class="k">else</span> <span class="s1">&#39;Entrance door&#39;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">content</span>
+
+    <span class="c1"># get all the apertures</span>
+    <span class="k">with</span> <span class="n">target_folder</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s1">&#39;ImportWindows.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">wf</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">apt</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">apertures</span><span class="p">:</span>
+            <span class="n">wf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">_get_opening</span><span class="p">(</span><span class="n">apt</span><span class="p">))</span>
+
+    <span class="c1"># get all the doors</span>
+    <span class="k">with</span> <span class="n">target_folder</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s1">&#39;ImportDoors.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">wf</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">door</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">doors</span><span class="p">:</span>
+            <span class="n">wf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">_get_opening</span><span class="p">(</span><span class="n">door</span><span class="p">))</span>
+
+    <span class="c1"># write shade objects as obj file</span>
+    <span class="c1"># write txt files</span>
+    <span class="k">with</span> <span class="n">target_folder</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s1">&#39;ImportZones.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zf</span><span class="p">,</span> \
+            <span class="n">target_folder</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s1">&#39;ImportBuildingBodiesAndZones.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">bf</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">rooms</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">room</span><span class="o">.</span><span class="n">display_name</span>
+            <span class="n">bf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(:call Import-Geometry (:call ice-3d-pane [@] t t) &#39;zone (0 0 0) 0 </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.obj</span><span class="se">\&quot;</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">zf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(:call Import-Geometry (:call ice-3d-pane [@] t t) &#39;zone (0 0 0) 0 </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.obj</span><span class="se">\&quot;</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">zf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(:UPDATE [@](:REMOVE </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">-s</span><span class="se">\&quot;</span><span class="s2">))</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">target_folder</span></div>
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2025, Ladybug Tools.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.0.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
