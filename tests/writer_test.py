@@ -4,12 +4,20 @@ from honeybee_idaice.writer import model_to_idm
 
 
 def test_model():
-    in_file = './tests/assets/revit_sample_model_wall_finish.hbjson'
-    out_folder = pathlib.Path('./tests/assets/temp')
+    in_file = './models/TestGeb1.hbjson'
+    out_folder = pathlib.Path('./models')
     out_folder.mkdir(parents=True, exist_ok=True)
     model = Model.from_hbjson(in_file)
-    outf = model_to_idm(model, out_folder.as_posix(), name='revit_sample_model')
+    outf = model_to_idm(model, out_folder.as_posix(), name='Model_to_IDA', debug=True, constr=True, version='5.11')
     assert outf.exists()
+    print('export finished')
+
+
+def test_faces():
+    in_file = './models/TestGeb1.hbjson'
+    model = Model.from_hbjson(in_file)
+    r=model.rooms
+    f=r[0].faces
 
 
 def test_non_ascii():

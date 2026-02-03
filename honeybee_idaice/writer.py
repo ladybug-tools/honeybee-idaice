@@ -8,13 +8,15 @@ from ladybug_geometry.bounding import bounding_box
 from ladybug_geometry.geometry3d import Vector3D, Point3D, Plane, Face3D
 from honeybee.model import Model, Room
 from honeybee.facetype import RoofCeiling, Wall, Floor, AirBoundary, get_type_from_normal
-
+from honeybee_energy.construction.opaque import OpaqueConstruction
+from honeybee_energy.construction.window import WindowConstruction
 from .archive import zip_folder_to_idm
 from .bldgbody import section_to_idm, MAX_FLOOR_ELEVATION_DIFFERENCE, \
     IDA_ICE_BUILDING_BODY_TOL
 from .shade import shades_to_idm, shade_meshes_to_idm
 from .face import face_to_idm, opening_to_idm, face_reference_plane
 
+constructions=False  # global flag to include constructions in output IDM
 
 def ceilings_to_idm(
     room: Room, origin: Point3D, tolerance: float, angle_tolerance: float = 1.0,
@@ -40,16 +42,17 @@ def ceilings_to_idm(
     if len(faces) == 0:
         return ''
     if len(faces) == 1:
-        return face_to_idm(faces[0], origin, index, angle_tolerance, decimal_places)
+        return face_to_idm(faces[0], origin, index, angle_tolerance, decimal_places, constructions)
 
     # check to see the vertical range across the ceilings
     min_pt, max_pt = bounding_box([face.geometry for face in faces])
-    if max_pt.z - min_pt.z <= tolerance:
-        # all the ceilings are the same height
-        return '\n'.join(
-            face_to_idm(face, origin, index, angle_tolerance, decimal_places)
-            for face in faces
-        )
+    # deactivated: even when ceilings are at the same height, we need to create a unifing element to host the ceiling-parts
+    # if max_pt.z - min_pt.z <= tolerance:
+    #     # all the ceilings are the same height
+    #     return '\n'.join(
+    #         face_to_idm(face, origin, index, angle_tolerance, decimal_places, constructions)
+    #         for face in faces
+    #     )
 
     # get the boundary around all of the ceiling parts
     horiz_boundary = room.horizontal_boundary(tolerance=tolerance)
@@ -90,6 +93,7 @@ def ceilings_to_idm(
         contours = [list(face.geometry.boundary)] + [list(h) for h in holes]
         vc = sum(len(c) for c in contours)
         contours_formatted = ' '.join(str(len(c)) for c in contours)
+        construction=face.properties.energy.construction.identifier
         vertices_idm = ' '.join(
             f'({round(v.x - origin.x, dpl)} '
             f'{round(v.y - origin.y, dpl)} '
@@ -114,7 +118,12 @@ def ceilings_to_idm(
             '  ((AGGREGATE :N GEOMETRY)\n' \
             f'   (:PAR :N CORNERS :DIM ({vc} 3) :SP ({vc} 3) :V #2A({vertices_idm}))\n' \
             f'   (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
-            f'   (:PAR :N SLOPE :V {round(face.altitude + 90, 2)})){windows})'
+            f'   (:PAR :N SLOPE :V {round(face.altitude + 90, 2)}))\n'
+            
+        if constructions:
+            cp += f'   (:RES :N CONSTRUCTION_EXTERNAL :V "{construction}")\n'
+        cp+= f'   {windows})\n'
+        
         ceiling_idm.append(cp)
 
     return '\n'.join(ceiling_idm) + ')'
@@ -135,6 +144,7 @@ def room_to_idm(
         decimal_places: An integer for the number of decimal places to which
             coordinate values will be rounded. (Default: 3).
     """
+    global constructions
     room_idm = []
     dpl = decimal_places
 
@@ -187,8 +197,13 @@ def room_to_idm(
         ' (:PAR :N NUMBER_OF :V 1)\n' \
         ' (:RES :N SCHEDULE_0-1 :V ALWAYS_ON)\n' \
         f' (:PAR :N POSITION :V #({round(rp.x, dpl)} {round(rp.y, dpl)} {0.6})))'
-
     room_idm.append(light_occ)
+
+    # append program types
+    prog_type = f'\n(:ORES :N ZONE-USAGE :V "{room.properties.energy.program_type.display_name}") \n' \
+                f'(:PAR :N TEXT :V "{room.properties.energy.program_type.display_name}")'
+
+    room_idm.append(prog_type)
 
     count = len(vertices)
     elevation = round(origin.z, dpl)
@@ -232,14 +247,14 @@ def room_to_idm(
         used_index.append(index)
         face_idm = face_to_idm(
             wall, origin=origin, index=index, angle_tolerance=angle_tolerance,
-            decimal_places=dpl
+            decimal_places=dpl, constr=constructions
         )
         room_idm.append(face_idm)
 
     for count, floor in enumerate(floors):
         face_idm = face_to_idm(
             floor, origin=origin, index=-(2000 + count),
-            angle_tolerance=angle_tolerance, decimal_places=dpl
+            angle_tolerance=angle_tolerance, decimal_places=dpl, constr=constructions
         )
         room_idm.append(face_idm)
 
@@ -257,6 +272,7 @@ def deconstruct_room(room: Room):
     walls = []
     floors = []
     ceilings = []
+    
     for face in room.faces:
         type_ = face.type
         if isinstance(type_, RoofCeiling):
@@ -283,11 +299,13 @@ def _is_room_extruded(room: Room, tolerance: float, angle_tolerance: float) -> T
     """
     f_hs = []
     c_hs = []
+    w_hs = []
     for face in room.faces:
         type_ = face.type
         if isinstance(type_, Wall):
             if abs(face.altitude) > angle_tolerance:
                 return False, -1
+            w_hs.extend(v.z for v in face.vertices)   # collect all wall vertex heights
         elif isinstance(type_, RoofCeiling):
             if abs(90 - face.altitude) > angle_tolerance:
                 return False, -1
@@ -297,10 +315,113 @@ def _is_room_extruded(room: Room, tolerance: float, angle_tolerance: float) -> T
                 return False, -1
             f_hs.append(face.vertices[0].z)
 
+    #check if wall heights are diverging
+    if all(abs(z-min(w_hs))< tolerance or abs(z-max(w_hs))<tolerance for z in w_hs)==False:
+        print(room.identifier, ': wall heights are diverging -> PROTECTED_SHAPE')
+        return False, -1
+    
+    #check if there are more than one floor or ceiling
+    if len(c_hs)>1 or len(f_hs)>1:
+        print(room.identifier, ': more than one floor or ceiling -> PROTECTED_SHAPE')
+        return False, -1
+    
     if len(f_hs) != 0 and len(c_hs) != 0 and max(c_hs) - min(c_hs) < tolerance and \
             max(f_hs) - min(f_hs) < tolerance:
         return True, round(room.max.z - room.min.z, 2)
     return False, -1
+
+
+
+def classify_construction(constr):
+    if isinstance(constr, WindowConstruction):
+        return "window"
+    if isinstance(constr, OpaqueConstruction):
+        return "opaque"
+    # if isinstance(constr, DoorConstruction):
+    #      return "door"
+    # if isinstance(constr, ShadeConstruction):
+    #     return "shade"
+    # if isinstance(constr, AirBoundaryConstruction):
+    #     return "air-boundary"
+    return "unknown"
+
+
+# def classify_opaque_construction_usage(model):
+#     usage = {}
+
+#     for face in model.faces:
+#         constr = face.properties.energy.construction
+#         if not constr:
+#             continue
+
+#         if not hasattr(constr, "identifier"):
+#             continue
+
+#         cid = constr.identifier
+#         ftype = face.type.name
+
+#         usage.setdefault(cid, set()).add(ftype)
+
+#     return usage
+
+
+
+
+def add_resources(model:Model)-> str:
+    """Read constructions from model and add prepare ida resource definition for them
+
+    Args:
+        model: A honeybee model. """
+ 
+    #Adding all constructions from the model
+    opaque = []
+    window = []
+    doors = set([
+        door
+        for room in model.rooms
+        for face in room.faces
+        for door in getattr(face, "doors", [])
+        if not (door.display_name).startswith("Ajd_")
+    ])
+    door_names = {d.properties.energy.construction.identifier for d in doors}
+    
+    resources_str=""
+    for con in model.properties.energy.constructions:
+        match classify_construction(con):
+            case "window":
+                window.append(con)
+            case "opaque":
+                opaque.append(con)
+        
+
+
+    #Adding all constructions that are not equal to doornames
+    for con in opaque:  # no type definition -> generic
+        if con.identifier not in door_names:
+                resources_str = resources_str + f'\n ((WALLDEF :N "{con.identifier}" :T WALLDEF :D "from HBJSON without layers")\n' \
+                f'    ((WALL-LAYER :N "layer-1" :T WALL-LAYER :D NIL :INDEX 0)\n' \
+                f'     (:RES :N MATERIAL :V "Concrete")\n' \
+                f'     (:PAR :N THICKNESS :V 0.25))\n' \
+                f'  )'
+    
+    #Adding Windows and Doors by their construction as templates to make them easier editable in IDA ICE
+    for con in window:  
+                resources_str = resources_str + f'\n  ((TEMPLATE :N "{con.identifier}" :T WINDOW)\n' \
+                f'   (:PAR :N X :V 1.0)\n' \
+                f'  (:PAR :N Y :V 0.9)\n' \
+                f'  (:PAR :N DX :V 0.8)\n' \
+                f'  (:PAR :N DY :V 1.5))'    
+    
+    for door in door_names:
+        resources_str = resources_str + \
+            f'\n  ((TEMPLATE :N "{door}" :T OPENING :D "Basic definition from HBJSON")\n' \
+            f'   (:PAR :N X :V 1)\n' \
+            f'   (:PAR :N Y :V 0.05)\n' \
+            f'   (:PAR :N DX :V 1.01)\n' \
+            f'   (:PAR :N DY :V 2.13)\n' \
+            f'   (:RES :N OPENING-SCHEDULE :V ALWAYS_OFF))\n'
+
+    return resources_str
 
 
 def prepare_model(model: Model, max_int_wall_thickness: float = 0.45) -> Model:
@@ -390,8 +511,8 @@ def prepare_folder(bldg_name: str, out_folder: str) -> List[pathlib.Path]:
 
 def model_to_idm(
         model: Model, out_folder: pathlib.Path, name: str = None,
-        max_int_wall_thickness: float = 0.40, max_adjacent_sub_face_dist: float = 0.40,
-        debug: bool = False):
+        max_int_wall_thickness: float = 0.40, max_adjacent_sub_face_dist: float = 0.40, constr: bool = False,
+        debug: bool = False, version: str = '5.00001'):
     """Translate a Honeybee model to an IDM file.
 
     Args:
@@ -417,7 +538,8 @@ def model_to_idm(
             single file.
     """
     # check for the presence of rooms
-    VERSION = '5.00001'
+    global constructions
+    constructions=constr
     if not model.rooms:
         raise ValueError(
             'The model must have at least have one room to translate to IDM.')
@@ -430,10 +552,13 @@ def model_to_idm(
         model.convert_to_units('Meters')
     # remove degenerate geometry within the model tolerance
     model.remove_degenerate_geometry()
+    
     # merge coplanar faces across the model's rooms
-    for room in model.rooms:
-        room.merge_coplanar_faces(
-            model.tolerance, model.angle_tolerance, orthogonal_only=True)
+    #disabled for now as it avoids creating wallparts with different constructions
+    if not constructions:
+        for room in model.rooms:
+            room.merge_coplanar_faces(
+                model.tolerance, model.angle_tolerance, orthogonal_only=True)
 
     # edit the model display_names and add user_data to help with the translation
     adj_dist = max_adjacent_sub_face_dist \
@@ -459,10 +584,10 @@ def model_to_idm(
 
     # create building file that includes building bodies and a reference to the rooms
     with bldg_file.open('w', encoding='utf-8') as bldg:
-        header = f';IDA {VERSION} Data UTF-8\n' \
+        header = f';IDA {version} Data UTF-8\n' \
             f'(DOCUMENT-HEADER :TYPE BUILDING :N "{bldg_name}" :MS 6 :CK ' \
             '((RECENT (WINDEF . "Double Clear Air (WIN7)"))) ' \
-            f':PARENT ICE :APP (ICE :VER {VERSION}))\n'
+            f':PARENT ICE :APP (ICE :VER {version}))\n'
         bldg.write(header)
         # add template values
         bldg_template = templates_folder.joinpath('building.idm')
@@ -490,6 +615,11 @@ def model_to_idm(
             bldg.write('))\n')
         else:
             bldg.write(')\n')
+
+        # write resources for the building
+        resources=add_resources(model)
+        bldg.write(resources)
+
         # create a building sections/bodies for the building
         sections = section_to_idm(
             model, max_int_wall_thickness=max_int_wall_thickness,
@@ -527,7 +657,7 @@ def model_to_idm(
                 rm.write(f'{line.rstrip()}\n')
             # add zone as the group information
             if room.zone and room.zone.strip():
-                rm.write(f'(:PAR :N GROUP :V "{room.zone}")\n')
+                rm.write(f'(:PAR :N GROUP :V "{room.properties.energy.program_type.display_name}")\n')
             geometry = room_to_idm(
                 room, model.tolerance, model.angle_tolerance, dec_count
             )
@@ -538,7 +668,7 @@ def model_to_idm(
     if not original_name.endswith('.idm'):
         original_name = f'{original_name}.idm'
     idm_file = base_folder.joinpath(original_name)
-    zip_folder_to_idm(model_folder, idm_file)
+    zip_folder_to_idm(model_folder, idm_file)    
 
     # clean up the folder
     if not debug:

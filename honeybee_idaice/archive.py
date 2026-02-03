@@ -14,8 +14,8 @@ def zip_folder_to_idm(folder: pathlib.Path, idm_file: pathlib.Path):
 
     """
     filters = [
-        {"id": lzma.FILTER_LZMA2, "preset": 7 | lzma.PRESET_EXTREME},
-    ]
+            {"id": lzma.FILTER_LZMA2, "preset": 7 | lzma.PRESET_EXTREME},
+        ]
     with py7zr.SevenZipFile(idm_file, 'w', filters=filters) as archive:
         for f in pathlib.Path(folder).glob('*'):
             archive.writeall(f, f.relative_to(folder))

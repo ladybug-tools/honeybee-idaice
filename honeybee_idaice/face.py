@@ -111,7 +111,7 @@ def opening_to_idm(
     )
 
     if is_aperture:
-        opening_idm = f'\n ((CE-WINDOW :N "{name}" :T WINDOW)\n' \
+        opening_idm = f'\n ((CE-WINDOW :N "{name}" :T "{opening.properties.energy.construction.display_name}")\n' \
             f'  (:PAR :N X :V {round(min_2d.x, decimal_places)})\n' \
             f'  (:PAR :N Y :V {round(min_2d.y, decimal_places)})\n' \
             f'  (:PAR :N DX :V {width})\n' \
@@ -129,7 +129,7 @@ def opening_to_idm(
 
 def face_to_idm(
     face: Face, origin: Point3D, index: int,
-    angle_tolerance: float = 1.0, decimal_places: int = 3
+    angle_tolerance: float = 1.0, decimal_places: int = 3, constr: bool = False
 ):
     """Translate a HBJSON face to an IDM ENCLOSING-ELEMENT.
 
@@ -150,11 +150,19 @@ def face_to_idm(
         'Floor': 'FLOOR',
         'Wall': 'WALL'
     }
+    _bc_mapper = {
+        'Outdoors': 'EXTERNAL',
+        'Ground': 'GROUND',
+        'Surface': 'INTERNAL',
+        'Adiabatic': 'INTERNAL'
+    } # needs maybe more boundary conditions
     name = face.identifier
     type_ = _face_mapper[str(face.type)]
+    bc_ = _bc_mapper[str(face.boundary_condition)]
     geometry = face.geometry
     holes = geometry.holes
     bv = list(geometry.boundary)
+    construction=face.properties.energy.construction.identifier
     if not holes:
         contours = [bv]
         count = len(bv)
@@ -195,13 +203,36 @@ def face_to_idm(
 
     doors = ''.join(doors)
 
-    face = f'((ENCLOSING-ELEMENT :N "{name}" :T {type_} :INDEX {index})\n' \
+    face_txt = f'((ENCLOSING-ELEMENT :N "{name}" :T {type_} :INDEX {index})\n' \
         f' ((AGGREGATE :N GEOMETRY)\n' \
         f'  (:PAR :N CORNERS :DIM ({count} 3) :SP ({count} 3) :V #2A({verts_idm}))\n' \
         f'  (:PAR :N CONTOURS :V ({contours_formatted}))\n' \
-        f'  (:PAR :N SLOPE :V {round(face.altitude + 90, 2)})){windows}\n{doors})'
+        f'  (:PAR :N SLOPE :V {round(face.altitude + 90, 2)}))\n' 
 
-    return face
+    if constr:
+        #determine if the face is above, below or straddling z=0
+        max_z= max(v.z for vertices in contours for v in vertices)
+        min_z= min(v.z for vertices in contours for v in vertices)
+        
+        if max_z>=0 and min_z>=0:
+            pos_='FACADE'
+            if face.boundary_condition.name=='Ground':
+                pos_='GROUND'
+                bc_='GROUND'
+        elif max_z<=0 and min_z<=0:
+            pos_='GROUND'    
+            if face.boundary_condition.name=='Outdoors':
+                pos_='FACADE' 
+                bc_='EXTERNAL'           
+        else:
+            pos_='GROUND'  #some split faces are interpreted in IDA as internal below surface. Therefore in doubt set to GROUND
+        
+        face_txt+= f'  (:PAR :N IF_NOT_CONNECTED :V {pos_})\n'
+        face_txt+= f'  (:RES :N CONSTRUCTION_{bc_} :V "{construction}")\n'
+
+    face_txt+= f'  {windows}\n{doors})\n' # Add windows and doors
+
+    return face_txt
 
 
 def face_reference_plane(face: Face, angle_tolerance: float = 1.0):
