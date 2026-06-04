@@ -263,12 +263,12 @@ def _section_to_idm_extruded(
             boundaries = bb_boundaries
             print(fail_msg)
         else:  # make sure that grouped_horizontal_boundary is not self-intersecting
-            for bnd in boundaries:
+            for k, bnd in enumerate(boundaries):
                 if bnd.is_self_intersecting:
-                    # there were likely overlapping Room boundaries causing failure
-                    boundaries = bb_boundaries
-                    print(fail_msg)
-                    break
+                    polys = bnd.boundary_polygon2d.split_through_self_intersection(tolerance)
+                    poly2d = max(polys, key=lambda p: p.area)
+                    pts_3d = [bnd.plane.xy_to_xyz(p) for p in poly2d]
+                    boundaries[k] = Face3D(pts_3d)
 
         # convert the boundaries into building section strings
         for count, boundary in enumerate(boundaries):

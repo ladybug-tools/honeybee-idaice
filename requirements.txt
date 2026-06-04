@@ -1,2 +1,2 @@
-honeybee-core>=1.56.26
+honeybee-core>=1.64.44
 py7zr==0.20.5
