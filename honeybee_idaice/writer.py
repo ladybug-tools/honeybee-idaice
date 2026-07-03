@@ -527,7 +527,8 @@ def model_to_idm(
             for line in inf:
                 rm.write(f'{line.rstrip()}\n')
             # add zone as the group information
-            if room.zone and room.zone.strip():
+
+            if room._zone and room.zone.strip():
                 rm.write(f'(:PAR :N GROUP :V "{room.zone}")\n')
             geometry = room_to_idm(
                 room, model.tolerance, model.angle_tolerance, dec_count
