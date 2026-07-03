@@ -79,14 +79,14 @@ def ceilings_to_idm(
     ))
     count = len(vertices)
     ceiling = \
-        f'((ENCLOSING-ELEMENT :N CEILING_{faces[0].display_name} :T CEILING :INDEX -1000' \
+        f'((ENCLOSING-ELEMENT :N "{room.display_name}" :T CEILING :INDEX -1000' \
         ')\n ((AGGREGATE :N GEOMETRY)\n' \
         f'  (:PAR :N CORNERS :DIM ({count} 3) :SP ({count} 3) :V #2A({vertices_idm})))'
     ceiling_idm = [ceiling]
 
     # write each of the ceiling faces to IDM
     for fc, face in enumerate(faces):
-        name = f'{face.display_name}_{fc}'
+        name = face.display_name.replace(room.display_name, '')
         holes = face.geometry.holes or []
         contours = [list(face.geometry.boundary)] + [list(h) for h in holes]
         vc = sum(len(c) for c in contours)
@@ -430,11 +430,11 @@ def model_to_idm(
         shade.display_name = clean_idaice_string(shade.display_name)
     for shade_mesh in model.shade_meshes:
         shade_mesh.display_name = clean_idaice_string(shade_mesh.display_name)
-    model.assign_unique_names()
     # merge coplanar faces across the model's rooms
     for room in model.rooms:
         room.merge_coplanar_faces(
             model.tolerance, model.angle_tolerance, orthogonal_only=True)
+    model.assign_unique_names()
 
     # add user_data to help with the translation
     adj_dist = max_adjacent_sub_face_dist \
