@@ -105,7 +105,7 @@ def opening_to_idm(
     height = round(max_2d.y - min_2d.y, decimal_places)
     width = round(max_2d.x - min_2d.x, decimal_places)
 
-    name = opening.identifier
+    name = opening.display_name
     corners_idm = opening_corners_to_idm(
         opening_geo, ref_plane, min_2d, ang_tol, is_horizontal
     )
@@ -150,7 +150,7 @@ def face_to_idm(
         'Floor': 'FLOOR',
         'Wall': 'WALL'
     }
-    name = face.identifier
+    name = face.display_name
     type_ = _face_mapper[str(face.type)]
     geometry = face.geometry
     holes = geometry.holes

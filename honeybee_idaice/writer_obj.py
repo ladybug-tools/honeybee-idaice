@@ -76,7 +76,7 @@ def hbjson_to_idm_obj(model: Model, target_folder: Path):
             center=' '.join(map(str, center)),
             normal=' '.join(map(str, normal)),
             opening_type='WINDOW' if opening_type == 'aperture' else 'DOOR',
-            name=apt.identifier,
+            name=apt.display_name,
             height=height,
             width=width,
             type='Glazed' if opening_type == 'aperture' else 'Entrance door'
@@ -98,7 +98,7 @@ def hbjson_to_idm_obj(model: Model, target_folder: Path):
     with target_folder.joinpath('ImportZones.txt').open('w') as zf, \
             target_folder.joinpath('ImportBuildingBodiesAndZones.txt').open('w') as bf:
         for room in model.rooms:
-            name = room.display_name
+            name = room.display_name.replace('_', ' ')
             bf.write(f"(:call Import-Geometry (:call ice-3d-pane [@] t t) 'zone (0 0 0) 0 \"{name}.obj\")\n")
             zf.write(f"(:call Import-Geometry (:call ice-3d-pane [@] t t) 'zone (0 0 0) 0 \"{name}.obj\")\n")
             zf.write(f"(:UPDATE [@](:REMOVE \"{name}-s\"))\n")

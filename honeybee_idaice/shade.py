@@ -85,18 +85,12 @@ def _shade_group_to_idm(
     )
     shade = shades[0]
     # remove new lines from the name
-    name = '_'.join(
-        (' '.join(shade.display_name.split()), shade.identifier.replace('Shade_', ''))
-    )
-    return _shade_geometry_to_idm(group_geometry, name, decimal_places)
+    return _shade_geometry_to_idm(group_geometry, shade.display_name, decimal_places)
 
 
 def _shade_to_idm(shade: Shade, decimal_places: int = 3):
     shade_geo = shade.geometry
-    name = '_'.join(
-        (' '.join(shade.display_name.split()), shade.identifier.replace('Shade_', ''))
-    )
-    return _shade_geometry_to_idm(shade_geo, name, decimal_places)
+    return _shade_geometry_to_idm(shade_geo, shade.display_name, decimal_places)
 
 
 def shades_to_idm(shades: List[Shade], tolerance: float, decimal_places: int = 3):
@@ -168,15 +162,8 @@ def shade_meshes_to_idm(shades: List[ShadeMesh], tolerance: float, decimal_place
     shade_idms = []
     for shade in shades:
         shade.triangulate_and_remove_degenerate_faces(tolerance)
-        name = '_'.join(
-            (
-                ' '.join(shade.display_name.split()),
-                shade.identifier.replace('Shade_', '')
-            )
-        )
-
         shade_idms.append(
-            _shade_geometry_to_idm(shade.geometry, name, decimal_places)
+            _shade_geometry_to_idm(shade.geometry, shade.display_name, decimal_places)
         )
 
     return '\n'.join(shade_idms)
