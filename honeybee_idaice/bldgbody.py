@@ -66,8 +66,8 @@ def _section_to_idm_protected(
         )
 
         min_pt, max_pt = room.geometry.min, room.geometry.max
-
-        header = f'((CE-SECTION :N "{room.display_name}_SEC" :T BUILDING-SECTION)\n' \
+        room_id = room.display_name
+        header = f'((CE-SECTION :N "{room_id}_SEC" :T BUILDING-SECTION)\n' \
             ' (:PAR :N PROTECTED_SHAPE :V :TRUE)\n' \
             f' (:PAR :N NCORN :V {vc})\n' \
             f' (:PAR :N CORNERS :DIM ({vc} 2) :V #2A({idm_vertices}))\n' \

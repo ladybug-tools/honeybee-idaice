@@ -12,6 +12,7 @@ from honeybee.facetype import RoofCeiling, Wall, Floor, AirBoundary, get_type_fr
 from .archive import zip_folder_to_idm
 from .bldgbody import section_to_idm, MAX_FLOOR_ELEVATION_DIFFERENCE, \
     IDA_ICE_BUILDING_BODY_TOL
+from .typing import clean_idaice_string
 from .shade import shades_to_idm, shade_meshes_to_idm
 from .face import face_to_idm, opening_to_idm, face_reference_plane
 
@@ -78,14 +79,14 @@ def ceilings_to_idm(
     ))
     count = len(vertices)
     ceiling = \
-        f'((ENCLOSING-ELEMENT :N CEILING_{faces[0].identifier} :T CEILING :INDEX -1000' \
+        f'((ENCLOSING-ELEMENT :N CEILING_{faces[0].display_name} :T CEILING :INDEX -1000' \
         ')\n ((AGGREGATE :N GEOMETRY)\n' \
         f'  (:PAR :N CORNERS :DIM ({count} 3) :SP ({count} 3) :V #2A({vertices_idm})))'
     ceiling_idm = [ceiling]
 
     # write each of the ceiling faces to IDM
     for fc, face in enumerate(faces):
-        name = f'{face.identifier}_{fc}'
+        name = f'{face.display_name}_{fc}'
         holes = face.geometry.holes or []
         contours = [list(face.geometry.boundary)] + [list(h) for h in holes]
         vc = sum(len(c) for c in contours)
@@ -144,7 +145,7 @@ def room_to_idm(
         # skip this room
         print(
             'Failed to create a horizontal boundary for '
-            f'{room.display_name}[{room.identifier}]. This room will be skipped.'
+            f'{room.display_name}. This room will be skipped.'
         )
         return ''
     contours = []
@@ -306,7 +307,6 @@ def _is_room_extruded(room: Room, tolerance: float, angle_tolerance: float) -> T
 def prepare_model(model: Model, max_int_wall_thickness: float = 0.45) -> Model:
     """Perform a number of model edits to prepare it for translation to IDM.
 
-    * Check room display names and ensure they are unique
     * Mark rooms as extruded and non-extruded
     * Mark doors and apertures in the model to avoid writing duplicated doors and
       apertures
@@ -321,25 +321,12 @@ def prepare_model(model: Model, max_int_wall_thickness: float = 0.45) -> Model:
     # difference in normal angles that make apertures/doors adjacent
     min_ang = math.pi - math.radians(model.angle_tolerance)
     # ensure unique room names for each story and make a note of adjacencies
-    room_names = {}
     grouped_rooms, _ = Room.group_by_floor_height(
         model.rooms, min_difference=MAX_FLOOR_ELEVATION_DIFFERENCE)
     door_tracker = []
     aperture_tracker = []
     for grouped_room in grouped_rooms:
         for room in grouped_room:
-            # check the display name and change it if it is not unique
-            room.display_name = \
-                room.display_name.replace('/', '-').replace('\\', '-') \
-                    .replace('\n', ' ').replace(':', '.') \
-                    .replace('\r', ' ').replace('\r\n', ' ')
-            if room.display_name in room_names:
-                original_name = room.display_name
-                room.display_name = \
-                    f'{room.display_name}_{room_names[original_name]}'
-                room_names[original_name] += 1
-            else:
-                room_names[room.display_name] = 1
             # add markers for whether the Room is extruded or not
             is_extruded, floor_to_ceiling_height = \
                 _is_room_extruded(room, model.tolerance, model.angle_tolerance)
@@ -417,7 +404,7 @@ def model_to_idm(
             single file.
     """
     # check for the presence of rooms
-    VERSION = '5.00001'
+    VERSION = '5.11001'
     if not model.rooms:
         raise ValueError(
             'The model must have at least have one room to translate to IDM.')
@@ -430,12 +417,26 @@ def model_to_idm(
         model.convert_to_units('Meters')
     # remove degenerate geometry within the model tolerance
     model.remove_degenerate_geometry()
+    # ensure all names are compatible with IDA-ICE and are unique
+    for room in model.rooms:
+        room.display_name = clean_idaice_string(room.display_name)
+    for face in model.faces:
+        face.display_name = clean_idaice_string(face.display_name)
+    for ap in model.apertures:
+        ap.display_name = clean_idaice_string(ap.display_name)
+    for dr in model.doors:
+        dr.display_name = clean_idaice_string(dr.display_name)
+    for shade in model.shades:
+        shade.display_name = clean_idaice_string(shade.display_name)
+    for shade_mesh in model.shade_meshes:
+        shade_mesh.display_name = clean_idaice_string(shade_mesh.display_name)
+    model.assign_unique_names()
     # merge coplanar faces across the model's rooms
     for room in model.rooms:
         room.merge_coplanar_faces(
             model.tolerance, model.angle_tolerance, orthogonal_only=True)
 
-    # edit the model display_names and add user_data to help with the translation
+    # add user_data to help with the translation
     adj_dist = max_adjacent_sub_face_dist \
         if max_adjacent_sub_face_dist > model.tolerance else model.tolerance
     prepare_model(model, adj_dist)

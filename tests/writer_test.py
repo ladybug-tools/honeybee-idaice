@@ -21,7 +21,7 @@ def test_non_ascii():
     assert outf.is_file()
     bldg_file = out_folder.joinpath('single-room', 'single-room.idm')
     content = bldg_file.read_text(encoding='UTF-8')
-    assert 'CE-ZONE :N "Wände" :T ZONE' in content
+    assert 'CE-ZONE :N "Wände 木" :T ZONE' in content
 
 
 def test_group_attribute():
