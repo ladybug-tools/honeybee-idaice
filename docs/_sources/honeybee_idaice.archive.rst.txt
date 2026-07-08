@@ -1,0 +1,7 @@
+honeybee\_idaice.archive module
+===============================
+
+.. automodule:: honeybee_idaice.archive
+   :members:
+   :undoc-members:
+   :show-inheritance:

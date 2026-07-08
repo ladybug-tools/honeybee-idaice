@@ -1,0 +1,7 @@
+honeybee\_idaice.face module
+============================
+
+.. automodule:: honeybee_idaice.face
+   :members:
+   :undoc-members:
+   :show-inheritance:

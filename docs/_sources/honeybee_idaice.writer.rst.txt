@@ -1,0 +1,7 @@
+honeybee\_idaice.writer module
+==============================
+
+.. automodule:: honeybee_idaice.writer
+   :members:
+   :undoc-members:
+   :show-inheritance:
