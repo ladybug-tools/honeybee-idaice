@@ -4,14 +4,15 @@ import pathlib
 import shutil
 from typing import List, Tuple
 
-from ladybug_geometry.bounding import bounding_box
+from ladybug_geometry.bounding import bounding_box, overlapping_bounding_boxes
+from ladybug_geometry.geometry2d import Polygon2D
 from ladybug_geometry.geometry3d import Vector3D, Point3D, Plane, Face3D
 from honeybee.model import Model, Room
 from honeybee.facetype import RoofCeiling, Wall, Floor, AirBoundary, get_type_from_normal
+from honeybee.boundarycondition import Surface
 
 from .archive import zip_folder_to_idm
-from .bldgbody import section_to_idm, MAX_FLOOR_ELEVATION_DIFFERENCE, \
-    IDA_ICE_BUILDING_BODY_TOL
+from .bldgbody import section_to_idm, IDA_ICE_BUILDING_BODY_TOL
 from .typing import clean_idaice_string
 from .shade import shades_to_idm, shade_meshes_to_idm
 from .face import face_to_idm, opening_to_idm, face_reference_plane
@@ -320,44 +321,84 @@ def prepare_model(model: Model, max_int_wall_thickness: float = 0.45) -> Model:
     """
     # difference in normal angles that make apertures/doors adjacent
     min_ang = math.pi - math.radians(model.angle_tolerance)
+    wt, tol, a_tol = max_int_wall_thickness, model.tolerance, model.angle_tolerance
+    rooms = model.rooms
     # ensure unique room names for each story and make a note of adjacencies
-    grouped_rooms, _ = Room.group_by_floor_height(
-        model.rooms, min_difference=MAX_FLOOR_ELEVATION_DIFFERENCE)
-    door_tracker = []
-    aperture_tracker = []
-    for grouped_room in grouped_rooms:
-        for room in grouped_room:
-            # add markers for whether the Room is extruded or not
-            is_extruded, floor_to_ceiling_height = \
-                _is_room_extruded(room, model.tolerance, model.angle_tolerance)
-            room.user_data = {
-                '_idm_is_extruded': is_extruded,
-                '_idm_flr_ceil_height': floor_to_ceiling_height
-            }
-            # add markers so adjacent interior Apertures and Doors are not duplicated
-            for face in room.faces:
-                # remove AirBoundaries until we learn how to support them
-                if isinstance(face.type, AirBoundary):
-                    face.type = get_type_from_normal(face.normal)
-                for door in face.doors:
-                    center = door.geometry.center
-                    normal = door.geometry.normal
-                    for data in door_tracker:
-                        c, n = data
-                        if c.distance_to_point(center) <= max_int_wall_thickness \
-                                and n.angle(normal) > min_ang:
-                            door.user_data = {'_idm_ignore': True}
+    for i, room in enumerate(rooms):
+        # add markers for whether the Room is extruded or not
+        is_extruded, floor_to_ceiling_height = _is_room_extruded(room, tol, a_tol)
+        room.user_data = {
+            '_idm_is_extruded': is_extruded,
+            '_idm_flr_ceil_height': floor_to_ceiling_height
+        }
+
+        # add markers to ignore duplicated windows on the interior and below grade
+        # gather the other relevant Apertures and Doors to check
+        other_sfs = []
+        for o_room in rooms[i + 1:]:
+            for of in o_room.faces:
+                other_sfs.extend(of.sub_faces)
+        for face in room.faces:
+            # remove AirBoundaries until we learn how to support them
+            if isinstance(face.type, AirBoundary):
+                face.type = get_type_from_normal(face.normal)
+            # check the Apertures and Doors against the others
+            for sf in face.sub_faces:
+                normal = sf.normal
+                rel_o_sfs = []
+                for o_sf in other_sfs:
+                    if o_sf.normal.angle(normal) > min_ang and \
+                            overlapping_bounding_boxes(sf.geometry, o_sf.geometry, wt):
+                        if o_sf.user_data and '_idm_ignore' in o_sf.user_data:
+                            continue
+                        rel_o_sfs.append(o_sf)
+                # if colliding objects were found, evaluate whether to remove the largest
+                if len(rel_o_sfs) != 0:
+                    base_plane = sf.geometry.plane
+                    base_poly = sf.geometry.boundary_polygon2d
+                    base_plane = sf.geometry.plane
+                    base_poly = sf.geometry.boundary_polygon2d
+                    for eval_sf in rel_o_sfs:
+                        e_pts = eval_sf.geometry.boundary
+                        e_pts_3d = [base_plane.project_point(pt) for pt in e_pts]
+                        e_pts_2d = [base_plane.xyz_to_xy(pt) for pt in e_pts_3d]
+                        e_poly = Polygon2D(e_pts_2d)
+                        if base_poly.polygon_relationship(e_poly, tol) >= 0:
+                            if sf.area > eval_sf.area:
+                                ignore_sf, int_sf = sf, eval_sf
+                            else:
+                                ignore_sf, int_sf = eval_sf, sf
+                            if ignore_sf.user_data is None:
+                                ignore_sf.user_data = {'_idm_ignore': True}
+                            else:
+                                ignore_sf.user_data['_idm_ignore'] = True
+                            if int_sf.user_data is None:
+                                int_sf.user_data = {'_idm_interior': True}
+                            else:
+                                int_sf.user_data['_idm_interior'] = True
                             break
-                    door_tracker.append((center, normal))
-                for aperture in face.apertures:
-                    center = aperture.geometry.center
-                    normal = aperture.geometry.normal
-                    for data in aperture_tracker:
-                        c, n = data
-                        if c.distance_to_point(center) <= max_int_wall_thickness \
-                                and n.angle(normal) > min_ang:
-                            aperture.user_data = {'_idm_ignore': True}
-                    aperture_tracker.append((center, normal))
+            # remove windows that are below grade
+            sf_to_keep, update_sf = [], False
+            for sf in face.sub_faces:
+                if sf.user_data and '_idm_interior' in sf.user_data:
+                    sf_to_keep.append(sf)
+                    continue
+                if sf.max.z < 0:
+                    update_sf = True
+                    continue
+                if sf.min.z < 0:
+                    split_geos = sf.geometry.split_with_plane(Plane(), tol)
+                    for geo in split_geos:
+                        if geo.center.z > 0:
+                            sf_dup = sf.duplicate()
+                            sf_dup._geometry = geo
+                            sf_to_keep.append(sf_dup)
+                    update_sf = True
+                else:
+                    sf_to_keep.append(sf)
+            if update_sf and not isinstance(face.boundary_condition, Surface):
+                face.remove_sub_faces()
+                face.add_sub_faces(sf_to_keep)
 
 
 def prepare_folder(bldg_name: str, out_folder: str) -> List[pathlib.Path]:
