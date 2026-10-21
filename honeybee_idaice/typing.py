@@ -2,8 +2,10 @@
 import re
 import hashlib
 
+from honeybee.typing import readable_short_name
 
-def clean_idaice_string(value, input_name=''):
+
+def clean_idaice_string(value, input_name='', max_length=50):
     """Clean a string for IDA-ICE that can be used for identifying objects.
 
     This includes stripping out all illegal characters in file paths and truncating
@@ -22,6 +24,5 @@ def clean_idaice_string(value, input_name=''):
         sha256_hash = hashlib.sha256(value.encode('utf-8'))
         hash_str = str(sha256_hash.hexdigest())
         return hash_str[:8] if len(hash_str) > 8 else hash_str
-    if len(val) > 100:  # avoid excessively long names
-        val = val[:100]
-    return val
+    # respect the 50 character limit that certain programs within IDA ICE enforce
+    return readable_short_name(val, max_length)
