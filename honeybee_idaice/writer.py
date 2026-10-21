@@ -10,6 +10,7 @@ from ladybug_geometry.geometry3d import Vector3D, Point3D, Plane, Face3D
 from honeybee.model import Model, Room
 from honeybee.facetype import RoofCeiling, Wall, Floor, AirBoundary, get_type_from_normal
 from honeybee.boundarycondition import Surface
+from honeybee.typing import number_string
 
 from .archive import zip_folder_to_idm
 from .bldgbody import section_to_idm, IDA_ICE_BUILDING_BODY_TOL
@@ -344,14 +345,15 @@ def prepare_model(model: Model, max_int_wall_thickness: float = 0.45) -> Model:
                 face.type = get_type_from_normal(face.normal)
             # check the Apertures and Doors against the others
             for sf in face.sub_faces:
-                normal = sf.normal
+                normal, sf_plane = sf.normal, sf.geometry.plane
                 rel_o_sfs = []
                 for o_sf in other_sfs:
                     if o_sf.normal.angle(normal) > min_ang and \
                             overlapping_bounding_boxes(sf.geometry, o_sf.geometry, wt):
                         if o_sf.user_data and '_idm_ignore' in o_sf.user_data:
                             continue
-                        rel_o_sfs.append(o_sf)
+                        if any(sf_plane.distance_to_point(pt) for pt in o_sf.geometry):
+                            rel_o_sfs.append(o_sf)
                 # if colliding objects were found, evaluate whether to remove the largest
                 if len(rel_o_sfs) != 0:
                     base_plane = sf.geometry.plane
@@ -459,23 +461,38 @@ def model_to_idm(
     # remove degenerate geometry within the model tolerance
     model.remove_degenerate_geometry()
     # ensure all names are compatible with IDA-ICE and are unique
+    room_dict, face_dict, shd_dict, sm_dict = {}, {}, {}, {}
     for room in model.rooms:
-        room.display_name = clean_idaice_string(room.display_name)
+        room.display_name = clean_idaice_string(room.display_name, max_length=46)
+        room.display_name = number_string(room.display_name, room_dict)
     for face in model.faces:
-        face.display_name = clean_idaice_string(face.display_name)
-    for ap in model.apertures:
+        face.display_name = clean_idaice_string(face.display_name, max_length=36)
+        face.display_name = number_string(face.display_name, face_dict)
+        sf_max_len = 46 - len(face.display_name)
+        ap_dict, dr_dict = {}, {}
+        for ap in face.apertures:
+            ap.display_name = clean_idaice_string(ap.display_name, max_length=sf_max_len)
+            ap.display_name = number_string(ap.display_name, ap_dict)
+        for dr in face.doors:
+            dr.display_name = clean_idaice_string(dr.display_name, max_length=sf_max_len)
+            dr.display_name = number_string(dr.display_name, dr_dict)
+    for ap in model.orphaned_apertures:
         ap.display_name = clean_idaice_string(ap.display_name)
-    for dr in model.doors:
+        ap.display_name = number_string(ap.display_name, shd_dict)
+    for dr in model.orphaned_doors:
         dr.display_name = clean_idaice_string(dr.display_name)
+        dr.display_name = number_string(dr.display_name, shd_dict)
     for shade in model.shades:
         shade.display_name = clean_idaice_string(shade.display_name)
+        shade.display_name = number_string(shade.display_name, shd_dict)
     for shade_mesh in model.shade_meshes:
         shade_mesh.display_name = clean_idaice_string(shade_mesh.display_name)
+        shade_mesh.display_name = number_string(shade_mesh.display_name, sm_dict)
     # merge coplanar faces across the model's rooms
     for room in model.rooms:
         room.merge_coplanar_faces(
-            model.tolerance, model.angle_tolerance, orthogonal_only=True)
-    model.assign_unique_names()
+            model.tolerance, model.angle_tolerance, orthogonal_only=True
+        )
 
     # add user_data to help with the translation
     adj_dist = max_adjacent_sub_face_dist \
