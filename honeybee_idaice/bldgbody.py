@@ -1,6 +1,8 @@
 """A module for functions related to IDM building-bodies."""
 from typing import List
+
 from ladybug_geometry.bounding import bounding_box
+from ladybug_geometry.geometry2d import Point2D, LineSegment2D, Polygon2D
 from ladybug_geometry.geometry3d import Point3D, LineSegment3D, Plane, Face3D
 
 from honeybee.model import Model
@@ -263,12 +265,40 @@ def _section_to_idm_extruded(
             boundaries = bb_boundaries
             print(fail_msg)
         else:  # make sure that grouped_horizontal_boundary is not self-intersecting
+            bldg_body_2d = []
             for k, bnd in enumerate(boundaries):
                 if bnd.is_self_intersecting:
                     polys = bnd.boundary_polygon2d.split_through_self_intersection(tolerance)
                     poly2d = max(polys, key=lambda p: p.area)
                     pts_3d = [bnd.plane.xy_to_xyz(p) for p in poly2d]
                     boundaries[k] = Face3D(pts_3d)
+
+                bldg_body_2d.append(Polygon2D([Point2D(p.x, p.y) for p in bnd.boundary]))
+                if bnd.has_holes:
+                    for hole in bnd.holes:
+                        bldg_body_2d.append(Polygon2D([Point2D(p.x, p.y) for p in hole]))
+
+            # use building body to remove windows/doors not clearly exterior or interior
+            body_segs = []
+            for bb_poly in bldg_body_2d:
+                body_segs.extend(bb_poly.segments)
+            for room in rooms:
+                for wall in room.walls:
+                    for sf in wall.sub_faces:
+                        if sf.user_data:
+                            if '_idm_interior' in sf.user_data or '_idm_ignore' in sf.user_data:
+                                continue  # already clearly interior
+                        min_pt = Point2D(sf.geometry.min.x, sf.geometry.min.y)
+                        max_pt = Point2D(sf.geometry.max.x, sf.geometry.max.y)
+                        sf_2d = LineSegment2D.from_end_points(min_pt, max_pt)
+                        for bb_seg in body_segs:
+                            if sf_2d.distance_to_line(bb_seg) < 0.5:  # 0.5 meters
+                                break
+                        else:  # an opening that is not clearly interior or exterior
+                            if sf.user_data is None:
+                                sf.user_data = {'_idm_ignore': True}
+                            else:
+                                sf.user_data['_idm_ignore'] = True
 
         # convert the boundaries into building section strings
         for count, boundary in enumerate(boundaries):
