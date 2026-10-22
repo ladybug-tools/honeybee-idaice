@@ -1,0 +1,6 @@
+translate
+=========
+
+.. click:: honeybee_idaice.cli.translate:translate
+   :prog: honeybee-idaice translate
+   :show-nested:

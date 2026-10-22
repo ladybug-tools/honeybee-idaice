@@ -1,0 +1,7 @@
+honeybee\_idaice.typing module
+==============================
+
+.. automodule:: honeybee_idaice.typing
+   :members:
+   :undoc-members:
+   :show-inheritance:
