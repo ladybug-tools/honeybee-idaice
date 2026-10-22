@@ -321,8 +321,8 @@ def prepare_model(model: Model, max_int_wall_thickness: float = 0.45) -> Model:
             is written to IDA-ICE. (Default: 0.45).
     """
     # difference in normal angles that make apertures/doors adjacent
-    min_ang = math.pi - math.radians(model.angle_tolerance)
     wt, tol, a_tol = max_int_wall_thickness, model.tolerance, model.angle_tolerance
+    min_ang = math.pi - math.radians(a_tol)
     rooms = model.rooms
     # ensure unique room names for each story and make a note of adjacencies
     for i, room in enumerate(rooms):
@@ -352,8 +352,9 @@ def prepare_model(model: Model, max_int_wall_thickness: float = 0.45) -> Model:
                             overlapping_bounding_boxes(sf.geometry, o_sf.geometry, wt):
                         if o_sf.user_data and '_idm_ignore' in o_sf.user_data:
                             continue
-                        if any(sf_plane.distance_to_point(pt) for pt in o_sf.geometry):
+                        if any(sf_plane.distance_to_point(pt) <= wt for pt in o_sf.geometry):
                             rel_o_sfs.append(o_sf)
+
                 # if colliding objects were found, evaluate whether to remove the largest
                 if len(rel_o_sfs) != 0:
                     base_plane = sf.geometry.plane
