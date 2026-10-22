@@ -350,8 +350,6 @@ def prepare_model(model: Model, max_int_wall_thickness: float = 0.45) -> Model:
                 for o_sf in other_sfs:
                     if o_sf.normal.angle(normal) > min_ang and \
                             overlapping_bounding_boxes(sf.geometry, o_sf.geometry, wt):
-                        if o_sf.user_data and '_idm_ignore' in o_sf.user_data:
-                            continue
                         if any(sf_plane.distance_to_point(pt) <= wt for pt in o_sf.geometry):
                             rel_o_sfs.append(o_sf)
 
@@ -461,6 +459,11 @@ def model_to_idm(
         model.convert_to_units('Meters')
     # remove degenerate geometry within the model tolerance
     model.remove_degenerate_geometry()
+    # merge coplanar faces across the model's rooms
+    for room in model.rooms:
+        room.merge_coplanar_faces(
+            model.tolerance, model.angle_tolerance, orthogonal_only=True
+        )
     # ensure all names are compatible with IDA-ICE and are unique
     room_dict, face_dict, shd_dict, sm_dict = {}, {}, {}, {}
     for room in model.rooms:
@@ -489,11 +492,6 @@ def model_to_idm(
     for shade_mesh in model.shade_meshes:
         shade_mesh.display_name = clean_idaice_string(shade_mesh.display_name)
         shade_mesh.display_name = number_string(shade_mesh.display_name, sm_dict)
-    # merge coplanar faces across the model's rooms
-    for room in model.rooms:
-        room.merge_coplanar_faces(
-            model.tolerance, model.angle_tolerance, orthogonal_only=True
-        )
 
     # add user_data to help with the translation
     adj_dist = max_adjacent_sub_face_dist \
