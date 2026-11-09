@@ -5,8 +5,10 @@ import os
 import logging
 import base64
 import tempfile
+import json
 import uuid
 
+from ladybug.projectinfo import ProjectInfo
 from honeybee.model import Model
 from honeybee.units import parse_distance_string
 from honeybee_idaice.writer import model_to_idm as model_to_idm_file
@@ -22,6 +24,13 @@ def translate():
 @translate.command('model-to-idm')
 @click.argument('model-file', type=click.Path(
     exists=True, file_okay=True, dir_okay=False, resolve_path=True))
+@click.option(
+    '--project-info', '-pi', help='Full path to a ladybug ProjectInfo '
+    'JSON that describes criteria about the project site. This will be '
+    'used to fill in any information that is not described in the '
+    '--sim-par-json or --epw-file. Otherwise, these two options override '
+    'whatever is specified within the --project-info.', default=None, show_default=True,
+    type=click.Path(exists=True, file_okay=True, dir_okay=False, resolve_path=True))
 @click.option(
     '--wall-thickness', '-t', help='Maximum thickness of the interior walls. This '
     'can include the units of the distance (eg. 1.5ft) or, if no units are provided, '
@@ -60,7 +69,8 @@ def translate():
     'of the translation. By default this will be printed out to stdout.',
     type=click.File('w'), default='-', show_default=True)
 def model_to_idm_cli(
-    model_file, wall_thickness, adjacency_distance, name, folder, output_file
+    model_file, project_info, wall_thickness, adjacency_distance,
+    name, folder, output_file
 ):
     """Translate a Honeybee Model file to an IDA-ICE IDM file.
     \b
@@ -73,7 +83,9 @@ def model_to_idm_cli(
             if not name.lower().endswith('.idm'):
                 name = name + '.idm'
             output_file = os.path.join(folder, name)
-        model_to_idm(model_file, wall_thickness, adjacency_distance, output_file)
+        model_to_idm(
+            model_file, project_info, wall_thickness, adjacency_distance, output_file
+        )
     except Exception as e:
         _logger.exception('Model translation failed.\n{}'.format(e))
         sys.exit(1)
@@ -81,12 +93,19 @@ def model_to_idm_cli(
         sys.exit(0)
 
 
-def model_to_idm(model_file, wall_thickness='0.4m', adjacency_distance='0.4m',
-                 output_file=None):
+def model_to_idm(
+    model_file, project_info=None, wall_thickness='0.4m', adjacency_distance='0.4m',
+    output_file=None
+):
     """Translate a Honeybee Model file to an IDA-ICE IDM file.
 
     Args:
         model_file: Full path to a Honeybee Model file (HBJSON or HBpkl).
+        project_info: Full path to a ladybug ProjectInfo JSON that describes
+            criteria about the project site. This will be used to fill in any
+            information that is not described in the sim_par_json or epw_file.
+            Otherwise, these two options override whatever is specified within
+            the project_info.
         wall_thickness: Maximum thickness of the interior walls. This can include
             the units of the distance (eg. 1.5ft) or, if no units are provided,
             the value will be assumed to be in meters (the native units of IDA-ICE).
@@ -114,6 +133,12 @@ def model_to_idm(model_file, wall_thickness='0.4m', adjacency_distance='0.4m',
     wall_thickness = parse_distance_string(str(wall_thickness), 'Meters')
     adjacency_distance = parse_distance_string(str(adjacency_distance), 'Meters')
 
+    # load the project information if it exists
+    if project_info is not None:
+        with open(project_info) as json_file:
+            data = json.load(json_file)
+        project_info = ProjectInfo.from_dict(data)
+
     # translate the Model to IDM
     model = Model.from_file(model_file)
     if isinstance(output_file, str):
@@ -121,9 +146,10 @@ def model_to_idm(model_file, wall_thickness='0.4m', adjacency_distance='0.4m',
         if not os.path.isdir(folder):
             os.makedirs(folder)
         model_to_idm_file(
-            model, folder, name=name, debug=False,
+            model, folder, name=name, project_info=project_info,
             max_int_wall_thickness=wall_thickness,
-            max_adjacent_sub_face_dist=adjacency_distance)
+            max_adjacent_sub_face_dist=adjacency_distance
+        )
     else:
         if output_file is None or output_file.name == '<stdout>':  # get a temporary file
             out_file = str(uuid.uuid4())[:6]
@@ -131,9 +157,10 @@ def model_to_idm(model_file, wall_thickness='0.4m', adjacency_distance='0.4m',
         else:
             out_folder, out_file = os.path.split(output_file.name)
         idm_file = model_to_idm_file(
-            model, out_folder, name=out_file, debug=False,
+            model, out_folder, name=out_file, project_info=project_info,
             max_int_wall_thickness=wall_thickness,
-            max_adjacent_sub_face_dist=adjacency_distance)
+            max_adjacent_sub_face_dist=adjacency_distance
+        )
         if output_file is None or output_file.name == '<stdout>':  # load file contents
             with open(idm_file, 'rb') as of:  # IDM can only be read as binary
                 f_contents = of.read()

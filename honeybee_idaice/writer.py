@@ -14,6 +14,7 @@ from honeybee.typing import number_string
 
 from .archive import zip_folder_to_idm
 from .bldgbody import section_to_idm, IDA_ICE_BUILDING_BODY_TOL
+from .site import project_info_to_climate_header
 from .typing import clean_idaice_string
 from .shade import shades_to_idm, shade_meshes_to_idm
 from .face import face_to_idm, opening_to_idm, face_reference_plane
@@ -418,15 +419,21 @@ def prepare_folder(bldg_name: str, out_folder: str) -> List[pathlib.Path]:
 
 
 def model_to_idm(
-        model: Model, out_folder: pathlib.Path, name: str = None,
-        max_int_wall_thickness: float = 0.40, max_adjacent_sub_face_dist: float = 0.40,
-        debug: bool = False):
+    model, out_folder, name=None, project_info=None,
+    max_int_wall_thickness=0.40, max_adjacent_sub_face_dist=0.40,
+    debug=False
+):
     """Translate a Honeybee model to an IDM file.
 
     Args:
         model: A honeybee model.
         out_folder: Output folder for idm file.
         name: Output IDM file name.
+        project_info: An optional ladybug ProjectInfo object that describes criteria
+            about the project site. When specified, this will result in the location
+            and north_angle written into the IDM. If a weather file has been associated
+            with the project_info, a .PRN file will be written from the EPW and
+            will be referenced within the IDM. (Default: None).
         max_int_wall_thickness: Maximum thickness of the interior wall in meters. IDA-ICE
             expects the input model to have a gap between the rooms that represents
             the wall thickness. This value must be smaller than the smallest Room
@@ -446,10 +453,10 @@ def model_to_idm(
             single file.
     """
     # check for the presence of rooms
-    VERSION = '5.11001'
+    VERSION = '5.2'
     if not model.rooms:
-        raise ValueError(
-            'The model must have at least have one room to translate to IDM.')
+        msg = 'The model must have at least have one room to translate to IDM.'
+        raise ValueError(msg)
 
     # duplicate model to avoid mutating it as we edit it for export
     # otherwise, we'll loose the original model if we want to do anything after export
@@ -515,6 +522,11 @@ def model_to_idm(
     __here__ = pathlib.Path(__file__).parent
     templates_folder = __here__.joinpath('templates')
 
+    # assemble the header for the climate info
+    climate_header = project_info_to_climate_header(project_info)
+    north_angle = 0 if project_info is None or project_info.north_angle == 0 \
+        else -project_info.north_angle
+
     # create building file that includes building bodies and a reference to the rooms
     with bldg_file.open('w', encoding='utf-8') as bldg:
         header = f';IDA {VERSION} Data UTF-8\n' \
@@ -522,6 +534,7 @@ def model_to_idm(
             '((RECENT (WINDEF . "Double Clear Air (WIN7)"))) ' \
             f':PARENT ICE :APP (ICE :VER {VERSION}))\n'
         bldg.write(header)
+        bldg.write(climate_header)
         # add template values
         bldg_template = templates_folder.joinpath('building.idm')
         for count, line in enumerate(bldg_template.open('r', encoding='utf-8')):
@@ -533,7 +546,8 @@ def model_to_idm(
 
         # site object
         site_idm = '((SITE-OBJECT :N SITE)\n' \
-            ' (:PAR :N SITE-AREA :V #(-100.0 -80.0 150.0 100.0))\n'
+            ' (:PAR :N SITE-AREA :V #(-100.0 -80.0 150.0 100.0))\n' \
+            ' (:PAR :N ORIENTATION :V {})\n'.format(north_angle)
         bldg.write(site_idm)
         has_shade = model.shade_meshes or model.shades
         if has_shade:
