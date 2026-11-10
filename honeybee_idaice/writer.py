@@ -1,4 +1,5 @@
 """Write an idm file from a HBJSON file."""
+import os
 import math
 import pathlib
 import shutil
@@ -13,8 +14,9 @@ from honeybee.boundarycondition import Surface
 from honeybee.typing import number_string
 
 from .archive import zip_folder_to_idm
+from .config import folders
 from .bldgbody import section_to_idm, IDA_ICE_BUILDING_BODY_TOL
-from .site import project_info_to_climate_header
+from .site import project_info_to_climate_header, epw_to_prn
 from .typing import clean_idaice_string
 from .shade import shades_to_idm, shade_meshes_to_idm
 from .face import face_to_idm, opening_to_idm, face_reference_plane
@@ -523,9 +525,18 @@ def model_to_idm(
     templates_folder = __here__.joinpath('templates')
 
     # assemble the header for the climate info
-    climate_header = project_info_to_climate_header(project_info)
+    climate_header, city = project_info_to_climate_header(project_info)
     north_angle = 0 if project_info is None or project_info.north_angle == 0 \
         else -project_info.north_angle
+    if project_info is not None and project_info.default_epw_file is not None \
+            and folders.default_prn_folder is not None:
+        prn_path = epw_to_prn(project_info.default_epw_file)
+        prn_base = os.path.basename(prn_path)[:-4]
+        with open(prn_path, 'r') as f:
+            start_air = f.readline().split()[1]
+        prn_path = 'clim:{}.prn'.format(prn_base)
+    else:
+        prn_path, start_air = 'clim:Kalmar.prn', '6.92'
 
     # create building file that includes building bodies and a reference to the rooms
     with bldg_file.open('w', encoding='utf-8') as bldg:
@@ -535,6 +546,7 @@ def model_to_idm(
             f':PARENT ICE :APP (ICE :VER {VERSION}))\n'
         bldg.write(header)
         bldg.write(climate_header)
+
         # add template values
         bldg_template = templates_folder.joinpath('building.idm')
         for count, line in enumerate(bldg_template.open('r', encoding='utf-8')):
@@ -542,6 +554,12 @@ def model_to_idm(
             # the start of the line
             if count == 0 and line[0] != '(':
                 line = line[1:]
+            if line.startswith('((SOURCE-FILE :DOCUMENT-PATH'):
+                line = line.replace('clim:Kalmar.prn', prn_path)
+            if line.startswith(' (:VAR :N TAIR :V 6.92'):
+                line = line.replace('6.92', start_air)
+            elif line.startswith('(:RES :N LOCATION :V '):
+                line = line.replace('Kalmar', city)
             bldg.write(line)
 
         # site object
