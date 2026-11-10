@@ -1,0 +1,4 @@
+{
+    "__comment__": "Add full paths to folders (eg. C:/prn_data, /usr/local/prn_data).",
+    "default_prn_folder": ""
+}

@@ -1,6 +1,58 @@
 """A module for functions related to IDM site and climate."""
+import os
+
 from ladybug.location import Location
 from ladybug.designday import ASHRAETau
+from ladybug.epw import EPW
+
+from .config import folders
+
+
+def epw_to_prn(epw_file, folder=None):
+    """Convert an .epw file into a .prn file for simulation with IDA ICE.
+
+    Args:
+        epw_file: A path to an EPW file to be converted to a PRN file for
+            IDA ICE simulation.
+        folder: The folder into which the PRN file will be written. If None,
+            it will be written into the folders.default_prn_folder.
+    """
+    # get the folder and check whether the .PRN file already exits
+    file_name = os.path.split(epw_file)[-1][:-4]
+    if folder is None:
+        folder = folders.default_prn_folder
+    elif not os.path.isdir(folder):
+        os.makedirs(folder)
+    prn = os.path.join(folder, file_name + '.PRN')
+    if os.path.isfile(prn):
+        return prn
+
+    # get the EPW file and the relevant data fields
+    epw_obj = EPW(epw_file)
+    zip_obj = zip(
+        list(range(len(epw_obj.dry_bulb_temperature))),
+        epw_obj.dry_bulb_temperature.values,
+        epw_obj.relative_humidity.values,
+        epw_obj.wind_direction.values,
+        epw_obj.wind_speed.values,
+        epw_obj.direct_normal_radiation.values,
+        epw_obj.diffuse_horizontal_radiation.values
+    )
+
+    # loop through the timesteps and build the PRN file contents
+    widths = [5, 8, 8, 8, 8, 8, 8]
+    prn_contents = []
+    for row in zip_obj:
+        formatted_items = [
+            f"{str(item):>{widths[i]}}" if i == 0 else
+            f"{item:>{widths[i]}.2f}" for i, item in enumerate(row)
+        ]
+        prn_contents.append(''.join(formatted_items))
+
+    # write the contents into the .PRN file
+    with open(prn, 'w') as pf:
+        pf.write('\n'.join(prn_contents))
+    return prn
 
 
 def project_info_to_climate_header(project_info=None):
@@ -14,28 +66,31 @@ def project_info_to_climate_header(project_info=None):
             will be referenced within the IDM. (Default: None).
     """
     # parse the project_info to get the location and north_angle
-    location, climate_location, year = None, None, None
+    location, climate_location, year, prn_path = None, None, None, None
     summer_day, winter_day = None, None
     if project_info is not None:
         location = project_info.location
         if project_info.location:
             location = project_info.location.duplicate()
-            year = location.source if location.source is not None else None
             for attr in ('city', 'country', 'station_id', 'source'):
                 if not getattr(location, attr):
                     setattr(location, attr, 'Unknown')
-        climate_location = project_info.default_epw_file.location \
-            if project_info.default_epw_file is not None else None
-        des_days = project_info.default_design_days
-        if len(des_days) != 0:
-            summer_days = [dd for dd in des_days if dd.day_type == 'SummerDesignDay']
-            if len(summer_days) != 0:
-                summer_day = max(summer_days, key=lambda dd: dd.dry_bulb_condition.dry_bulb_max)
-            winter_days = [dd for dd in des_days if dd.day_type == 'WinterDesignDay']
-            if len(winter_days) != 0:
-                winter_day = min(winter_days, key=lambda dd: dd.dry_bulb_condition.dry_bulb_max)
+        if folders.default_prn_folder and project_info.default_epw_file:
+            # use the weather file in the project info for the simulation
+            climate_location = EPW(project_info.default_epw_file).location
+            year = climate_location.source if climate_location.source is not None else None
+            prn_base = os.path.basename(project_info.default_epw_file)[:-4]
+            prn_path = prn_base + '.PRN'
+            des_days = project_info.default_design_days
+            if len(des_days) != 0:
+                sds = [dd for dd in des_days if dd.day_type == 'SummerDesignDay']
+                if len(sds) != 0:
+                    summer_day = max(sds, key=lambda dd: dd.dry_bulb_condition.dry_bulb_max)
+                wds = [dd for dd in des_days if dd.day_type == 'WinterDesignDay']
+                if len(wds) != 0:
+                    winter_day = min(wds, key=lambda dd: dd.dry_bulb_condition.dry_bulb_max)
 
-    # use the default location of Sweden if none has been specified
+    # use the default location of Sweden if no weather file has been specified
     default_location = Location(
         city='Kalmar', country='Sweden',
         latitude=56.73, longitude=16.3, time_zone=1, elevation=16,
@@ -50,6 +105,8 @@ def project_info_to_climate_header(project_info=None):
         climate_location.elevation = 0
     if year is None:
         year = '1968'
+    if prn_path is None:
+        prn_path = 'Kalmar.prn'
 
     # use the default summer design day of Sweden if none has been specified
     if summer_day is None:
@@ -121,7 +178,7 @@ def project_info_to_climate_header(project_info=None):
         ' (:ORES :N CLIMATE-DEF :V "{c_city}-{year}")\n' \
         ' (:PAR :N DESIGN-WEATHER-FILE :V "ASHRAE 2013\\026720.tbl"))\n' \
         '((CLIMATE-DEF :N "{c_city}-{year}" :T CLIMATE-DEF :D "{st_id} weather station in {c_city}")\n' \
-        ' (:PAR :N FILENAME :V "{c_city}.prn")\n' \
+        ' (:PAR :N FILENAME :V "{prn_path}")\n' \
         ' (:PAR :N STATION :V "{c_city}")\n' \
         ' (:PAR :N COUNTRY :V "{c_country}")\n' \
         ' (:PAR :N LATITUDE :V {c_lat})\n' \
@@ -129,7 +186,7 @@ def project_info_to_climate_header(project_info=None):
         ' (:PAR :N ELEVATION :V {c_elev})\n' \
         ' (:PAR :N TIME_ZONE :V {c_tz})\n' \
         ' (:PAR :N WIND-HEIGHT :V 10))\n'.format(
-            city=location.city, country=location.country, year=year,
+            city=location.city, country=location.country, year=year, prn_path=prn_path,
             lat=location.latitude, long=-location.longitude,
             elev=location.elevation, tz=-location.time_zone,
             st_id=climate_location.station_id, source=climate_location.source,
@@ -143,4 +200,4 @@ def project_info_to_climate_header(project_info=None):
             sum_wind_dir=sum_wind_dir, sum_wind_vel=sum_wind_vel,
             sum_tau_b=sum_tau_b, sum_tau_d=sum_tau_d, sum_clear=sum_clear
         )
-    return climate_header
+    return climate_header, location.city
