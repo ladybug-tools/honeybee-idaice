@@ -20,6 +20,8 @@ def epw_to_prn(epw_file, folder=None):
     # get the folder and check whether the .PRN file already exits
     file_name = os.path.split(epw_file)[-1][:-4]
     if folder is None:
+        if folders.default_prn_folder is None:
+            return None
         folder = folders.default_prn_folder
     elif not os.path.isdir(folder):
         os.makedirs(folder)
