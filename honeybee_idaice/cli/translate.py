@@ -5,7 +5,6 @@ import os
 import logging
 import base64
 import tempfile
-import json
 import uuid
 
 from ladybug.projectinfo import ProjectInfo
@@ -135,9 +134,7 @@ def model_to_idm(
 
     # load the project information if it exists
     if project_info is not None:
-        with open(project_info) as json_file:
-            data = json.load(json_file)
-        project_info = ProjectInfo.from_dict(data)
+        project_info = ProjectInfo.from_json(project_info)
 
     # translate the Model to IDM
     model = Model.from_file(model_file)
