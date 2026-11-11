@@ -1,0 +1,7 @@
+honeybee\_idaice.bldgbody module
+================================
+
+.. automodule:: honeybee_idaice.bldgbody
+   :members:
+   :undoc-members:
+   :show-inheritance:

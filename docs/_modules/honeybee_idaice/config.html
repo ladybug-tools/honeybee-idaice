@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>honeybee_idaice.config &#8212; honeybee-idaice  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=0bf093e7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e6365d57" />
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<link rel="icon" type="image/x-icon" href="https://github.com/ladybug-tools/artwork/raw/refs/heads/master/icons_bugs/ico/honeybee.ico">
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          honeybee-idaice</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cli/index.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli/index.html#commands">Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cli/translate.html">translate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../cli/translate.html#honeybee-idaice-translate">honeybee-idaice translate</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../cli/translate.html#honeybee-idaice-translate-model-to-idm">model-to-idm</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.cli.html">honeybee_idaice.cli package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.cli.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../honeybee_idaice.cli.translate.html">honeybee_idaice.cli.translate module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="../../honeybee_idaice.cli.translate.html#honeybee_idaice.cli.translate.model_to_idm"><code class="docutils literal notranslate"><span class="pre">model_to_idm()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.cli.html#module-honeybee_idaice.cli">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.properties.html">honeybee_idaice.properties package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.properties.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../honeybee_idaice.properties.model.html">honeybee_idaice.properties.model module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties"><code class="docutils literal notranslate"><span class="pre">ModelIDAICEProperties</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.ToString"><code class="docutils literal notranslate"><span class="pre">ToString()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.apply_properties_from_dict"><code class="docutils literal notranslate"><span class="pre">apply_properties_from_dict()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.check_for_extension"><code class="docutils literal notranslate"><span class="pre">check_for_extension()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.to_dict"><code class="docutils literal notranslate"><span class="pre">to_dict()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.host"><code class="docutils literal notranslate"><span class="pre">host</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.properties.html#module-honeybee_idaice.properties">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.archive.html">honeybee_idaice.archive module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.archive.html#honeybee_idaice.archive.zip_folder_to_idm"><code class="docutils literal notranslate"><span class="pre">zip_folder_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.bldgbody.html">honeybee_idaice.bldgbody module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.bldgbody.html#honeybee_idaice.bldgbody.section_to_idm"><code class="docutils literal notranslate"><span class="pre">section_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.config.html">honeybee_idaice.config module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.config.html#honeybee_idaice.config.Folders"><code class="docutils literal notranslate"><span class="pre">Folders</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../honeybee_idaice.config.html#honeybee_idaice.config.Folders.config_file"><code class="docutils literal notranslate"><span class="pre">config_file</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../honeybee_idaice.config.html#honeybee_idaice.config.Folders.default_prn_folder"><code class="docutils literal notranslate"><span class="pre">default_prn_folder</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.face.html">honeybee_idaice.face module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.face.html#honeybee_idaice.face.face_reference_plane"><code class="docutils literal notranslate"><span class="pre">face_reference_plane()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.face.html#honeybee_idaice.face.face_to_idm"><code class="docutils literal notranslate"><span class="pre">face_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.face.html#honeybee_idaice.face.opening_to_idm"><code class="docutils literal notranslate"><span class="pre">opening_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.shade.html">honeybee_idaice.shade module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.shade.html#honeybee_idaice.shade.shade_meshes_to_idm"><code class="docutils literal notranslate"><span class="pre">shade_meshes_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.shade.html#honeybee_idaice.shade.shades_to_idm"><code class="docutils literal notranslate"><span class="pre">shades_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.site.html">honeybee_idaice.site module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.site.html#honeybee_idaice.site.epw_to_prn"><code class="docutils literal notranslate"><span class="pre">epw_to_prn()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.site.html#honeybee_idaice.site.project_info_to_climate_header"><code class="docutils literal notranslate"><span class="pre">project_info_to_climate_header()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.typing.html">honeybee_idaice.typing module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.typing.html#honeybee_idaice.typing.clean_idaice_string"><code class="docutils literal notranslate"><span class="pre">clean_idaice_string()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.writer.html">honeybee_idaice.writer module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.ceilings_to_idm"><code class="docutils literal notranslate"><span class="pre">ceilings_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.deconstruct_room"><code class="docutils literal notranslate"><span class="pre">deconstruct_room()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.model_to_idm"><code class="docutils literal notranslate"><span class="pre">model_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.prepare_folder"><code class="docutils literal notranslate"><span class="pre">prepare_folder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.prepare_model"><code class="docutils literal notranslate"><span class="pre">prepare_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.room_to_idm"><code class="docutils literal notranslate"><span class="pre">room_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.writer_obj.html">honeybee_idaice.writer_obj module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer_obj.html#honeybee_idaice.writer_obj.hbjson_to_idm_obj"><code class="docutils literal notranslate"><span class="pre">hbjson_to_idm_obj()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#module-honeybee_idaice">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-4">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="body col-md-8 content" role="main">
+      
+  <h1>Source code for honeybee_idaice.config</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Honeybee-IdaIce configurations.</span>
+
+<span class="sd">Import this into every module where access configurations are needed.</span>
+
+<span class="sd">Usage:</span>
+<span class="sd">    from honeybee_idaice.config import folders</span>
+<span class="sd">    print(folders.default_prn_folder)</span>
+<span class="sd">    folders.default_prn_folder = "C:/prn_data"</span>
+<span class="sd">"""</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+
+<div class="viewcode-block" id="Folders">
+<a class="viewcode-back" href="../../honeybee_idaice.config.html#honeybee_idaice.config.Folders">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Folders</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Ladybug folders.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        config_file: The path to the config.json file from which folders are loaded.</span>
+<span class="sd">            If None, the config.json module included in this package will be used.</span>
+<span class="sd">            Default: None.</span>
+<span class="sd">        mute: If False, the paths to the various folders will be printed as they</span>
+<span class="sd">            are found. If True, no printing will occur upon initialization of this</span>
+<span class="sd">            class. Default: True.</span>
+
+<span class="sd">    Properties:</span>
+<span class="sd">        * default_prn_folder</span>
+<span class="sd">        * config_file</span>
+<span class="sd">        * mute</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mute</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="c1"># set the mute value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mute</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">mute</span><span class="p">)</span>
+
+        <span class="c1"># load paths from the config JSON file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_file</span> <span class="o">=</span> <span class="n">config_file</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">default_prn_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Get or set the path to the default folder where PRN files are stored."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_prn_folder</span>
+
+    <span class="nd">@default_prn_folder</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">default_prn_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>  <span class="c1"># check the default location for prn files</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_default_prn_folder</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_default_prn_folder</span> <span class="o">=</span> <span class="n">path</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">mute</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_prn_folder</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">'Path to the default prn folder is set to: '</span>
+                  <span class="s1">'</span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_default_prn_folder</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">config_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Get or set the path to the config.json file from which folders are loaded.</span>
+
+<span class="sd">        Setting this to None will result in using the config.json module included</span>
+<span class="sd">        in this package.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config_file</span>
+
+    <span class="nd">@config_file</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">config_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">cfg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cfg</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">'config.json'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load_from_file</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_config_file</span> <span class="o">=</span> <span class="n">cfg</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Set all of the the properties of this object from a config JSON file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file_path: Path to a JSON file containing the file paths. A sample of this</span>
+<span class="sd">                JSON is the config.json file within this package.</span>
+<span class="sd">        """</span>
+        <span class="c1"># set the default paths to be all blank</span>
+        <span class="n">default_path</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"default_prn_folder"</span><span class="p">:</span> <span class="sa">r</span><span class="s1">''</span>
+        <span class="p">}</span>
+
+        <span class="c1"># load any attributes that have been set in the config.json</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">cfg</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">paths</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">'Failed to load paths from </span><span class="si">{}</span><span class="s1">.</span><span class="se">\n</span><span class="s1">They will be set to defaults '</span>
+                          <span class="s1">'instead</span><span class="se">\n</span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'__'</span><span class="p">)</span> <span class="ow">and</span> <span class="n">p</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                            <span class="n">default_path</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="c1"># set paths for the ladybug_tools_folder and default_prn_folder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default_prn_folder</span> <span class="o">=</span> <span class="n">default_path</span><span class="p">[</span><span class="s2">"default_prn_folder"</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_default_prn_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Find the the default PRN folder in its usual location.</span>
+
+<span class="sd">        An attempt will be made to create the directory if it does not already exist.</span>
+<span class="sd">        """</span>
+        <span class="c1"># first check if there's a user-defined folder in AppData</span>
+        <span class="n">app_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">'APPDATA'</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">app_folder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">prn_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">app_folder</span><span class="p">,</span> <span class="s1">'Equa'</span><span class="p">,</span> <span class="s1">'IDA'</span><span class="p">,</span> <span class="s1">'climate'</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">prn_folder</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">prn_folder</span>
+        <span class="c1"># if we're not on Windows, just use the ladybug_tools epw folder</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<span class="sd">"""Object possessing all key folders within the configuration."""</span>
+<span class="n">folders</span> <span class="o">=</span> <span class="n">Folders</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2026, Ladybug Tools.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.0.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

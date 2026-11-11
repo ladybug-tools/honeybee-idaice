@@ -1,0 +1,7 @@
+honeybee\_idaice.config module
+==============================
+
+.. automodule:: honeybee_idaice.config
+   :members:
+   :undoc-members:
+   :show-inheritance:

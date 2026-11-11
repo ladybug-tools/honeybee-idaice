@@ -1,0 +1,7 @@
+honeybee\_idaice.site module
+============================
+
+.. automodule:: honeybee_idaice.site
+   :members:
+   :undoc-members:
+   :show-inheritance:

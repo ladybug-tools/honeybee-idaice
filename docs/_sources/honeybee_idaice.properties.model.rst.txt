@@ -1,0 +1,7 @@
+honeybee\_idaice.properties.model module
+========================================
+
+.. automodule:: honeybee_idaice.properties.model
+   :members:
+   :undoc-members:
+   :show-inheritance:

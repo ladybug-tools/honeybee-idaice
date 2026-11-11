@@ -1,0 +1,7 @@
+honeybee\_idaice.shade module
+=============================
+
+.. automodule:: honeybee_idaice.shade
+   :members:
+   :undoc-members:
+   :show-inheritance:

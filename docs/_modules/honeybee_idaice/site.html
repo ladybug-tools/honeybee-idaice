@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>honeybee_idaice.site &#8212; honeybee-idaice  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=0bf093e7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e6365d57" />
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<link rel="icon" type="image/x-icon" href="https://github.com/ladybug-tools/artwork/raw/refs/heads/master/icons_bugs/ico/honeybee.ico">
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          honeybee-idaice</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cli/index.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli/index.html#commands">Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cli/translate.html">translate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../cli/translate.html#honeybee-idaice-translate">honeybee-idaice translate</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../cli/translate.html#honeybee-idaice-translate-model-to-idm">model-to-idm</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.cli.html">honeybee_idaice.cli package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.cli.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../honeybee_idaice.cli.translate.html">honeybee_idaice.cli.translate module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="../../honeybee_idaice.cli.translate.html#honeybee_idaice.cli.translate.model_to_idm"><code class="docutils literal notranslate"><span class="pre">model_to_idm()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.cli.html#module-honeybee_idaice.cli">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.properties.html">honeybee_idaice.properties package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.properties.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../honeybee_idaice.properties.model.html">honeybee_idaice.properties.model module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties"><code class="docutils literal notranslate"><span class="pre">ModelIDAICEProperties</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.ToString"><code class="docutils literal notranslate"><span class="pre">ToString()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.apply_properties_from_dict"><code class="docutils literal notranslate"><span class="pre">apply_properties_from_dict()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.check_for_extension"><code class="docutils literal notranslate"><span class="pre">check_for_extension()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.to_dict"><code class="docutils literal notranslate"><span class="pre">to_dict()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="../../honeybee_idaice.properties.model.html#honeybee_idaice.properties.model.ModelIDAICEProperties.host"><code class="docutils literal notranslate"><span class="pre">host</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.properties.html#module-honeybee_idaice.properties">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.archive.html">honeybee_idaice.archive module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.archive.html#honeybee_idaice.archive.zip_folder_to_idm"><code class="docutils literal notranslate"><span class="pre">zip_folder_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.bldgbody.html">honeybee_idaice.bldgbody module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.bldgbody.html#honeybee_idaice.bldgbody.section_to_idm"><code class="docutils literal notranslate"><span class="pre">section_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.config.html">honeybee_idaice.config module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.config.html#honeybee_idaice.config.Folders"><code class="docutils literal notranslate"><span class="pre">Folders</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../honeybee_idaice.config.html#honeybee_idaice.config.Folders.config_file"><code class="docutils literal notranslate"><span class="pre">config_file</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../honeybee_idaice.config.html#honeybee_idaice.config.Folders.default_prn_folder"><code class="docutils literal notranslate"><span class="pre">default_prn_folder</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.face.html">honeybee_idaice.face module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.face.html#honeybee_idaice.face.face_reference_plane"><code class="docutils literal notranslate"><span class="pre">face_reference_plane()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.face.html#honeybee_idaice.face.face_to_idm"><code class="docutils literal notranslate"><span class="pre">face_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.face.html#honeybee_idaice.face.opening_to_idm"><code class="docutils literal notranslate"><span class="pre">opening_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.shade.html">honeybee_idaice.shade module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.shade.html#honeybee_idaice.shade.shade_meshes_to_idm"><code class="docutils literal notranslate"><span class="pre">shade_meshes_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.shade.html#honeybee_idaice.shade.shades_to_idm"><code class="docutils literal notranslate"><span class="pre">shades_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.site.html">honeybee_idaice.site module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.site.html#honeybee_idaice.site.epw_to_prn"><code class="docutils literal notranslate"><span class="pre">epw_to_prn()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.site.html#honeybee_idaice.site.project_info_to_climate_header"><code class="docutils literal notranslate"><span class="pre">project_info_to_climate_header()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.typing.html">honeybee_idaice.typing module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.typing.html#honeybee_idaice.typing.clean_idaice_string"><code class="docutils literal notranslate"><span class="pre">clean_idaice_string()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.writer.html">honeybee_idaice.writer module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.ceilings_to_idm"><code class="docutils literal notranslate"><span class="pre">ceilings_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.deconstruct_room"><code class="docutils literal notranslate"><span class="pre">deconstruct_room()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.model_to_idm"><code class="docutils literal notranslate"><span class="pre">model_to_idm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.prepare_folder"><code class="docutils literal notranslate"><span class="pre">prepare_folder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.prepare_model"><code class="docutils literal notranslate"><span class="pre">prepare_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer.html#honeybee_idaice.writer.room_to_idm"><code class="docutils literal notranslate"><span class="pre">room_to_idm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../honeybee_idaice.writer_obj.html">honeybee_idaice.writer_obj module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../honeybee_idaice.writer_obj.html#honeybee_idaice.writer_obj.hbjson_to_idm_obj"><code class="docutils literal notranslate"><span class="pre">hbjson_to_idm_obj()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../honeybee_idaice.html#module-honeybee_idaice">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-4">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/index.html">CLI Docs</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../honeybee_idaice.html">honeybee_idaice package</a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="body col-md-8 content" role="main">
+      
+  <h1>Source code for honeybee_idaice.site</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""A module for functions related to IDM site and climate."""</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ladybug.location</span><span class="w"> </span><span class="kn">import</span> <span class="n">Location</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ladybug.designday</span><span class="w"> </span><span class="kn">import</span> <span class="n">ASHRAETau</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ladybug.epw</span><span class="w"> </span><span class="kn">import</span> <span class="n">EPW</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">folders</span>
+
+
+<div class="viewcode-block" id="epw_to_prn">
+<a class="viewcode-back" href="../../honeybee_idaice.site.html#honeybee_idaice.site.epw_to_prn">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">epw_to_prn</span><span class="p">(</span><span class="n">epw_file</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Convert an .epw file into a .prn file for simulation with IDA ICE.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        epw_file: A path to an EPW file to be converted to a PRN file for</span>
+<span class="sd">            IDA ICE simulation.</span>
+<span class="sd">        folder: The folder into which the PRN file will be written. If None,</span>
+<span class="sd">            it will be written into the folders.default_prn_folder.</span>
+<span class="sd">    """</span>
+    <span class="c1"># get the folder and check whether the .PRN file already exits</span>
+    <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">epw_file</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">folder</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">folders</span><span class="o">.</span><span class="n">default_prn_folder</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">folder</span> <span class="o">=</span> <span class="n">folders</span><span class="o">.</span><span class="n">default_prn_folder</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">folder</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+    <span class="n">prn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">+</span> <span class="s1">'.PRN'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">prn</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">prn</span>
+
+    <span class="c1"># get the EPW file and the relevant data fields</span>
+    <span class="n">epw_obj</span> <span class="o">=</span> <span class="n">EPW</span><span class="p">(</span><span class="n">epw_file</span><span class="p">)</span>
+    <span class="n">zip_obj</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span>
+        <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">epw_obj</span><span class="o">.</span><span class="n">dry_bulb_temperature</span><span class="p">))),</span>
+        <span class="n">epw_obj</span><span class="o">.</span><span class="n">dry_bulb_temperature</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+        <span class="n">epw_obj</span><span class="o">.</span><span class="n">relative_humidity</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+        <span class="n">epw_obj</span><span class="o">.</span><span class="n">wind_direction</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+        <span class="n">epw_obj</span><span class="o">.</span><span class="n">wind_speed</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+        <span class="n">epw_obj</span><span class="o">.</span><span class="n">direct_normal_radiation</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+        <span class="n">epw_obj</span><span class="o">.</span><span class="n">diffuse_horizontal_radiation</span><span class="o">.</span><span class="n">values</span>
+    <span class="p">)</span>
+
+    <span class="c1"># loop through the timesteps and build the PRN file contents</span>
+    <span class="n">widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+    <span class="n">prn_contents</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">zip_obj</span><span class="p">:</span>
+        <span class="n">formatted_items</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="si">:</span><span class="s2">&gt;</span><span class="si">{</span><span class="n">widths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}}</span><span class="s2">"</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">item</span><span class="si">:</span><span class="s2">&gt;</span><span class="si">{</span><span class="n">widths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">prn_contents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">formatted_items</span><span class="p">))</span>
+
+    <span class="c1"># write the contents into the .PRN file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">prn</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="k">as</span> <span class="n">pf</span><span class="p">:</span>
+        <span class="n">pf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prn_contents</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">prn</span></div>
+
+
+
+<div class="viewcode-block" id="project_info_to_climate_header">
+<a class="viewcode-back" href="../../honeybee_idaice.site.html#honeybee_idaice.site.project_info_to_climate_header">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">project_info_to_climate_header</span><span class="p">(</span><span class="n">project_info</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Get a string for the header with climate and project information.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        project_info: An optional ladybug ProjectInfo object that describes criteria</span>
+<span class="sd">            about the project site. When specified, this will result in the location</span>
+<span class="sd">            and north_angle written into the IDM. If a weather file has been associated</span>
+<span class="sd">            with the project_info, a .PRN file will be written from the EPW and</span>
+<span class="sd">            will be referenced within the IDM. (Default: None).</span>
+<span class="sd">    """</span>
+    <span class="c1"># parse the project_info to get the location and north_angle</span>
+    <span class="n">location</span><span class="p">,</span> <span class="n">climate_location</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">prn_path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">summer_day</span><span class="p">,</span> <span class="n">winter_day</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">project_info</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="n">project_info</span><span class="o">.</span><span class="n">location</span>
+        <span class="k">if</span> <span class="n">project_info</span><span class="o">.</span><span class="n">location</span><span class="p">:</span>
+            <span class="n">location</span> <span class="o">=</span> <span class="n">project_info</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">duplicate</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">'city'</span><span class="p">,</span> <span class="s1">'country'</span><span class="p">,</span> <span class="s1">'station_id'</span><span class="p">,</span> <span class="s1">'source'</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="s1">'Unknown'</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">folders</span><span class="o">.</span><span class="n">default_prn_folder</span> <span class="ow">and</span> <span class="n">project_info</span><span class="o">.</span><span class="n">default_epw_file</span><span class="p">:</span>
+            <span class="c1"># use the weather file in the project info for the simulation</span>
+            <span class="n">climate_location</span> <span class="o">=</span> <span class="n">EPW</span><span class="p">(</span><span class="n">project_info</span><span class="o">.</span><span class="n">default_epw_file</span><span class="p">)</span><span class="o">.</span><span class="n">location</span>
+            <span class="n">year</span> <span class="o">=</span> <span class="n">climate_location</span><span class="o">.</span><span class="n">source</span> <span class="k">if</span> <span class="n">climate_location</span><span class="o">.</span><span class="n">source</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="n">prn_base</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">project_info</span><span class="o">.</span><span class="n">default_epw_file</span><span class="p">)[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+            <span class="n">prn_path</span> <span class="o">=</span> <span class="n">prn_base</span> <span class="o">+</span> <span class="s1">'.PRN'</span>
+            <span class="n">des_days</span> <span class="o">=</span> <span class="n">project_info</span><span class="o">.</span><span class="n">default_design_days</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">des_days</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">sds</span> <span class="o">=</span> <span class="p">[</span><span class="n">dd</span> <span class="k">for</span> <span class="n">dd</span> <span class="ow">in</span> <span class="n">des_days</span> <span class="k">if</span> <span class="n">dd</span><span class="o">.</span><span class="n">day_type</span> <span class="o">==</span> <span class="s1">'SummerDesignDay'</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sds</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">summer_day</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">sds</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">dd</span><span class="p">:</span> <span class="n">dd</span><span class="o">.</span><span class="n">dry_bulb_condition</span><span class="o">.</span><span class="n">dry_bulb_max</span><span class="p">)</span>
+                <span class="n">wds</span> <span class="o">=</span> <span class="p">[</span><span class="n">dd</span> <span class="k">for</span> <span class="n">dd</span> <span class="ow">in</span> <span class="n">des_days</span> <span class="k">if</span> <span class="n">dd</span><span class="o">.</span><span class="n">day_type</span> <span class="o">==</span> <span class="s1">'WinterDesignDay'</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wds</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">winter_day</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">wds</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">dd</span><span class="p">:</span> <span class="n">dd</span><span class="o">.</span><span class="n">dry_bulb_condition</span><span class="o">.</span><span class="n">dry_bulb_max</span><span class="p">)</span>
+
+    <span class="c1"># use the default location of Sweden if no weather file has been specified</span>
+    <span class="n">default_location</span> <span class="o">=</span> <span class="n">Location</span><span class="p">(</span>
+        <span class="n">city</span><span class="o">=</span><span class="s1">'Kalmar'</span><span class="p">,</span> <span class="n">country</span><span class="o">=</span><span class="s1">'Sweden'</span><span class="p">,</span>
+        <span class="n">latitude</span><span class="o">=</span><span class="mf">56.73</span><span class="p">,</span> <span class="n">longitude</span><span class="o">=</span><span class="mf">16.3</span><span class="p">,</span> <span class="n">time_zone</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">elevation</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+        <span class="n">source</span><span class="o">=</span><span class="s1">'ASHRAE Fundamentals 2013'</span><span class="p">,</span>
+        <span class="n">station_id</span><span class="o">=</span><span class="s1">'SMHI weather station in Kalmar'</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">location</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="n">default_location</span>
+    <span class="k">if</span> <span class="n">climate_location</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">climate_location</span> <span class="o">=</span> <span class="n">default_location</span><span class="o">.</span><span class="n">duplicate</span><span class="p">()</span>
+        <span class="n">climate_location</span><span class="o">.</span><span class="n">latitude</span> <span class="o">=</span> <span class="mf">56.68</span>
+        <span class="n">climate_location</span><span class="o">.</span><span class="n">elevation</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">year</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="s1">'1968'</span>
+    <span class="k">if</span> <span class="n">prn_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">prn_path</span> <span class="o">=</span> <span class="s1">'Kalmar.prn'</span>
+
+    <span class="c1"># use the default summer design day of Sweden if none has been specified</span>
+    <span class="k">if</span> <span class="n">summer_day</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sum_db_min</span><span class="p">,</span> <span class="n">sum_db_max</span><span class="p">,</span> <span class="n">sum_wb_max</span> <span class="o">=</span> <span class="mf">12.7</span><span class="p">,</span> <span class="mf">27.1</span><span class="p">,</span> <span class="mf">18.7</span>
+        <span class="n">sum_wind_dir</span><span class="p">,</span> <span class="n">sum_wind_vel</span> <span class="o">=</span> <span class="mi">180</span><span class="p">,</span> <span class="mf">4.5</span>
+        <span class="n">sum_tau_b</span><span class="p">,</span> <span class="n">sum_tau_d</span><span class="p">,</span> <span class="n">sum_clear</span> <span class="o">=</span> <span class="mf">0.343</span><span class="p">,</span> <span class="mf">2.423</span><span class="p">,</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sum_db</span><span class="p">,</span> <span class="n">sum_humid</span> <span class="o">=</span> <span class="n">summer_day</span><span class="o">.</span><span class="n">dry_bulb_condition</span><span class="p">,</span> <span class="n">summer_day</span><span class="o">.</span><span class="n">humidity_condition</span>
+        <span class="n">sum_wind</span><span class="p">,</span> <span class="n">sum_sky</span> <span class="o">=</span> <span class="n">summer_day</span><span class="o">.</span><span class="n">wind_condition</span><span class="p">,</span> <span class="n">summer_day</span><span class="o">.</span><span class="n">sky_condition</span>
+        <span class="n">sum_db_max</span> <span class="o">=</span> <span class="n">sum_db</span><span class="o">.</span><span class="n">dry_bulb_max</span>
+        <span class="n">sum_db_min</span> <span class="o">=</span> <span class="n">sum_db</span><span class="o">.</span><span class="n">dry_bulb_max</span> <span class="o">-</span> <span class="n">sum_db</span><span class="o">.</span><span class="n">dry_bulb_range</span>
+        <span class="k">if</span> <span class="n">sum_humid</span><span class="o">.</span><span class="n">humidity_type</span> <span class="o">==</span> <span class="s1">'Wetbulb'</span><span class="p">:</span>
+            <span class="n">sum_wb_max</span> <span class="o">=</span> <span class="n">sum_humid</span><span class="o">.</span><span class="n">humidity_value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sum_wb_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">sum_humid</span><span class="o">.</span><span class="n">hourly_dew_point_values</span><span class="p">(</span><span class="n">sum_db</span><span class="p">))</span>
+        <span class="n">sum_wind_dir</span><span class="p">,</span> <span class="n">sum_wind_vel</span> <span class="o">=</span> <span class="n">sum_wind</span><span class="o">.</span><span class="n">wind_direction</span><span class="p">,</span> <span class="n">sum_wind</span><span class="o">.</span><span class="n">wind_speed</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sum_sky</span><span class="p">,</span> <span class="n">ASHRAETau</span><span class="p">):</span>
+            <span class="n">sum_tau_b</span><span class="p">,</span> <span class="n">sum_tau_d</span><span class="p">,</span> <span class="n">sum_clear</span> <span class="o">=</span> <span class="n">sum_sky</span><span class="o">.</span><span class="n">tau_b</span><span class="p">,</span> <span class="n">sum_sky</span><span class="o">.</span><span class="n">tau_d</span><span class="p">,</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sum_tau_b</span><span class="p">,</span> <span class="n">sum_tau_d</span><span class="p">,</span> <span class="n">sum_clear</span> <span class="o">=</span> <span class="mf">0.343</span><span class="p">,</span> <span class="mf">2.423</span><span class="p">,</span> <span class="n">sum_sky</span><span class="o">.</span><span class="n">clearness</span>
+
+    <span class="c1"># use the default winter design day of Sweden if none has been specified</span>
+    <span class="k">if</span> <span class="n">winter_day</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">win_db_min</span><span class="p">,</span> <span class="n">win_db_max</span><span class="p">,</span> <span class="n">win_wb_max</span> <span class="o">=</span> <span class="o">-</span><span class="mf">14.3</span><span class="p">,</span> <span class="o">-</span><span class="mf">9.3</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.2</span>
+        <span class="n">win_wind_dir</span><span class="p">,</span> <span class="n">win_wind_vel</span> <span class="o">=</span> <span class="mi">340</span><span class="p">,</span> <span class="mf">1.7</span>
+        <span class="n">win_tau_b</span><span class="p">,</span> <span class="n">win_tau_d</span><span class="p">,</span> <span class="n">win_clear</span> <span class="o">=</span> <span class="mf">0.394</span><span class="p">,</span> <span class="mf">2.366</span><span class="p">,</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">win_db</span><span class="p">,</span> <span class="n">win_humid</span> <span class="o">=</span> <span class="n">winter_day</span><span class="o">.</span><span class="n">dry_bulb_condition</span><span class="p">,</span> <span class="n">winter_day</span><span class="o">.</span><span class="n">humidity_condition</span>
+        <span class="n">win_wind</span><span class="p">,</span> <span class="n">win_sky</span> <span class="o">=</span> <span class="n">winter_day</span><span class="o">.</span><span class="n">wind_condition</span><span class="p">,</span> <span class="n">winter_day</span><span class="o">.</span><span class="n">sky_condition</span>
+        <span class="n">win_db_max</span> <span class="o">=</span> <span class="n">win_db</span><span class="o">.</span><span class="n">dry_bulb_max</span>
+        <span class="n">win_db_min</span> <span class="o">=</span> <span class="n">win_db</span><span class="o">.</span><span class="n">dry_bulb_max</span> <span class="o">-</span> <span class="n">win_db</span><span class="o">.</span><span class="n">dry_bulb_range</span>
+        <span class="k">if</span> <span class="n">win_humid</span><span class="o">.</span><span class="n">humidity_type</span> <span class="o">==</span> <span class="s1">'Wetbulb'</span><span class="p">:</span>
+            <span class="n">win_wb_max</span> <span class="o">=</span> <span class="n">win_humid</span><span class="o">.</span><span class="n">humidity_value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">win_wb_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">win_humid</span><span class="o">.</span><span class="n">hourly_dew_point_values</span><span class="p">(</span><span class="n">win_db</span><span class="p">))</span>
+        <span class="n">win_wind_dir</span><span class="p">,</span> <span class="n">win_wind_vel</span> <span class="o">=</span> <span class="n">win_wind</span><span class="o">.</span><span class="n">wind_direction</span><span class="p">,</span> <span class="n">win_wind</span><span class="o">.</span><span class="n">wind_speed</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">win_sky</span><span class="p">,</span> <span class="n">ASHRAETau</span><span class="p">):</span>
+            <span class="n">win_tau_b</span><span class="p">,</span> <span class="n">win_tau_d</span><span class="p">,</span> <span class="n">win_clear</span> <span class="o">=</span> <span class="n">win_sky</span><span class="o">.</span><span class="n">tau_b</span><span class="p">,</span> <span class="n">win_sky</span><span class="o">.</span><span class="n">tau_d</span><span class="p">,</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">win_tau_b</span><span class="p">,</span> <span class="n">win_tau_d</span><span class="p">,</span> <span class="n">win_clear</span> <span class="o">=</span> <span class="mf">0.394</span><span class="p">,</span> <span class="mf">2.366</span><span class="p">,</span> <span class="n">win_sky</span><span class="o">.</span><span class="n">clearness</span>
+
+    <span class="c1"># assemble the header for the climate info</span>
+    <span class="n">climate_header</span> <span class="o">=</span> \
+        <span class="s1">'((LOCATION :N "</span><span class="si">{city}</span><span class="s1">" :T LOCATION :D "Data from </span><span class="si">{source}</span><span class="s1">")</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' (:PAR :N COUNTRY :V "</span><span class="si">{country}</span><span class="s1">")</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' (:PAR :N CITY :V "</span><span class="si">{city}</span><span class="s1">")</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' (:PAR :N LATITUDE :V </span><span class="si">{lat}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' (:PAR :N LONGITUDE :V </span><span class="si">{long}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' (:PAR :N ELEVATION :V </span><span class="si">{elev}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' (:PAR :N TIME_ZONE :V </span><span class="si">{tz}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' ((DESIGN-DAY :N WINTER-DESIGN-DAY)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">'  (:PAR :N DRY-BULB-MIN :F 128 :V </span><span class="si">{win_db_min}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">'  (:PAR :N DRY-BULB-MAX :F 128 :V </span><span class="si">{win_db_max}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">'  (:PAR :N WET-BULB-MAX :F 128 :V </span><span class="si">{win_wb_max}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">'  (:PAR :N WIND-DIR :F 128 :V </span><span class="si">{win_wind_dir}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">'  (:PAR :N WIND-VEL :F 128 :V </span><span class="si">{win_wind_vel}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">'  (:PAR :N TAU_B :F 128 :V </span><span class="si">{win_tau_b}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">'  (:PAR :N TAU_D :F 128 :V </span><span class="si">{win_tau_d}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">'  (:PAR :N RED-FAC :F 128 :V </span><span class="si">{win_clear}</span><span class="s1">))</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' ((DESIGN-DAY :N SUMMER-DESIGN-DAY)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">'  (:PAR :N DRY-BULB-MIN :F 128 :V </span><span class="si">{sum_db_min}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">'  (:PAR :N DRY-BULB-MAX :F 128 :V </span><span class="si">{sum_db_max}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">'  (:PAR :N WET-BULB-MAX :F 128 :V </span><span class="si">{sum_wb_max}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">'  (:PAR :N WIND-DIR :F 128 :V </span><span class="si">{sum_wind_dir}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">'  (:PAR :N WIND-VEL :F 128 :V </span><span class="si">{sum_wind_vel}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">'  (:PAR :N TAU_B :F 128 :V </span><span class="si">{sum_tau_b}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">'  (:PAR :N TAU_D :F 128 :V </span><span class="si">{sum_tau_d}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">'  (:PAR :N RED-FAC :F 128 :V </span><span class="si">{sum_clear}</span><span class="s1">))</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' (:ORES :N CLIMATE-DEF :V "</span><span class="si">{c_city}</span><span class="s1">-</span><span class="si">{year}</span><span class="s1">")</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' (:PAR :N DESIGN-WEATHER-FILE :V "ASHRAE 2013</span><span class="se">\\</span><span class="s1">026720.tbl"))</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">'((CLIMATE-DEF :N "</span><span class="si">{c_city}</span><span class="s1">-</span><span class="si">{year}</span><span class="s1">" :T CLIMATE-DEF :D "</span><span class="si">{st_id}</span><span class="s1"> weather station in </span><span class="si">{c_city}</span><span class="s1">")</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' (:PAR :N FILENAME :V "</span><span class="si">{prn_path}</span><span class="s1">")</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' (:PAR :N STATION :V "</span><span class="si">{c_city}</span><span class="s1">")</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' (:PAR :N COUNTRY :V "</span><span class="si">{c_country}</span><span class="s1">")</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' (:PAR :N LATITUDE :V </span><span class="si">{c_lat}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' (:PAR :N LONGITUDE :V </span><span class="si">{c_long}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' (:PAR :N ELEVATION :V </span><span class="si">{c_elev}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' (:PAR :N TIME_ZONE :V </span><span class="si">{c_tz}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">'</span> \
+        <span class="s1">' (:PAR :N WIND-HEIGHT :V 10))</span><span class="se">\n</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">city</span><span class="o">=</span><span class="n">location</span><span class="o">.</span><span class="n">city</span><span class="p">,</span> <span class="n">country</span><span class="o">=</span><span class="n">location</span><span class="o">.</span><span class="n">country</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="n">year</span><span class="p">,</span> <span class="n">prn_path</span><span class="o">=</span><span class="n">prn_path</span><span class="p">,</span>
+            <span class="n">lat</span><span class="o">=</span><span class="n">location</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span> <span class="n">long</span><span class="o">=-</span><span class="n">location</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span>
+            <span class="n">elev</span><span class="o">=</span><span class="n">location</span><span class="o">.</span><span class="n">elevation</span><span class="p">,</span> <span class="n">tz</span><span class="o">=-</span><span class="n">location</span><span class="o">.</span><span class="n">time_zone</span><span class="p">,</span>
+            <span class="n">st_id</span><span class="o">=</span><span class="n">climate_location</span><span class="o">.</span><span class="n">station_id</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">climate_location</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+            <span class="n">c_city</span><span class="o">=</span><span class="n">climate_location</span><span class="o">.</span><span class="n">city</span><span class="p">,</span> <span class="n">c_country</span><span class="o">=</span><span class="n">climate_location</span><span class="o">.</span><span class="n">country</span><span class="p">,</span>
+            <span class="n">c_lat</span><span class="o">=</span><span class="n">climate_location</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span> <span class="n">c_long</span><span class="o">=-</span><span class="n">climate_location</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span>
+            <span class="n">c_elev</span><span class="o">=</span><span class="n">climate_location</span><span class="o">.</span><span class="n">elevation</span><span class="p">,</span> <span class="n">c_tz</span><span class="o">=-</span><span class="n">climate_location</span><span class="o">.</span><span class="n">time_zone</span><span class="p">,</span>
+            <span class="n">win_db_min</span><span class="o">=</span><span class="n">win_db_min</span><span class="p">,</span> <span class="n">win_db_max</span><span class="o">=</span><span class="n">win_db_max</span><span class="p">,</span> <span class="n">win_wb_max</span><span class="o">=</span><span class="n">win_wb_max</span><span class="p">,</span>
+            <span class="n">win_wind_dir</span><span class="o">=</span><span class="n">win_wind_dir</span><span class="p">,</span> <span class="n">win_wind_vel</span><span class="o">=</span><span class="n">win_wind_vel</span><span class="p">,</span>
+            <span class="n">win_tau_b</span><span class="o">=</span><span class="n">win_tau_b</span><span class="p">,</span> <span class="n">win_tau_d</span><span class="o">=</span><span class="n">win_tau_d</span><span class="p">,</span> <span class="n">win_clear</span><span class="o">=</span><span class="n">win_clear</span><span class="p">,</span>
+            <span class="n">sum_db_min</span><span class="o">=</span><span class="n">sum_db_min</span><span class="p">,</span> <span class="n">sum_db_max</span><span class="o">=</span><span class="n">sum_db_max</span><span class="p">,</span> <span class="n">sum_wb_max</span><span class="o">=</span><span class="n">sum_wb_max</span><span class="p">,</span>
+            <span class="n">sum_wind_dir</span><span class="o">=</span><span class="n">sum_wind_dir</span><span class="p">,</span> <span class="n">sum_wind_vel</span><span class="o">=</span><span class="n">sum_wind_vel</span><span class="p">,</span>
+            <span class="n">sum_tau_b</span><span class="o">=</span><span class="n">sum_tau_b</span><span class="p">,</span> <span class="n">sum_tau_d</span><span class="o">=</span><span class="n">sum_tau_d</span><span class="p">,</span> <span class="n">sum_clear</span><span class="o">=</span><span class="n">sum_clear</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">climate_header</span><span class="p">,</span> <span class="n">location</span><span class="o">.</span><span class="n">city</span></div>
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2026, Ladybug Tools.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.0.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
